@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Mobile Device Asset Manager - Cloud Web</title>
-  
+ 
   <!-- 1. 카메라 스캐너 SDK -->
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
@@ -23,8 +23,8 @@
       --orb-1: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
       --orb-3: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, transparent 70%);
-      
-      --glass-bg: rgba(17, 24, 39, 0.68);
+     
+      --glass-bg: rgba(17, 24, 39, 0.7);
       --glass-card: rgba(30, 41, 59, 0.55);
       --glass-card-hover: rgba(51, 65, 85, 0.7);
       --glass-border: rgba(255, 255, 255, 0.12);
@@ -40,10 +40,10 @@
       --warning: #f59e0b;
 
       --input-bg: rgba(15, 23, 42, 0.75);
-      --table-header: rgba(15, 23, 42, 0.85);
+      --table-header: rgba(15, 23, 42, 0.9);
       --table-row-alt: rgba(255, 255, 255, 0.02);
       --table-row-hover: rgba(99, 102, 241, 0.15);
-      --modal-bg: rgba(15, 23, 42, 0.94);
+      --modal-bg: rgba(15, 23, 42, 0.95);
       --shadow-color: rgba(0, 0, 0, 0.45);
     }
 
@@ -52,8 +52,8 @@
       --orb-1: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, transparent 70%);
       --orb-3: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
-      
-      --glass-bg: rgba(255, 255, 255, 0.75);
+     
+      --glass-bg: rgba(255, 255, 255, 0.78);
       --glass-card: rgba(255, 255, 255, 0.65);
       --glass-card-hover: rgba(255, 255, 255, 0.9);
       --glass-border: rgba(255, 255, 255, 0.8);
@@ -69,10 +69,10 @@
       --warning: #d97706;
 
       --input-bg: rgba(255, 255, 255, 0.85);
-      --table-header: rgba(241, 245, 249, 0.9);
+      --table-header: rgba(241, 245, 249, 0.95);
       --table-row-alt: rgba(0, 0, 0, 0.015);
       --table-row-hover: rgba(79, 70, 229, 0.08);
-      --modal-bg: rgba(255, 255, 255, 0.95);
+      --modal-bg: rgba(255, 255, 255, 0.96);
       --shadow-color: rgba(0, 0, 0, 0.08);
     }
 
@@ -94,10 +94,11 @@
       pointer-events: none;
       z-index: 0;
     }
-    .orb-1 { width: 500px; height: 500px; top: -100px; left: -100px; background: var(--orb-1); }
-    .orb-2 { width: 450px; height: 450px; bottom: -50px; right: -50px; background: var(--orb-2); }
-    .orb-3 { width: 350px; height: 350px; top: 40%; left: 45%; background: var(--orb-3); }
+    .orb-1 { width: 450px; height: 450px; top: -100px; left: -100px; background: var(--orb-1); }
+    .orb-2 { width: 400px; height: 400px; bottom: -50px; right: -50px; background: var(--orb-2); }
+    .orb-3 { width: 300px; height: 300px; top: 40%; left: 45%; background: var(--orb-3); }
 
+    /* 데스크톱 기본 컨테이너 */
     .app-container {
       position: relative;
       z-index: 1;
@@ -114,7 +115,7 @@
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
       border-radius: 16px;
-      padding: 12px 20px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -124,8 +125,8 @@
     }
     .brand-area { display: flex; align-items: center; gap: 12px; }
     .brand-logo {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       border-radius: 10px;
       background: linear-gradient(135deg, var(--accent), #a855f7);
       display: flex;
@@ -133,12 +134,12 @@
       justify-content: center;
       color: #fff;
       font-weight: 800;
-      font-size: 19px;
+      font-size: 18px;
       box-shadow: 0 0 16px var(--accent-glow);
     }
-    .brand-title { font-size: 17px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
+    .brand-title { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .brand-subtitle { font-size: 11px; color: var(--text-sub); }
-    
+   
     .cloud-status {
       font-size: 11px;
       padding: 2px 8px;
@@ -157,7 +158,7 @@
       background: var(--glass-card);
       border: 1px solid var(--glass-border);
       color: var(--text-main);
-      padding: 7px 12px;
+      padding: 8px 12px;
       border-radius: 10px;
       cursor: pointer;
       font-size: 12.5px;
@@ -166,6 +167,7 @@
       align-items: center;
       gap: 6px;
       transition: all var(--transition-speed);
+      white-space: nowrap;
     }
     .btn-icon:hover {
       background: var(--glass-card-hover);
@@ -191,23 +193,23 @@
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
       border-radius: 16px;
-      padding: 12px 18px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       box-shadow: 0 8px 24px var(--shadow-color);
     }
     .scanner-status {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       white-space: nowrap;
     }
     .scanner-dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       background: var(--success);
       border-radius: 50%;
       box-shadow: 0 0 10px var(--success);
@@ -224,8 +226,8 @@
       background: var(--input-bg);
       border: 1.5px solid var(--glass-border);
       border-radius: 12px;
-      padding: 11px 44px 11px 40px;
-      font-size: 15px;
+      padding: 10px 42px 10px 38px;
+      font-size: 14px;
       color: var(--text-main);
       outline: none;
       font-family: inherit;
@@ -237,13 +239,13 @@
     }
     .scanner-icon {
       position: absolute;
-      left: 14px;
+      left: 13px;
       color: var(--text-sub);
-      font-size: 16px;
+      font-size: 15px;
     }
     .quick-cam-trigger {
       position: absolute;
-      right: 12px;
+      right: 10px;
       background: transparent;
       border: none;
       color: var(--accent);
@@ -251,23 +253,26 @@
       cursor: pointer;
       display: flex;
       align-items: center;
+      padding: 4px;
     }
 
+    /* 데스크톱 기본 작업공간 */
     .workspace {
       display: grid;
-      grid-template-columns: 460px 1fr;
+      grid-template-columns: 440px 1fr;
       gap: 16px;
       flex: 1;
       min-height: 0;
     }
 
+    /* Left Hero Card (사진 제거 후 콤팩트 구성) */
     .hero-device-view {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
       border-radius: 20px;
-      padding: 20px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       overflow-y: auto;
@@ -305,8 +310,8 @@
     .hero-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 14px;
+      align-items: center;
+      margin-bottom: 12px;
     }
     .mgmt-badge {
       background: linear-gradient(135deg, var(--accent), #9333ea);
@@ -317,52 +322,34 @@
       font-weight: 700;
       letter-spacing: 0.5px;
     }
-    .hero-image-wrap {
-      width: 100%;
-      height: 180px;
-      border-radius: 14px;
-      background: var(--glass-card);
-      border: 1px dashed var(--glass-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-    .hero-image-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 10px;
-    }
     .hero-device-name {
-      font-size: 21px;
+      font-size: 20px;
       font-weight: 800;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       letter-spacing: -0.4px;
+      word-break: keep-all;
     }
     .hero-meta-bar {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
       margin-bottom: 16px;
       flex-wrap: wrap;
     }
     .badge {
       font-size: 11px;
-      padding: 3px 9px;
+      padding: 3px 8px;
       border-radius: 6px;
       font-weight: 600;
       border: 1px solid transparent;
       display: inline-flex;
       align-items: center;
-      transition: all var(--transition-speed);
     }
 
     .specs-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 9px;
+      gap: 8px;
       margin-bottom: 16px;
     }
     .spec-item {
@@ -375,16 +362,17 @@
     .spec-lbl { font-size: 11px; color: var(--text-sub); margin-bottom: 2px; }
     .spec-val { font-size: 13px; font-weight: 600; word-break: break-all; }
 
-    .hero-actions { display: flex; gap: 8px; margin-top: auto; }
-    .hero-actions button { flex: 1; }
+    .hero-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 10px; }
+    .hero-actions button { flex: 1; justify-content: center; }
 
+    /* Right Inventory Panel */
     .inventory-panel {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
       border-radius: 20px;
-      padding: 18px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       box-shadow: 0 12px 32px var(--shadow-color);
@@ -398,14 +386,14 @@
       border-radius: 12px;
       padding: 4px;
       gap: 4px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .inv-tab-btn {
       flex: 1;
       background: transparent;
       border: none;
       color: var(--text-sub);
-      padding: 8px 16px;
+      padding: 8px 12px;
       border-radius: 9px;
       font-size: 13px;
       font-weight: 600;
@@ -413,8 +401,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
       transition: all var(--transition-speed);
+      white-space: nowrap;
     }
     .inv-tab-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.05); }
     .inv-tab-btn.active {
@@ -438,27 +427,27 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 10px;
+      margin-bottom: 12px;
       flex-wrap: wrap;
     }
-    .search-filter-wrap { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .search-filter-wrap { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 240px; }
     .table-search {
       background: var(--input-bg);
       border: 1px solid var(--glass-border);
       border-radius: 10px;
-      padding: 8px 14px;
+      padding: 8px 12px;
       font-size: 13px;
       color: var(--text-main);
       outline: none;
-      width: 220px;
+      flex: 1;
     }
     .table-search:focus { border-color: var(--accent); }
     .filter-select {
       background: var(--input-bg);
       border: 1px solid var(--glass-border);
       border-radius: 10px;
-      padding: 8px 12px;
+      padding: 8px 10px;
       font-size: 13px;
       color: var(--text-main);
       outline: none;
@@ -468,11 +457,13 @@
     .table-container {
       flex: 1;
       overflow-y: auto;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
       border: 1px solid var(--glass-border);
       border-radius: 14px;
       background: var(--glass-card);
     }
-    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12.5px; }
+    table { width: 100%; min-width: 620px; border-collapse: collapse; text-align: left; font-size: 12.5px; }
     thead {
       position: sticky;
       top: 0;
@@ -481,7 +472,7 @@
       z-index: 2;
     }
     th {
-      padding: 11px 12px;
+      padding: 10px 12px;
       font-weight: 600;
       color: var(--text-sub);
       border-bottom: 1px solid var(--glass-border);
@@ -500,6 +491,7 @@
       border-left: 3px solid var(--accent);
     }
 
+    /* 모달 공통 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -518,7 +510,7 @@
       border: 1px solid var(--glass-border);
       border-radius: 20px;
       width: 100%;
-      max-width: 680px;
+      max-width: 640px;
       max-height: 90vh;
       display: flex;
       flex-direction: column;
@@ -585,7 +577,7 @@
     }
     #cameraReader {
       width: 100%;
-      max-width: 480px;
+      max-width: 460px;
       border-radius: 14px;
       overflow: hidden;
       border: 1.5px solid var(--glass-border);
@@ -595,7 +587,7 @@
       display: flex;
       gap: 10px;
       width: 100%;
-      max-width: 480px;
+      max-width: 460px;
       align-items: center;
     }
     .cam-select {
@@ -696,7 +688,7 @@
     .center-alert-box {
       pointer-events: auto;
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       background: rgba(220, 38, 38, 0.18);
       backdrop-filter: blur(28px);
       -webkit-backdrop-filter: blur(28px);
@@ -722,7 +714,7 @@
       justify-content: center;
       font-size: 18px;
     }
-    .center-alert-title { font-size: 16px; font-weight: 800; color: #fecaca; }
+    .center-alert-title { font-size: 15.5px; font-weight: 800; color: #fecaca; }
     .center-alert-close {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
@@ -783,17 +775,83 @@
     .toast.error { border-left: 4px solid var(--danger); }
     .toast.info { border-left: 4px solid var(--accent); }
 
+    /* =========================================================
+       모바일 및 태블릿 완전 가변(Fluid) 반응형 스타일
+       ========================================================= */
     @media (max-width: 900px) {
-      .app-container { height: auto; min-height: 100vh; overflow-y: auto; padding: 10px; }
-      .workspace { grid-template-columns: 1fr; height: auto; }
-      .hero-device-view { max-height: 520px; }
-      .inventory-panel { height: 600px; }
-      .scanner-panel { flex-direction: column; align-items: stretch; gap: 10px; }
-      .scanner-status { justify-content: center; }
-      .table-search { width: 100%; }
-      .search-filter-wrap { flex-direction: column; align-items: stretch; }
-      .form-grid { grid-template-columns: 1fr; }
-      .form-group.full { grid-column: span 1; }
+      .app-container {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: visible;
+        padding: 12px 10px 40px 10px;
+        gap: 12px;
+      }
+      header.glass-header {
+        padding: 12px 14px;
+        gap: 10px;
+      }
+      .brand-area {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .header-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .header-actions .btn-icon {
+        width: 100%;
+        justify-content: center;
+        padding: 9px 8px;
+      }
+      .workspace {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        gap: 12px;
+      }
+      /* 스캔된 기기 상세 카드 - 내용에 맞춰 자연스럽게 늘어남 */
+      .hero-device-view {
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        padding: 16px;
+      }
+      /* 인벤토리 목록 패널 - 모바일 화면에서 유연한 높이 */
+      .inventory-panel {
+        height: auto;
+        min-height: 480px;
+        padding: 14px;
+      }
+      .table-container {
+        max-height: 460px;
+        overflow-x: auto;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .scanner-panel {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 10px 14px;
+      }
+      .scanner-status {
+        justify-content: center;
+      }
+      .search-filter-wrap {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .table-search {
+        width: 100%;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .form-group.full {
+        grid-column: span 1;
+      }
     }
   </style>
 </head>
@@ -810,7 +868,7 @@
           <div class="center-alert-icon">⚠️</div>
           <div class="center-alert-title">단말기를 찾을 수 없음</div>
         </div>
-        <button class="center-alert-close" id="btnCenterAlertClose" title="닫기">&times;</button>
+        <button type="button" class="center-alert-close" id="btnCenterAlertClose" title="닫기">&times;</button>
       </div>
       <div class="center-alert-body">
         <div>스캔/입력된 데이터:</div>
@@ -830,14 +888,14 @@
         <div>
           <div class="brand-title">
             <span>Mobile Device Asset Manager</span>
-            <span class="cloud-status" id="cloudStatus">☁️ 오프라인 캐시 모드</span>
+            <span class="cloud-status" id="cloudStatus">☁️ 연결 확인 중</span>
           </div>
-          <div class="brand-subtitle">Liquid Glass Barcode & Inventory Cloud</div>
+          <div class="brand-subtitle">Liquid Glass Cloud Inventory</div>
         </div>
       </div>
       <div class="header-actions">
-        <button type="button" class="btn-icon btn-cam" id="btnOpenCamModal" title="PC 웹캠 및 모바일 카메라로 스캔">📷 카메라 스캔</button>
-        <button type="button" class="btn-icon" id="btnOpenConfigModal" title="회사, 분류, 보안레벨, 색상 관리">⚙️ 항목 설정</button>
+        <button type="button" class="btn-icon btn-cam" id="btnOpenCamModal" title="카메라로 스캔">📷 카메라 스캔</button>
+        <button type="button" class="btn-icon" id="btnOpenConfigModal" title="항목 및 색상 설정">⚙️ 항목 설정</button>
         <button type="button" class="btn-icon" id="btnThemeToggle" title="화이트/다크 모드">☀️ 테마 전환</button>
         <button type="button" class="btn-icon btn-primary" id="btnOpenAddModal">＋ 신규 기기 등록</button>
       </div>
@@ -850,13 +908,13 @@
       </div>
       <div class="scanner-input-box">
         <span class="scanner-icon">⌕</span>
-        <input type="text" id="barcodeScannerInput" placeholder="바코드 / 데이터 매트릭스를 찍으세요 (USB 리더기 또는 카메라)" autofocus autocomplete="off">
+        <input type="text" id="barcodeScannerInput" placeholder="바코드 / 데이터 매트릭스를 찍으세요" autofocus autocomplete="off">
         <button type="button" class="quick-cam-trigger" id="btnQuickCam" title="카메라로 바코드 찍기">📷</button>
       </div>
     </div>
 
     <div class="workspace">
-      <!-- Left Hero Card -->
+      <!-- Left Hero Card (사진 제거 후 콤팩트 스펙 뷰) -->
       <div class="hero-device-view" id="heroView">
         <div class="hero-laser-beam"></div>
 
@@ -864,10 +922,7 @@
           <span class="mgmt-badge" id="heroMgmtNo">SM001</span>
           <span style="font-size: 11.5px; color: var(--text-sub);" id="heroLastViewed">조회 기록 없음</span>
         </div>
-        <div class="hero-image-wrap">
-          <img id="heroImage" src="" alt="단말기 이미지" style="display: none;">
-          <div id="heroImagePlaceholder" style="color: var(--text-sub); font-size: 13px;">등록된 이미지 없음</div>
-        </div>
+       
         <div class="hero-device-name" id="heroDeviceName">기기를 선택하세요</div>
         <div class="hero-meta-bar">
           <span class="badge" id="heroCategory">메인</span>
@@ -961,7 +1016,7 @@
 
   <!-- Modal: Camera Barcode Scanner -->
   <div class="modal-overlay" id="camModal">
-    <div class="modal-box" style="max-width: 520px;">
+    <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
         <div class="modal-title">📷 카메라 바코드/데이터매트릭스 스캐너</div>
         <button type="button" class="modal-close" id="btnCloseCamModal">&times;</button>
@@ -984,7 +1039,7 @@
     </div>
   </div>
 
-  <!-- Modal: Add / Edit Device -->
+  <!-- Modal: Add / Edit Device (사진 첨부 필드 삭제 완료) -->
   <div class="modal-overlay" id="deviceModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -1048,12 +1103,8 @@
               <input type="text" id="formImei2" placeholder="eSIM 또는 보조 IMEI">
             </div>
             <div class="form-group full">
-              <label>단말기 이미지 파일 선택 (PC 사진 업로드)</label>
-              <input type="file" id="formImageFile" accept="image/*">
-            </div>
-            <div class="form-group full">
               <label>비고 (메모)</label>
-              <textarea id="formNotes" rows="2" placeholder="기기 상태, 파손 여부, 용도 메모"></textarea>
+              <textarea id="formNotes" rows="3" placeholder="기기 상태, 파손 여부, 용도 메모"></textarea>
             </div>
           </div>
         </form>
@@ -1189,14 +1240,12 @@
         sn: "R3CN123456W",
         color: "티타늄 블랙",
         carrier: "자급제",
-        notes: "클라우드 연동 테스트 단말기",
-        image: ""
+        notes: "클라우드 연동 테스트 단말기"
       }
     ];
 
     let currentSelectedId = null;
     let deviceToDeleteId = null;
-    let uploadedImageBase64 = "";
     let centerAlertTimer = null;
     let currentInventoryTab = 'active';
 
@@ -1240,7 +1289,7 @@
       elem.style.fontWeight = '700';
     }
 
-    // 2. Firebase Cloud Init (오류 발생 시에도 완벽 방어)
+    // 2. Firebase Cloud Init
     let firestoreDb = null;
     let inventoryDocRef = null;
 
@@ -1256,7 +1305,6 @@
             appId: "1:903936009990:web:a154227c0349101c30a087"
           };
 
-          // [핵심 패치] 중복 초기화 방지
           const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
           firestoreDb = app.firestore();
           inventoryDocRef = firestoreDb.collection("device_inventory").doc("main_data");
@@ -1287,7 +1335,7 @@
           });
         }
       } catch (err) {
-        console.warn("Firebase Init Error (로컬 모드로 전환):", err);
+        console.warn("Firebase 초기화 에러:", err);
         setCloudStatus(false);
       }
     }
@@ -1379,7 +1427,7 @@
       appConfig[configKey].forEach((val, idx) => {
         const chip = document.createElement('div');
         chip.className = 'tag-chip';
-        
+       
         let colorHtml = '';
         if (hasColor) {
           const colorHex = (appConfig.colors && appConfig.colors[val]) || '#6366f1';
@@ -1554,7 +1602,7 @@
         const now = new Date();
         const pad = (n) => String(n).padStart(2, '0');
         found.lastViewed = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-        
+       
         saveToCloud();
 
         if (found.category === '판매완료' && currentInventoryTab !== 'sold') {
@@ -1577,7 +1625,7 @@
       scannerInput.focus();
     }
 
-    // 6. UI 렌더링
+    // 6. UI 렌더링 (사진 관련 DOM 조작 완전 제거)
     function selectDevice(id, triggerAnim = false) {
       currentSelectedId = id;
       const d = devices.find(x => x.id === id);
@@ -1614,18 +1662,6 @@
       document.getElementById('heroSn').textContent = d.sn || '-';
       document.getElementById('heroColor').textContent = d.color || '-';
       document.getElementById('heroNotes').textContent = d.notes || '등록된 메모 없음';
-
-      const imgElem = document.getElementById('heroImage');
-      const placeholder = document.getElementById('heroImagePlaceholder');
-      if (d.image && d.image.trim() !== '') {
-        imgElem.src = d.image;
-        imgElem.style.display = 'block';
-        placeholder.style.display = 'none';
-      } else {
-        imgElem.src = '';
-        imgElem.style.display = 'none';
-        placeholder.style.display = 'block';
-      }
 
       document.querySelectorAll('#deviceTableBody tr').forEach(row => {
         if (row.dataset.id === id) row.classList.add('selected-row');
@@ -1711,7 +1747,7 @@
     async function openCameraScanner() {
       camModal.classList.add('active');
       if (typeof Html5Qrcode === 'undefined') {
-        showToast('카메라 라이브러리를 불러오는 중입니다. 잠시 후 다시 시도해 주세요.', 'error');
+        showToast('카메라 라이브러리를 불러오는 중입니다.', 'error');
         return;
       }
       if (!html5QrCode) {
@@ -1737,7 +1773,7 @@
         }
       } catch (err) {
         console.error(err);
-        showToast('카메라 권한이 차단되었습니다. 브라우저 주소창에서 카메라를 허용해 주세요.', 'error');
+        showToast('카메라 권한이 차단되었습니다. 주소창에서 카메라를 허용해 주세요.', 'error');
       }
     }
 
@@ -1787,7 +1823,6 @@
       document.getElementById('modalTitle').textContent = '신규 단말기 등록';
       document.getElementById('formDeviceId').value = '';
       document.getElementById('deviceForm').reset();
-      uploadedImageBase64 = "";
       deviceModal.classList.add('active');
     }
 
@@ -1809,11 +1844,10 @@
       document.getElementById('formImei1').value = d.imei1 || '';
       document.getElementById('formImei2').value = d.imei2 || '';
       document.getElementById('formNotes').value = d.notes || '';
-      uploadedImageBase64 = d.image || "";
       deviceModal.classList.add('active');
     }
 
-    // 9. 핵심 초기화 및 이벤트 바인딩 함수
+    // 9. 초기화 및 이벤트 바인딩
     function initializeAppCore() {
       const cached = localStorage.getItem('mobile_devices_cloud_cache');
       if (cached) {
@@ -1830,7 +1864,6 @@
       renderTable();
       if (devices.length > 0) selectDevice(devices[0].id, false);
 
-      // 상단 헤더 버튼
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
@@ -1875,6 +1908,7 @@
         const id = document.getElementById('formDeviceId').value;
         const newCategory = document.getElementById('formCategory').value;
 
+        // 사진 필드 제외된 순수 텍스트 데이터 구성
         const deviceData = {
           id: id || ('dev-' + Date.now()),
           managementNo: document.getElementById('formMgmtNo').value.trim(),
@@ -1891,7 +1925,6 @@
           imei1: document.getElementById('formImei1').value.trim(),
           imei2: document.getElementById('formImei2').value.trim(),
           notes: document.getElementById('formNotes').value.trim(),
-          image: uploadedImageBase64,
           lastViewed: id ? (devices.find(x => x.id === id)?.lastViewed || '') : ''
         };
 
@@ -1962,14 +1995,6 @@
 
       document.getElementById('btnCenterAlertClose').onclick = hideCenterAlert;
 
-      document.getElementById('formImageFile').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (evt) => { uploadedImageBase64 = evt.target.result; };
-        reader.readAsDataURL(file);
-      });
-
       const barcodeInput = document.getElementById('barcodeScannerInput');
       barcodeInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
@@ -1991,15 +2016,13 @@
         document.body.appendChild(dlAnchor);
         dlAnchor.click();
         dlAnchor.remove();
-        showToast('설정 및 데이터가 로컬에 백업되었습니다.', 'success');
+        showToast('설정 및 데이터가 백업되었습니다.', 'success');
       };
 
-      // Firebase 초기화 실행
       initFirebase();
       setTimeout(() => barcodeInput.focus(), 300);
     }
 
-    // 로드 타이밍과 상관없이 즉각 실행 보장
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initializeAppCore);
     } else {
