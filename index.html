@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Mobile Device Asset Manager - Cloud Web</title>
+  <title>Mobile Device Asset Manager</title>
   
   <!-- 1. 카메라 스캐너 SDK -->
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -114,7 +114,7 @@
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
       border-radius: 16px;
-      padding: 12px 18px;
+      padding: 14px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -136,8 +136,7 @@
       font-size: 18px;
       box-shadow: 0 0 16px var(--accent-glow);
     }
-    .brand-title { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .brand-subtitle { font-size: 11px; color: var(--text-sub); }
+    .brand-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     
     .cloud-status {
       font-size: 11px;
@@ -487,9 +486,7 @@
       border-left: 3px solid var(--accent);
     }
 
-    /* =========================================================
-       [신규] 행 순서 변경 컨트롤 UI & 드래그 효과
-       ========================================================= */
+    /* 행 순서 변경 컨트롤 UI */
     .order-col-th { width: 75px; text-align: center; }
     .order-control-cell {
       display: flex;
@@ -509,13 +506,8 @@
       opacity: 0.7;
       transition: opacity 0.15s, color 0.15s;
     }
-    .order-drag-handle:hover {
-      opacity: 1;
-      color: var(--accent);
-    }
-    .order-drag-handle:active {
-      cursor: grabbing;
-    }
+    .order-drag-handle:hover { opacity: 1; color: var(--accent); }
+    .order-drag-handle:active { cursor: grabbing; }
     .order-step-btn {
       background: rgba(255, 255, 255, 0.07);
       border: 1px solid var(--glass-border);
@@ -537,21 +529,10 @@
       border-color: var(--accent);
       transform: scale(1.08);
     }
-    .order-step-btn:disabled {
-      opacity: 0.2;
-      cursor: not-allowed;
-    }
-    /* 드래그 앤 드롭 상태 시각 피드백 */
-    tbody tr.dragging-row {
-      opacity: 0.45;
-      background: rgba(99, 102, 241, 0.15) !important;
-    }
-    tbody tr.drag-target-top {
-      border-top: 2.5px solid var(--accent) !important;
-    }
-    tbody tr.drag-target-bottom {
-      border-bottom: 2.5px solid var(--accent) !important;
-    }
+    .order-step-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+    tbody tr.dragging-row { opacity: 0.45; background: rgba(99, 102, 241, 0.15) !important; }
+    tbody tr.drag-target-top { border-top: 2.5px solid var(--accent) !important; }
+    tbody tr.drag-target-bottom { border-bottom: 2.5px solid var(--accent) !important; }
 
     /* 모달 UI 공통 */
     .modal-overlay {
@@ -655,7 +636,7 @@
 
     .about-card-hero {
       text-align: center;
-      padding: 10px 0 18px;
+      padding: 10px 0 16px;
       border-bottom: 1px solid var(--glass-border);
       margin-bottom: 16px;
     }
@@ -702,8 +683,7 @@
       background: var(--accent);
       box-shadow: 0 0 8px var(--accent);
     }
-    .changelog-ver { font-size: 13.5px; font-weight: 700; color: var(--text-main); }
-    .changelog-date { font-size: 11px; color: var(--text-sub); margin-bottom: 6px; }
+    .changelog-ver { font-size: 13.5px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
     .changelog-desc { font-size: 12px; color: var(--text-sub); line-height: 1.6; }
 
     .cam-scanner-wrap {
@@ -779,7 +759,18 @@
     }
     .tag-color-input::-webkit-color-swatch-wrapper { padding: 0; }
     .tag-color-input::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; }
+    
+    /* [신규] 태그 이름 수정 아이콘 */
+    .tag-chip-edit {
+      cursor: pointer;
+      font-size: 11px;
+      opacity: 0.65;
+      transition: opacity 0.15s, transform 0.15s;
+      margin-left: 2px;
+    }
+    .tag-chip-edit:hover { opacity: 1; transform: scale(1.2); }
     .tag-chip-del { color: var(--danger); cursor: pointer; font-weight: 800; font-size: 13px; margin-left: 2px; }
+
     .tag-add-bar { display: flex; gap: 8px; align-items: center; }
     .tag-add-bar input[type="text"] {
       flex: 1;
@@ -1022,7 +1013,6 @@
             <span>Mobile Device Asset Manager</span>
             <span class="cloud-status" id="cloudStatus">☁️ 연결 확인 중</span>
           </div>
-          <div class="brand-subtitle">Liquid Glass Cloud Inventory</div>
         </div>
       </div>
       <div class="header-actions">
@@ -1186,7 +1176,7 @@
     </div>
   </div>
 
-  <!-- Modal 2: App Info & Changelog -->
+  <!-- Modal 2: App Info & Changelog (4개 영역 및 업데이트 내역 반영) -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
@@ -1197,31 +1187,30 @@
         <div class="about-card-hero">
           <div class="about-app-logo">M</div>
           <h2 style="font-size: 18px; font-weight: 800;" id="aboutAppTitle">Mobile Device Asset Manager</h2>
-          <p style="font-size: 12px; color: var(--text-sub); margin-top: 4px;" id="aboutAppDesc">리퀴드 글래스 기반 스마트 단말기 자산 관리 솔루션</p>
-          <div class="about-version-badge" id="aboutAppVersion">v2.6.0</div>
+          <div class="about-version-badge" id="aboutAppVersion">v1.0 BETA</div>
         </div>
 
         <div class="specs-grid" style="margin-bottom: 16px;">
           <div class="spec-item">
             <div class="spec-lbl">배포 환경</div>
-            <div class="spec-val">Vercel Web + GitHub</div>
+            <div class="spec-val" id="aboutDeployEnv">Vercel Web + GitHub</div>
           </div>
           <div class="spec-item">
-            <div class="spec-lbl">클라우드 DB</div>
-            <div class="spec-val">Firebase Firestore</div>
+            <div class="spec-lbl">사용중인 클라우드</div>
+            <div class="spec-val" id="aboutCloudDb">Firebase Firestore</div>
           </div>
           <div class="spec-item">
-            <div class="spec-lbl">목록 순서 제어</div>
-            <div class="spec-val">드래그 앤 드롭 & ▲/▼</div>
+            <div class="spec-lbl">사용 AI</div>
+            <div class="spec-val" id="aboutAi">Gemini</div>
           </div>
           <div class="spec-item">
-            <div class="spec-lbl">마지막 빌드일</div>
+            <div class="spec-lbl">마지막 빌드 날짜</div>
             <div class="spec-val" id="aboutAppDate">2026-09-20</div>
           </div>
         </div>
 
         <div class="changelog-box">
-          <div style="font-size: 13.5px; font-weight: 700; margin-bottom: 12px;">📋 업데이트 내역 (Changelog)</div>
+          <div style="font-size: 13.5px; font-weight: 700; margin-bottom: 12px;">📋 업데이트 내역</div>
           <div id="changelogContainer"></div>
         </div>
       </div>
@@ -1342,7 +1331,7 @@
       </div>
       <div class="modal-body">
         <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 14px;">
-          💡 각 항목 칩 앞의 <strong>동그라미 색상 아이콘</strong>을 클릭하면 원하는 색상으로 자유롭게 변경할 수 있습니다.
+          💡 <strong>✏️ 아이콘</strong>을 눌러 이름을 직접 변경하거나, <strong>색상 원형</strong>을 눌러 배지 색상을 변경할 수 있습니다.
         </p>
 
         <div class="config-section">
@@ -1434,36 +1423,19 @@
     // =========================================================
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
-      description: "리퀴드 글래스 기반 스마트 단말기 자산 관리 클라우드 시스템",
-      version: "v2.6.0",
+      version: "v1.0 BETA",
+      deployEnv: "Vercel Web + GitHub",
+      cloud: "Firebase Firestore",
+      ai: "Gemini",
       releaseDate: "2026-09-20",
       changelog: [
         {
-          version: "v2.6.0 (단말기 목록 순서 변경 기능 지원)",
+          version: "v1.0 BETA",
           date: "2026.09.20",
           notes: [
-            "보유 목록 및 판매완료 목록에서 행 드래그 앤 드롭 순서 변경 지원",
-            "모바일/터치 환경을 위한 ▲ / ▼ 원클릭 위아래 순서 변경 버튼 신설",
-            "변경된 단말기 순서의 Firebase Firestore 실시간 자동 동기화"
-          ]
-        },
-        {
-          version: "v2.5.0 (클라우드 데이터 복원 & 가변 반응형 패치)",
-          date: "2026.09.19",
-          notes: [
-            "JSON 백업 파일 복원(업로드) 기능 및 통합 데이터 관리 모달 추가",
-            "모바일/태블릿 가변 반응형(Fluid) 높이 및 부드러운 스크롤 최적화",
-            "Firestore 1MB 용량 초과 방지를 위한 이미지 필드 제거",
-            "사용자 정의 앱 정보 및 패치노트(Changelog) 팝업 신설"
-          ]
-        },
-        {
-          version: "v2.4.0 (판매 완료 탭 분리 & 자동 이동)",
-          date: "2026.09.19",
-          notes: [
-            "기기 목록 영역에 보유 단말기 vs 판매 완료 내역 전용 탭 분리",
-            "상태가 '판매완료'로 변경 저장 시 판매 완료 내역으로 자동 화면 전환",
-            "Firebase Firestore 클라우드 실시간 동기화(Spark Free) 연동"
+            "초기 기능 구현 및 오류 제거",
+            "가변 UI적용",
+            "바코드 리더기 및 스캔 디바이스 카메라 지원"
           ]
         }
       ]
@@ -1675,6 +1647,63 @@
       if (items.includes(curVal)) el.value = curVal;
     }
 
+    // =========================================================
+    // [신규 기능] 기존 항목 이름 수정(Rename) 엔진
+    // =========================================================
+    window.handleRenameTag = function(configKey, idx) {
+      const oldVal = appConfig[configKey][idx];
+
+      if (oldVal === '판매완료') {
+        showToast("'판매완료' 항목은 시스템 탭 연동 기준으로 보호되어 이름 변경이 불가능합니다.", 'error');
+        return;
+      }
+
+      const newVal = prompt(`'${oldVal}' 항목의 새로운 이름을 입력하세요:`, oldVal);
+      if (!newVal || newVal.trim() === '' || newVal.trim() === oldVal) return;
+
+      const trimmed = newVal.trim();
+      if (appConfig[configKey].includes(trimmed)) {
+        showToast('이미 동일한 이름의 항목이 존재합니다.', 'error');
+        return;
+      }
+
+      // 1. 항목 목록 배열 내 이름 변경
+      appConfig[configKey][idx] = trimmed;
+
+      // 2. 지정된 커스텀 배지 색상 이전
+      if (appConfig.colors && appConfig.colors[oldVal]) {
+        appConfig.colors[trimmed] = appConfig.colors[oldVal];
+        delete appConfig.colors[oldVal];
+      }
+
+      // 3. 기존 등록된 단말기들의 해당 필드 값도 일괄 동기화
+      const fieldMap = {
+        'companies': 'company',
+        'categories': 'category',
+        'securityLevels': 'securityLevel',
+        'carriers': 'carrier'
+      };
+      const targetField = fieldMap[configKey];
+      let updatedDevCount = 0;
+
+      if (targetField) {
+        devices.forEach(d => {
+          if (d[targetField] === oldVal) {
+            d[targetField] = trimmed;
+            updatedDevCount++;
+          }
+        });
+      }
+
+      saveToCloud();
+      refreshSelectDropdowns();
+      renderConfigTags();
+      renderTable();
+      if (currentSelectedId) selectDevice(currentSelectedId, false);
+
+      showToast(`'${oldVal}'이(가) '${trimmed}'(으)로 변경되었습니다. (기기 ${updatedDevCount}대 자동 반영)`, 'success');
+    };
+
     function renderConfigTags() {
       renderTagGroup('tagListCompany', 'companies', true);
       renderTagGroup('tagListCategory', 'categories', true);
@@ -1701,11 +1730,13 @@
         chip.innerHTML = `
           ${colorHtml}
           <span>${val}</span>
+          <span class="tag-chip-edit" data-type="${configKey}" data-idx="${idx}" title="이름 수정">✏️</span>
           <span class="tag-chip-del" data-type="${configKey}" data-idx="${idx}" title="삭제">&times;</span>
         `;
         container.appendChild(chip);
       });
 
+      // 색상 변경 바인딩
       container.querySelectorAll('.tag-color-input').forEach(inp => {
         inp.onchange = (e) => {
           const itemKey = e.target.getAttribute('data-key');
@@ -1718,6 +1749,16 @@
         };
       });
 
+      // 이름 수정(연필) 바인딩
+      container.querySelectorAll('.tag-chip-edit').forEach(editBtn => {
+        editBtn.onclick = (e) => {
+          const type = e.target.getAttribute('data-type');
+          const idx = parseInt(e.target.getAttribute('data-idx'), 10);
+          handleRenameTag(type, idx);
+        };
+      });
+
+      // 삭제 바인딩
       container.querySelectorAll('.tag-chip-del').forEach(delBtn => {
         delBtn.onclick = (e) => {
           const type = e.target.getAttribute('data-type');
@@ -1932,9 +1973,6 @@
       });
     }
 
-    // =========================================================
-    // [신규 로직] 단말기 순서 변경 (▲/▼ 버튼 및 드래그앤드롭 연동)
-    // =========================================================
     function getCurrentlyFilteredDevices() {
       const query = document.getElementById('tableSearchInput').value.trim().toLowerCase();
       const filterCat = document.getElementById('filterCategory').value;
@@ -2052,13 +2090,11 @@
           <td style="color: var(--text-sub); font-size: 11.5px;">${d.lastViewed || '-'}</td>
         `;
 
-        // 행 선택 이벤트
         tr.onclick = (e) => {
           if (e.target.closest('.order-control-cell')) return;
           selectDevice(d.id, true);
         };
 
-        // ▲ / ▼ 버튼 이벤트 바인딩
         const btnUp = tr.querySelector('.btn-step-up');
         const btnDown = tr.querySelector('.btn-step-down');
 
@@ -2072,7 +2108,6 @@
           moveDeviceStep(d.id, 1);
         };
 
-        // 드래그 앤 드롭 이벤트 바인딩
         tr.addEventListener('dragstart', (e) => {
           draggedRowDevId = d.id;
           e.dataTransfer.effectAllowed = 'move';
@@ -2135,10 +2170,13 @@
       }, 2500);
     }
 
+    // [신규] 앱 정보 모달 데이터 렌더링
     function renderAboutModal() {
       document.getElementById('aboutAppTitle').textContent = APP_INFO.title;
-      document.getElementById('aboutAppDesc').textContent = APP_INFO.description;
       document.getElementById('aboutAppVersion').textContent = APP_INFO.version;
+      document.getElementById('aboutDeployEnv').textContent = APP_INFO.deployEnv;
+      document.getElementById('aboutCloudDb').textContent = APP_INFO.cloud;
+      document.getElementById('aboutAi').textContent = APP_INFO.ai;
       document.getElementById('aboutAppDate').textContent = APP_INFO.releaseDate;
 
       const container = document.getElementById('changelogContainer');
@@ -2148,10 +2186,9 @@
         const itemDiv = document.createElement('div');
         itemDiv.className = 'changelog-item';
         
-        let notesHtml = item.notes.map(n => `• ${n}`).join('<br>');
+        let notesHtml = item.notes.map(n => `* ${n}`).join('<br>');
         itemDiv.innerHTML = `
-          <div class="changelog-ver">${item.version}</div>
-          <div class="changelog-date">${item.date}</div>
+          <div class="changelog-ver">${item.version} (${item.date})</div>
           <div class="changelog-desc">${notesHtml}</div>
         `;
         container.appendChild(itemDiv);
