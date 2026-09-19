@@ -319,11 +319,12 @@
       letter-spacing: 0.5px;
     }
     .hero-device-name {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       margin-bottom: 6px;
       letter-spacing: -0.4px;
       word-break: keep-all;
+      line-height: 1.4;
     }
     .hero-meta-bar {
       display: flex;
@@ -486,7 +487,6 @@
       border-left: 3px solid var(--accent);
     }
 
-    /* 행 순서 변경 컨트롤 UI */
     .order-col-th { width: 75px; text-align: center; }
     .order-control-cell {
       display: flex;
@@ -534,7 +534,6 @@
     tbody tr.drag-target-top { border-top: 2.5px solid var(--accent) !important; }
     tbody tr.drag-target-bottom { border-bottom: 2.5px solid var(--accent) !important; }
 
-    /* 모달 UI 공통 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -760,7 +759,6 @@
     .tag-color-input::-webkit-color-swatch-wrapper { padding: 0; }
     .tag-color-input::-webkit-color-swatch { border: 1px solid rgba(255,255,255,0.4); border-radius: 50%; }
     
-    /* [신규] 태그 이름 수정 아이콘 */
     .tag-chip-edit {
       cursor: pointer;
       font-size: 11px;
@@ -1037,21 +1035,21 @@
     </div>
 
     <div class="workspace">
-      <!-- Left Hero Card -->
+      <!-- Left Hero Card (초기 기본값: TEST 및 안내 문구) -->
       <div class="hero-device-view" id="heroView">
         <div class="hero-laser-beam"></div>
 
         <div class="hero-header">
-          <span class="mgmt-badge" id="heroMgmtNo">SM001</span>
-          <span style="font-size: 11.5px; color: var(--text-sub);" id="heroLastViewed">조회 기록 없음</span>
+          <span class="mgmt-badge" id="heroMgmtNo">TEST</span>
+          <span style="font-size: 11.5px; color: var(--text-sub);" id="heroLastViewed">-</span>
         </div>
         
-        <div class="hero-device-name" id="heroDeviceName">기기를 선택하세요</div>
+        <div class="hero-device-name" id="heroDeviceName">카메라 스캔 기능을 사용하여 스캔하세요</div>
         <div class="hero-meta-bar">
-          <span class="badge" id="heroCategory">메인</span>
-          <span class="badge" id="heroSecLevel">보안 Lv. None</span>
-          <span class="badge" id="heroCompany">삼성전자</span>
-          <span class="badge" id="heroCarrier">자급제</span>
+          <span class="badge" id="heroCategory">-</span>
+          <span class="badge" id="heroSecLevel">-</span>
+          <span class="badge" id="heroCompany">-</span>
+          <span class="badge" id="heroCarrier">-</span>
         </div>
 
         <div class="specs-grid">
@@ -1061,7 +1059,7 @@
           </div>
           <div class="spec-item">
             <div class="spec-lbl">RAM / 저장공간</div>
-            <div class="spec-val" id="heroRamStorage">- / -</div>
+            <div class="spec-val" id="heroRamStorage">-</div>
           </div>
           <div class="spec-item full">
             <div class="spec-lbl">IMEI 1</div>
@@ -1176,7 +1174,7 @@
     </div>
   </div>
 
-  <!-- Modal 2: App Info & Changelog (4개 영역 및 업데이트 내역 반영) -->
+  <!-- Modal 2: App Info & Changelog -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
@@ -1418,9 +1416,7 @@
        JavaScript Application Core
        ========================================================= -->
   <script>
-    // =========================================================
     // [사용자 직접 수정 영역] 앱 정보 및 패치노트 (Changelog)
-    // =========================================================
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
       version: "v1.0 BETA",
@@ -1455,27 +1451,7 @@
       }
     };
 
-    let devices = [
-      {
-        id: "dev-1",
-        managementNo: "SM001",
-        lastViewed: "2026-09-19 14:20:00",
-        company: "삼성전자",
-        name: "갤럭시 S24 울트라",
-        category: "메인",
-        securityLevel: "2",
-        ap: "Snapdragon 8 Gen 3 for Galaxy",
-        ram: "12GB",
-        storage: "512GB",
-        imei1: "351234567890123",
-        imei2: "351234567890124",
-        sn: "R3CN123456W",
-        color: "티타늄 블랙",
-        carrier: "자급제",
-        notes: "클라우드 연동 테스트 단말기"
-      }
-    ];
-
+    let devices = [];
     let currentSelectedId = null;
     let deviceToDeleteId = null;
     let centerAlertTimer = null;
@@ -1560,7 +1536,13 @@
               renderConfigTags();
               updateTabCounts();
               renderTable();
-              if (devices.length > 0 && !currentSelectedId) selectDevice(devices[0].id, false);
+
+              // 기존에 선택되어 있던 단말기가 있는 경우에만 유지 (자동 1번째 선택 방지)
+              if (currentSelectedId) {
+                const stillExists = devices.find(d => d.id === currentSelectedId);
+                if (stillExists) selectDevice(currentSelectedId, false);
+                else resetHeroView();
+              }
             } else {
               saveToCloud();
             }
@@ -1647,9 +1629,6 @@
       if (items.includes(curVal)) el.value = curVal;
     }
 
-    // =========================================================
-    // [신규 기능] 기존 항목 이름 수정(Rename) 엔진
-    // =========================================================
     window.handleRenameTag = function(configKey, idx) {
       const oldVal = appConfig[configKey][idx];
 
@@ -1667,16 +1646,13 @@
         return;
       }
 
-      // 1. 항목 목록 배열 내 이름 변경
       appConfig[configKey][idx] = trimmed;
 
-      // 2. 지정된 커스텀 배지 색상 이전
       if (appConfig.colors && appConfig.colors[oldVal]) {
         appConfig.colors[trimmed] = appConfig.colors[oldVal];
         delete appConfig.colors[oldVal];
       }
 
-      // 3. 기존 등록된 단말기들의 해당 필드 값도 일괄 동기화
       const fieldMap = {
         'companies': 'company',
         'categories': 'category',
@@ -1736,7 +1712,6 @@
         container.appendChild(chip);
       });
 
-      // 색상 변경 바인딩
       container.querySelectorAll('.tag-color-input').forEach(inp => {
         inp.onchange = (e) => {
           const itemKey = e.target.getAttribute('data-key');
@@ -1749,7 +1724,6 @@
         };
       });
 
-      // 이름 수정(연필) 바인딩
       container.querySelectorAll('.tag-chip-edit').forEach(editBtn => {
         editBtn.onclick = (e) => {
           const type = e.target.getAttribute('data-type');
@@ -1758,7 +1732,6 @@
         };
       });
 
-      // 삭제 바인딩
       container.querySelectorAll('.tag-chip-del').forEach(delBtn => {
         delBtn.onclick = (e) => {
           const type = e.target.getAttribute('data-type');
@@ -1826,12 +1799,13 @@
       refreshSelectDropdowns();
       renderTable();
 
-      const currentDev = devices.find(d => d.id === currentSelectedId);
-      const isCurrentSold = currentDev && currentDev.category === '판매완료';
-
-      if ((tabName === 'sold' && !isCurrentSold) || (tabName === 'active' && isCurrentSold)) {
-        const availableList = devices.filter(d => tabName === 'sold' ? d.category === '판매완료' : d.category !== '판매완료');
-        if (availableList.length > 0) selectDevice(availableList[0].id, false);
+      // 현재 선택된 기기가 다른 탭으로 넘어간 경우 초기 안내 화면으로 복귀
+      if (currentSelectedId) {
+        const currentDev = devices.find(d => d.id === currentSelectedId);
+        const isCurrentSold = currentDev && currentDev.category === '판매완료';
+        if ((tabName === 'sold' && !isCurrentSold) || (tabName === 'active' && isCurrentSold)) {
+          resetHeroView();
+        }
       }
     }
 
@@ -1927,6 +1901,38 @@
       const scannerInput = document.getElementById('barcodeScannerInput');
       scannerInput.value = '';
       scannerInput.focus();
+    }
+
+    // =========================================================
+    // [신규] 아무것도 선택되지 않았을 때의 Hero View 초기화
+    // =========================================================
+    function resetHeroView() {
+      currentSelectedId = null;
+      document.getElementById('heroMgmtNo').textContent = 'TEST';
+      document.getElementById('heroLastViewed').textContent = '-';
+      document.getElementById('heroDeviceName').textContent = '카메라 스캔 기능을 사용하여 스캔하세요';
+
+      const badgeIds = ['heroCompany', 'heroCategory', 'heroSecLevel', 'heroCarrier'];
+      badgeIds.forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = '-';
+        el.style.background = 'rgba(255, 255, 255, 0.08)';
+        el.style.borderColor = 'transparent';
+        el.style.color = 'var(--text-sub)';
+        el.style.fontWeight = '500';
+      });
+
+      document.getElementById('heroAp').textContent = '-';
+      document.getElementById('heroRamStorage').textContent = '-';
+      document.getElementById('heroImei1').textContent = '-';
+      document.getElementById('heroImei2').textContent = '-';
+      document.getElementById('heroSn').textContent = '-';
+      document.getElementById('heroColor').textContent = '-';
+      document.getElementById('heroNotes').textContent = '-';
+
+      document.querySelectorAll('#deviceTableBody tr').forEach(row => {
+        row.classList.remove('selected-row');
+      });
     }
 
     // 6. UI 렌더링
@@ -2170,7 +2176,6 @@
       }, 2500);
     }
 
-    // [신규] 앱 정보 모달 데이터 렌더링
     function renderAboutModal() {
       document.getElementById('aboutAppTitle').textContent = APP_INFO.title;
       document.getElementById('aboutAppVersion').textContent = APP_INFO.version;
@@ -2319,7 +2324,9 @@
       renderConfigTags();
       updateTabCounts();
       renderTable();
-      if (devices.length > 0) selectDevice(devices[0].id, false);
+
+      // [핵심] 첫 번째 단말기를 자동 선택하지 않고, 요청하신 초기 안내 화면으로 시작
+      resetHeroView();
 
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
@@ -2392,7 +2399,7 @@
               renderConfigTags();
               updateTabCounts();
               renderTable();
-              if (devices.length > 0) selectDevice(devices[0].id, true);
+              resetHeroView();
 
               fileInput.value = '';
               dataModal.classList.remove('active');
@@ -2480,11 +2487,19 @@
       };
 
       document.getElementById('btnEditCurrent').onclick = function() {
+        if (!currentSelectedId) {
+          showToast('수정할 기기를 먼저 목록에서 선택하거나 스캔하세요.', 'info');
+          return;
+        }
         const d = devices.find(x => x.id === currentSelectedId);
         if (d) openEditModal(d);
       };
 
       document.getElementById('btnDeleteCurrent').onclick = function() {
+        if (!currentSelectedId) {
+          showToast('삭제할 기기를 먼저 목록에서 선택하거나 스캔하세요.', 'info');
+          return;
+        }
         const d = devices.find(x => x.id === currentSelectedId);
         if (!d) return;
         deviceToDeleteId = d.id;
@@ -2500,11 +2515,7 @@
           devices = devices.filter(d => d.id !== deviceToDeleteId);
           await saveToCloud();
           renderTable();
-          if (currentSelectedId === deviceToDeleteId) {
-            const availableList = devices.filter(d => currentInventoryTab === 'sold' ? d.category === '판매완료' : d.category !== '판매완료');
-            currentSelectedId = availableList.length > 0 ? availableList[0].id : null;
-            if (currentSelectedId) selectDevice(currentSelectedId, true);
-          }
+          resetHeroView();
           showToast('기기가 삭제되었습니다.', 'info');
         }
         deleteModal.classList.remove('active');
