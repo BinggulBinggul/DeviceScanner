@@ -1130,15 +1130,15 @@
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
-        <div class="modal-title">ℹ️ 애플리케이션 정보</div>
+        <div class="modal-title">ℹ️ 프로그램 정보</div>
         <button type="button" class="modal-close" id="btnCloseAboutModal">&times;</button>
       </div>
       <div class="modal-body">
         <div class="about-card-hero">
           <div class="about-app-logo">M</div>
           <h2 style="font-size: 18px; font-weight: 800;" id="aboutAppTitle">Mobile Device Asset Manager</h2>
-          <p style="font-size: 12px; color: var(--text-sub); margin-top: 4px;" id="aboutAppDesc">리퀴드 글래스 기반 스마트 단말기 자산 관리 솔루션</p>
-          <div class="about-version-badge" id="aboutAppVersion">v2.5.0</div>
+          <p style="font-size: 12px; color: var(--text-sub); margin-top: 4px;" id="aboutAppDesc">스마트 단말기 자산 관리 솔루션</p>
+          <div class="about-version-badge" id="aboutAppVersion">v1.0</div>
         </div>
 
         <div class="specs-grid" style="margin-bottom: 16px;">
@@ -1375,38 +1375,19 @@
     // =========================================================
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
-      description: "리퀴드 글래스 기반 스마트 단말기 자산 관리 클라우드 시스템",
-      version: "v2.5.0",
+      description: "스마트 단말기 자산 관리 클라우드 시스템",
+      version: "v1.0",
       releaseDate: "2026-09-19",
       changelog: [
         {
-          version: "v2.5.0 (클라우드 데이터 복원 & 가변 반응형 패치)",
+          version: "v1.0",
           date: "2026.09.19",
           notes: [
-            "JSON 백업 파일 복원(업로드) 기능 및 통합 데이터 관리 모달 추가",
+            "기본 기능 구현 및 BETA 버전에서 발생한 오류 해결",
             "모바일/태블릿 가변 반응형(Fluid) 높이 및 부드러운 스크롤 최적화",
-            "Firestore 1MB 용량 초과 방지를 위한 이미지 필드 제거",
-            "사용자 정의 앱 정보 및 패치노트(Changelog) 팝업 신설"
+            "웹 기반으로 체제 변경",
           ]
         },
-        {
-          version: "v2.4.0 (판매 완료 탭 분리 & 자동 이동)",
-          date: "2026.09.19",
-          notes: [
-            "기기 목록 영역에 보유 단말기 vs 판매 완료 내역 전용 탭 분리",
-            "상태가 '판매완료'로 변경 저장 시 판매 완료 내역으로 자동 화면 전환",
-            "Firebase Firestore 클라우드 실시간 동기화(Spark Free) 연동"
-          ]
-        },
-        {
-          version: "v2.3.0 (카메라 바코드 & 하이테크 레이저)",
-          date: "2026.09.18",
-          notes: [
-            "스마트폰 카메라 및 PC 웹캠 Data Matrix/바코드 실시간 인식 지원",
-            "기기 조회 시 리퀴드 글래스 레이저 스캔 애니메이션 구동",
-            "제조사, 분류, 보안레벨 커스텀 컬러 피커 지원"
-          ]
-        }
       ]
     };
 
