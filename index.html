@@ -459,7 +459,7 @@
       border-radius: 14px;
       background: var(--glass-card);
     }
-    table { width: 100%; min-width: 620px; border-collapse: collapse; text-align: left; font-size: 12.5px; }
+    table { width: 100%; min-width: 680px; border-collapse: collapse; text-align: left; font-size: 12.5px; }
     thead {
       position: sticky;
       top: 0;
@@ -475,7 +475,7 @@
       white-space: nowrap;
     }
     td {
-      padding: 10px 12px;
+      padding: 9px 12px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       white-space: nowrap;
     }
@@ -485,6 +485,72 @@
     tbody tr.selected-row {
       background: rgba(99, 102, 241, 0.22) !important;
       border-left: 3px solid var(--accent);
+    }
+
+    /* =========================================================
+       [신규] 행 순서 변경 컨트롤 UI & 드래그 효과
+       ========================================================= */
+    .order-col-th { width: 75px; text-align: center; }
+    .order-control-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      user-select: none;
+    }
+    .order-drag-handle {
+      cursor: grab;
+      font-size: 14px;
+      color: var(--text-sub);
+      padding: 2px 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.7;
+      transition: opacity 0.15s, color 0.15s;
+    }
+    .order-drag-handle:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+    .order-drag-handle:active {
+      cursor: grabbing;
+    }
+    .order-step-btn {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--glass-border);
+      color: var(--text-sub);
+      border-radius: 6px;
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      cursor: pointer;
+      transition: all 0.15s;
+      padding: 0;
+    }
+    .order-step-btn:hover:not(:disabled) {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      transform: scale(1.08);
+    }
+    .order-step-btn:disabled {
+      opacity: 0.2;
+      cursor: not-allowed;
+    }
+    /* 드래그 앤 드롭 상태 시각 피드백 */
+    tbody tr.dragging-row {
+      opacity: 0.45;
+      background: rgba(99, 102, 241, 0.15) !important;
+    }
+    tbody tr.drag-target-top {
+      border-top: 2.5px solid var(--accent) !important;
+    }
+    tbody tr.drag-target-bottom {
+      border-bottom: 2.5px solid var(--accent) !important;
     }
 
     /* 모달 UI 공통 */
@@ -565,7 +631,6 @@
       box-shadow: 0 0 10px var(--accent-glow);
     }
 
-    /* 데이터 관리 모달 전용 카드 UI */
     .data-mgmt-card {
       background: var(--glass-card);
       border: 1px solid var(--glass-border);
@@ -588,7 +653,6 @@
       margin-bottom: 12px;
     }
 
-    /* 앱 정보 모달 전용 UI */
     .about-card-hero {
       text-align: center;
       padding: 10px 0 18px;
@@ -848,7 +912,6 @@
     .toast.error { border-left: 4px solid var(--danger); }
     .toast.info { border-left: 4px solid var(--accent); }
 
-    /* 모바일 반응형 */
     @media (max-width: 900px) {
       .app-container {
         height: auto;
@@ -959,13 +1022,12 @@
             <span>Mobile Device Asset Manager</span>
             <span class="cloud-status" id="cloudStatus">☁️ 연결 확인 중</span>
           </div>
-          <div class="brand-subtitle">Green Onion Project with Gemini</div>
+          <div class="brand-subtitle">Liquid Glass Cloud Inventory</div>
         </div>
       </div>
       <div class="header-actions">
         <button type="button" class="btn-icon btn-cam" id="btnOpenCamModal" title="카메라로 스캔">📷 카메라 스캔</button>
         <button type="button" class="btn-icon" id="btnOpenConfigModal" title="항목 및 색상 설정">⚙️ 항목 설정</button>
-        <!-- [신규] 앱 정보 버튼 -->
         <button type="button" class="btn-icon" id="btnOpenAboutModal" title="앱 정보 및 패치노트">ℹ️ 앱 정보</button>
         <button type="button" class="btn-icon" id="btnThemeToggle" title="화이트/다크 모드">☀️ 테마 전환</button>
         <button type="button" class="btn-icon btn-primary" id="btnOpenAddModal">＋ 신규 기기 등록</button>
@@ -1060,7 +1122,6 @@
             </select>
           </div>
           <div style="display: flex; gap: 8px;">
-            <!-- [신규] JSON 백업 버튼 -> 데이터 관리 버튼으로 변경 -->
             <button type="button" class="btn-icon" id="btnOpenDataModal">💾 데이터 관리</button>
           </div>
         </div>
@@ -1069,6 +1130,7 @@
           <table>
             <thead>
               <tr>
+                <th class="order-col-th">순서</th>
                 <th>관리번호</th>
                 <th>제조사</th>
                 <th>장치명</th>
@@ -1086,7 +1148,7 @@
     </div>
   </div>
 
-  <!-- Modal 1: Data Management (JSON Backup & Upload/Restore) -->
+  <!-- Modal 1: Data Management -->
   <div class="modal-overlay" id="dataModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
@@ -1094,23 +1156,21 @@
         <button type="button" class="modal-close" id="btnCloseDataModal">&times;</button>
       </div>
       <div class="modal-body">
-        <!-- 1. 백업 다운로드 -->
         <div class="data-mgmt-card">
           <div class="data-mgmt-title">📥 JSON 백업 파일 다운로드</div>
           <div class="data-mgmt-desc">
-            현재 클라우드에 저장된 모든 단말기 목록과 사용자 항목/색상 설정을 단일 <code>.json</code> 파일로 내보냅니다.
+            현재 클라우드에 저장된 모든 단말기 목록과 설정(순서 포함)을 <code>.json</code> 파일로 내보냅니다.
           </div>
           <button type="button" class="btn-icon btn-primary" id="btnDownloadJson" style="width: 100%; justify-content: center;">
             현재 데이터 JSON 백업받기
           </button>
         </div>
 
-        <!-- 2. 백업 파일 업로드 및 복원 -->
         <div class="data-mgmt-card" style="margin-bottom: 0;">
           <div class="data-mgmt-title">📤 JSON 백업 파일 불러오기 (복원)</div>
           <div class="data-mgmt-desc">
-            기존에 백업해 둔 <code>.json</code> 파일을 선택하여 클라우드 DB와 화면 전체에 복원합니다.<br>
-            <span style="color: var(--warning); font-weight: 600;">⚠️ 주의: 불러온 백업 데이터로 현재 기기 목록과 설정이 완전히 대체됩니다.</span>
+            기존에 백업해 둔 <code>.json</code> 파일을 선택하여 클라우드 DB와 화면에 복원합니다.<br>
+            <span style="color: var(--warning); font-weight: 600;">⚠️ 주의: 기존 데이터가 선택한 파일의 데이터로 대체됩니다.</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <input type="file" id="jsonFileInput" accept=".json" style="background: var(--input-bg); border: 1px solid var(--glass-border); padding: 8px; border-radius: 8px; font-size: 12px; color: var(--text-main);">
@@ -1130,15 +1190,15 @@
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
-        <div class="modal-title">ℹ️ 프로그램 정보</div>
+        <div class="modal-title">ℹ️ 애플리케이션 정보</div>
         <button type="button" class="modal-close" id="btnCloseAboutModal">&times;</button>
       </div>
       <div class="modal-body">
         <div class="about-card-hero">
           <div class="about-app-logo">M</div>
           <h2 style="font-size: 18px; font-weight: 800;" id="aboutAppTitle">Mobile Device Asset Manager</h2>
-          <p style="font-size: 12px; color: var(--text-sub); margin-top: 4px;" id="aboutAppDesc">스마트 단말기 자산 관리 솔루션</p>
-          <div class="about-version-badge" id="aboutAppVersion">v1.0</div>
+          <p style="font-size: 12px; color: var(--text-sub); margin-top: 4px;" id="aboutAppDesc">리퀴드 글래스 기반 스마트 단말기 자산 관리 솔루션</p>
+          <div class="about-version-badge" id="aboutAppVersion">v2.6.0</div>
         </div>
 
         <div class="specs-grid" style="margin-bottom: 16px;">
@@ -1151,12 +1211,12 @@
             <div class="spec-val">Firebase Firestore</div>
           </div>
           <div class="spec-item">
-            <div class="spec-lbl">스캐너 엔진</div>
-            <div class="spec-val">USB HID + HTML5 Cam</div>
+            <div class="spec-lbl">목록 순서 제어</div>
+            <div class="spec-val">드래그 앤 드롭 & ▲/▼</div>
           </div>
           <div class="spec-item">
             <div class="spec-lbl">마지막 빌드일</div>
-            <div class="spec-val" id="aboutAppDate">2026-09-19</div>
+            <div class="spec-val" id="aboutAppDate">2026-09-20</div>
           </div>
         </div>
 
@@ -1171,7 +1231,7 @@
     </div>
   </div>
 
-  <!-- Modal 3: Camera Barcode Scanner -->
+  <!-- Modal 3: Camera Scanner -->
   <div class="modal-overlay" id="camModal">
     <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
@@ -1371,23 +1431,41 @@
   <script>
     // =========================================================
     // [사용자 직접 수정 영역] 앱 정보 및 패치노트 (Changelog)
-    // 아래 내용만 텍스트로 직접 수정하면 [앱 정보] 팝업에 즉각 반영됩니다.
     // =========================================================
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
-      description: "스마트 단말기 자산 관리 클라우드 시스템",
-      version: "v1.0",
-      releaseDate: "2026-09-19",
+      description: "리퀴드 글래스 기반 스마트 단말기 자산 관리 클라우드 시스템",
+      version: "v2.6.0",
+      releaseDate: "2026-09-20",
       changelog: [
         {
-          version: "v1.0",
-          date: "2026.09.19",
+          version: "v2.6.0 (단말기 목록 순서 변경 기능 지원)",
+          date: "2026.09.20",
           notes: [
-            "기본 기능 구현 및 BETA 버전에서 발생한 오류 해결",
-            "모바일/태블릿 가변 반응형(Fluid) 높이 및 부드러운 스크롤 최적화",
-            "웹 기반으로 체제 변경",
+            "보유 목록 및 판매완료 목록에서 행 드래그 앤 드롭 순서 변경 지원",
+            "모바일/터치 환경을 위한 ▲ / ▼ 원클릭 위아래 순서 변경 버튼 신설",
+            "변경된 단말기 순서의 Firebase Firestore 실시간 자동 동기화"
           ]
         },
+        {
+          version: "v2.5.0 (클라우드 데이터 복원 & 가변 반응형 패치)",
+          date: "2026.09.19",
+          notes: [
+            "JSON 백업 파일 복원(업로드) 기능 및 통합 데이터 관리 모달 추가",
+            "모바일/태블릿 가변 반응형(Fluid) 높이 및 부드러운 스크롤 최적화",
+            "Firestore 1MB 용량 초과 방지를 위한 이미지 필드 제거",
+            "사용자 정의 앱 정보 및 패치노트(Changelog) 팝업 신설"
+          ]
+        },
+        {
+          version: "v2.4.0 (판매 완료 탭 분리 & 자동 이동)",
+          date: "2026.09.19",
+          notes: [
+            "기기 목록 영역에 보유 단말기 vs 판매 완료 내역 전용 탭 분리",
+            "상태가 '판매완료'로 변경 저장 시 판매 완료 내역으로 자동 화면 전환",
+            "Firebase Firestore 클라우드 실시간 동기화(Spark Free) 연동"
+          ]
+        }
       ]
     };
 
@@ -1430,6 +1508,9 @@
     let deviceToDeleteId = null;
     let centerAlertTimer = null;
     let currentInventoryTab = 'active';
+
+    // Drag & Drop State
+    let draggedRowDevId = null;
 
     // Camera Scanner Instance
     let html5QrCode = null;
@@ -1851,15 +1932,14 @@
       });
     }
 
-    function renderTable() {
-      const tbody = document.getElementById('deviceTableBody');
-      if (!tbody) return;
-      tbody.innerHTML = '';
-
+    // =========================================================
+    // [신규 로직] 단말기 순서 변경 (▲/▼ 버튼 및 드래그앤드롭 연동)
+    // =========================================================
+    function getCurrentlyFilteredDevices() {
       const query = document.getElementById('tableSearchInput').value.trim().toLowerCase();
       const filterCat = document.getElementById('filterCategory').value;
 
-      const filtered = devices.filter(d => {
+      return devices.filter(d => {
         if (currentInventoryTab === 'sold') {
           if (d.category !== '판매완료') return false;
         } else {
@@ -1876,24 +1956,92 @@
           (d.company || '').toLowerCase().includes(query)
         );
       });
+    }
+
+    function moveDeviceStep(devId, direction) {
+      const filtered = getCurrentlyFilteredDevices();
+      const currIdx = filtered.findIndex(d => d.id === devId);
+      if (currIdx === -1) return;
+
+      const targetIdx = currIdx + direction;
+      if (targetIdx < 0 || targetIdx >= filtered.length) return;
+
+      const currDev = filtered[currIdx];
+      const targetDev = filtered[targetIdx];
+
+      const realCurrIdx = devices.findIndex(d => d.id === currDev.id);
+      const realTargetIdx = devices.findIndex(d => d.id === targetDev.id);
+      if (realCurrIdx === -1 || realTargetIdx === -1) return;
+
+      devices.splice(realCurrIdx, 1);
+      const newTargetPos = devices.findIndex(d => d.id === targetDev.id);
+      if (direction > 0) {
+        devices.splice(newTargetPos + 1, 0, currDev);
+      } else {
+        devices.splice(newTargetPos, 0, currDev);
+      }
+
+      saveToCloud();
+      renderTable();
+      showToast('순서가 변경되었습니다.', 'info');
+    }
+
+    function reorderDeviceDrop(sourceId, targetId, placeAfter) {
+      if (!sourceId || !targetId || sourceId === targetId) return;
+
+      const sourceIndex = devices.findIndex(d => d.id === sourceId);
+      if (sourceIndex === -1) return;
+
+      const [movedItem] = devices.splice(sourceIndex, 1);
+      const targetIndex = devices.findIndex(d => d.id === targetId);
+
+      if (targetIndex === -1) {
+        devices.push(movedItem);
+      } else {
+        const insertPos = placeAfter ? targetIndex + 1 : targetIndex;
+        devices.splice(insertPos, 0, movedItem);
+      }
+
+      saveToCloud();
+      renderTable();
+      showToast('순서가 변경되었습니다.', 'info');
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('deviceTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const filtered = getCurrentlyFilteredDevices();
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 30px; color: var(--text-sub);">
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 30px; color: var(--text-sub);">
           ${currentInventoryTab === 'sold' ? '판매 완료된 기기가 없습니다.' : '조건과 일치하는 단말기가 없습니다.'}
         </td></tr>`;
         return;
       }
 
-      filtered.forEach(d => {
+      filtered.forEach((d, idx) => {
         const tr = document.createElement('tr');
         tr.dataset.id = d.id;
+        tr.setAttribute('draggable', 'true');
         if (d.id === currentSelectedId) tr.classList.add('selected-row');
 
         const companyColor = (appConfig.colors && appConfig.colors[d.company]) || '#3b82f6';
         const catColor = (appConfig.colors && appConfig.colors[d.category]) || '#10b981';
         const secColor = (appConfig.colors && appConfig.colors[d.securityLevel]) || '#ef4444';
 
+        const isFirst = idx === 0;
+        const isLast = idx === filtered.length - 1;
+
         tr.innerHTML = `
+          <td>
+            <div class="order-control-cell">
+              <span class="order-drag-handle" title="끌어서 순서 변경">⠿</span>
+              <button type="button" class="order-step-btn btn-step-up" title="위로 이동" ${isFirst ? 'disabled' : ''}>▲</button>
+              <button type="button" class="order-step-btn btn-step-down" title="아래로 이동" ${isLast ? 'disabled' : ''}>▼</button>
+            </div>
+          </td>
           <td style="font-weight: 700; color: var(--accent);">${d.managementNo || '-'}</td>
           <td><span class="badge" style="background:${hexToRgba(companyColor, 0.16)}; border-color:${hexToRgba(companyColor, 0.35)}; color:${companyColor};">${d.company || '-'}</span></td>
           <td style="font-weight: 600;">${d.name || '-'}</td>
@@ -1904,7 +2052,72 @@
           <td style="color: var(--text-sub); font-size: 11.5px;">${d.lastViewed || '-'}</td>
         `;
 
-        tr.onclick = () => selectDevice(d.id, true);
+        // 행 선택 이벤트
+        tr.onclick = (e) => {
+          if (e.target.closest('.order-control-cell')) return;
+          selectDevice(d.id, true);
+        };
+
+        // ▲ / ▼ 버튼 이벤트 바인딩
+        const btnUp = tr.querySelector('.btn-step-up');
+        const btnDown = tr.querySelector('.btn-step-down');
+
+        btnUp.onclick = (e) => {
+          e.stopPropagation();
+          moveDeviceStep(d.id, -1);
+        };
+
+        btnDown.onclick = (e) => {
+          e.stopPropagation();
+          moveDeviceStep(d.id, 1);
+        };
+
+        // 드래그 앤 드롭 이벤트 바인딩
+        tr.addEventListener('dragstart', (e) => {
+          draggedRowDevId = d.id;
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', d.id);
+          tr.classList.add('dragging-row');
+        });
+
+        tr.addEventListener('dragend', () => {
+          draggedRowDevId = null;
+          tr.classList.remove('dragging-row');
+          document.querySelectorAll('#deviceTableBody tr').forEach(r => {
+            r.classList.remove('drag-target-top', 'drag-target-bottom', 'dragging-row');
+          });
+        });
+
+        tr.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          if (!draggedRowDevId || draggedRowDevId === d.id) return;
+
+          const rect = tr.getBoundingClientRect();
+          const midY = rect.top + rect.height / 2;
+          tr.classList.remove('drag-target-top', 'drag-target-bottom');
+
+          if (e.clientY < midY) {
+            tr.classList.add('drag-target-top');
+          } else {
+            tr.classList.add('drag-target-bottom');
+          }
+        });
+
+        tr.addEventListener('dragleave', () => {
+          tr.classList.remove('drag-target-top', 'drag-target-bottom');
+        });
+
+        tr.addEventListener('drop', (e) => {
+          e.preventDefault();
+          tr.classList.remove('drag-target-top', 'drag-target-bottom');
+          if (!draggedRowDevId || draggedRowDevId === d.id) return;
+
+          const rect = tr.getBoundingClientRect();
+          const placeAfter = e.clientY >= (rect.top + rect.height / 2);
+
+          reorderDeviceDrop(draggedRowDevId, d.id, placeAfter);
+        });
+
         tbody.appendChild(tr);
       });
     }
@@ -1922,7 +2135,6 @@
       }, 2500);
     }
 
-    // [신규] 앱 정보 모달 렌더링 함수
     function renderAboutModal() {
       document.getElementById('aboutAppTitle').textContent = APP_INFO.title;
       document.getElementById('aboutAppDesc').textContent = APP_INFO.description;
@@ -2072,7 +2284,6 @@
       renderTable();
       if (devices.length > 0) selectDevice(devices[0].id, false);
 
-      // 상단 헤더 버튼들
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
@@ -2085,7 +2296,6 @@
       document.getElementById('btnOpenConfigModal').onclick = () => { renderConfigTags(); configModal.classList.add('active'); };
       document.getElementById('btnOpenAddModal').onclick = openAddModal;
 
-      // [신규] 앱 정보 모달 바인딩
       document.getElementById('btnOpenAboutModal').onclick = () => {
         renderAboutModal();
         aboutModal.classList.add('active');
@@ -2093,12 +2303,10 @@
       document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
       document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
 
-      // [신규] 데이터 관리 모달 열기/닫기
       document.getElementById('btnOpenDataModal').onclick = () => dataModal.classList.add('active');
       document.getElementById('btnCloseDataModal').onclick = () => dataModal.classList.remove('active');
       document.getElementById('btnCancelDataModal').onclick = () => dataModal.classList.remove('active');
 
-      // 1) 데이터 백업 다운로드
       document.getElementById('btnDownloadJson').onclick = function() {
         const exportData = { devices, config: appConfig, exportedAt: new Date().toISOString() };
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
@@ -2111,7 +2319,6 @@
         showToast('JSON 백업 파일이 다운로드되었습니다.', 'success');
       };
 
-      // 2) 데이터 업로드 (JSON 복원)
       document.getElementById('btnUploadJson').onclick = function() {
         const fileInput = document.getElementById('jsonFileInput');
         const file = fileInput.files[0];
@@ -2162,7 +2369,6 @@
         reader.readAsText(file);
       };
 
-      // 카메라 모달 닫기
       document.getElementById('btnCloseCamModal').onclick = () => { stopCamera(); camModal.classList.remove('active'); };
       document.getElementById('btnCancelCamModal').onclick = () => { stopCamera(); camModal.classList.remove('active'); };
 
