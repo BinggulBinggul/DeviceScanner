@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Mobile Device Asset Manager - Cloud Web</title>
- 
+  
   <!-- 1. 카메라 스캐너 SDK -->
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
@@ -23,7 +23,7 @@
       --orb-1: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
       --orb-3: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, transparent 70%);
-     
+      
       --glass-bg: rgba(17, 24, 39, 0.7);
       --glass-card: rgba(30, 41, 59, 0.55);
       --glass-card-hover: rgba(51, 65, 85, 0.7);
@@ -52,7 +52,7 @@
       --orb-1: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, transparent 70%);
       --orb-3: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%);
-     
+      
       --glass-bg: rgba(255, 255, 255, 0.78);
       --glass-card: rgba(255, 255, 255, 0.65);
       --glass-card-hover: rgba(255, 255, 255, 0.9);
@@ -98,7 +98,6 @@
     .orb-2 { width: 400px; height: 400px; bottom: -50px; right: -50px; background: var(--orb-2); }
     .orb-3 { width: 300px; height: 300px; top: 40%; left: 45%; background: var(--orb-3); }
 
-    /* 데스크톱 기본 컨테이너 */
     .app-container {
       position: relative;
       z-index: 1;
@@ -139,7 +138,7 @@
     }
     .brand-title { font-size: 16px; font-weight: 700; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .brand-subtitle { font-size: 11px; color: var(--text-sub); }
-   
+    
     .cloud-status {
       font-size: 11px;
       padding: 2px 8px;
@@ -256,7 +255,6 @@
       padding: 4px;
     }
 
-    /* 데스크톱 기본 작업공간 */
     .workspace {
       display: grid;
       grid-template-columns: 440px 1fr;
@@ -265,7 +263,6 @@
       min-height: 0;
     }
 
-    /* Left Hero Card (사진 제거 후 콤팩트 구성) */
     .hero-device-view {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -365,7 +362,6 @@
     .hero-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 10px; }
     .hero-actions button { flex: 1; justify-content: center; }
 
-    /* Right Inventory Panel */
     .inventory-panel {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -491,7 +487,7 @@
       border-left: 3px solid var(--accent);
     }
 
-    /* 모달 공통 */
+    /* 모달 UI 공통 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -568,6 +564,83 @@
       border-color: var(--accent);
       box-shadow: 0 0 10px var(--accent-glow);
     }
+
+    /* 데이터 관리 모달 전용 카드 UI */
+    .data-mgmt-card {
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .data-mgmt-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .data-mgmt-desc {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    /* 앱 정보 모달 전용 UI */
+    .about-card-hero {
+      text-align: center;
+      padding: 10px 0 18px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 16px;
+    }
+    .about-app-logo {
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 10px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 900;
+      font-size: 26px;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+    .about-version-badge {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--accent);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 6px;
+    }
+    .changelog-box { margin-top: 14px; }
+    .changelog-item {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 16px;
+      border-left: 2px solid var(--glass-border);
+    }
+    .changelog-item::before {
+      content: '';
+      position: absolute;
+      left: -5.5px;
+      top: 4px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+    .changelog-ver { font-size: 13.5px; font-weight: 700; color: var(--text-main); }
+    .changelog-date { font-size: 11px; color: var(--text-sub); margin-bottom: 6px; }
+    .changelog-desc { font-size: 12px; color: var(--text-sub); line-height: 1.6; }
 
     .cam-scanner-wrap {
       display: flex;
@@ -775,9 +848,7 @@
     .toast.error { border-left: 4px solid var(--danger); }
     .toast.info { border-left: 4px solid var(--accent); }
 
-    /* =========================================================
-       모바일 및 태블릿 완전 가변(Fluid) 반응형 스타일
-       ========================================================= */
+    /* 모바일 반응형 */
     @media (max-width: 900px) {
       .app-container {
         height: auto;
@@ -811,14 +882,12 @@
         height: auto;
         gap: 12px;
       }
-      /* 스캔된 기기 상세 카드 - 내용에 맞춰 자연스럽게 늘어남 */
       .hero-device-view {
         height: auto;
         max-height: none;
         overflow: visible;
         padding: 16px;
       }
-      /* 인벤토리 목록 패널 - 모바일 화면에서 유연한 높이 */
       .inventory-panel {
         height: auto;
         min-height: 480px;
@@ -896,6 +965,8 @@
       <div class="header-actions">
         <button type="button" class="btn-icon btn-cam" id="btnOpenCamModal" title="카메라로 스캔">📷 카메라 스캔</button>
         <button type="button" class="btn-icon" id="btnOpenConfigModal" title="항목 및 색상 설정">⚙️ 항목 설정</button>
+        <!-- [신규] 앱 정보 버튼 -->
+        <button type="button" class="btn-icon" id="btnOpenAboutModal" title="앱 정보 및 패치노트">ℹ️ 앱 정보</button>
         <button type="button" class="btn-icon" id="btnThemeToggle" title="화이트/다크 모드">☀️ 테마 전환</button>
         <button type="button" class="btn-icon btn-primary" id="btnOpenAddModal">＋ 신규 기기 등록</button>
       </div>
@@ -914,7 +985,7 @@
     </div>
 
     <div class="workspace">
-      <!-- Left Hero Card (사진 제거 후 콤팩트 스펙 뷰) -->
+      <!-- Left Hero Card -->
       <div class="hero-device-view" id="heroView">
         <div class="hero-laser-beam"></div>
 
@@ -922,7 +993,7 @@
           <span class="mgmt-badge" id="heroMgmtNo">SM001</span>
           <span style="font-size: 11.5px; color: var(--text-sub);" id="heroLastViewed">조회 기록 없음</span>
         </div>
-       
+        
         <div class="hero-device-name" id="heroDeviceName">기기를 선택하세요</div>
         <div class="hero-meta-bar">
           <span class="badge" id="heroCategory">메인</span>
@@ -989,7 +1060,8 @@
             </select>
           </div>
           <div style="display: flex; gap: 8px;">
-            <button type="button" class="btn-icon" id="btnExportJson">JSON 백업</button>
+            <!-- [신규] JSON 백업 버튼 -> 데이터 관리 버튼으로 변경 -->
+            <button type="button" class="btn-icon" id="btnOpenDataModal">💾 데이터 관리</button>
           </div>
         </div>
 
@@ -1014,7 +1086,92 @@
     </div>
   </div>
 
-  <!-- Modal: Camera Barcode Scanner -->
+  <!-- Modal 1: Data Management (JSON Backup & Upload/Restore) -->
+  <div class="modal-overlay" id="dataModal">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <div class="modal-title">💾 JSON 데이터 백업 및 복원 관리</div>
+        <button type="button" class="modal-close" id="btnCloseDataModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- 1. 백업 다운로드 -->
+        <div class="data-mgmt-card">
+          <div class="data-mgmt-title">📥 JSON 백업 파일 다운로드</div>
+          <div class="data-mgmt-desc">
+            현재 클라우드에 저장된 모든 단말기 목록과 사용자 항목/색상 설정을 단일 <code>.json</code> 파일로 내보냅니다.
+          </div>
+          <button type="button" class="btn-icon btn-primary" id="btnDownloadJson" style="width: 100%; justify-content: center;">
+            현재 데이터 JSON 백업받기
+          </button>
+        </div>
+
+        <!-- 2. 백업 파일 업로드 및 복원 -->
+        <div class="data-mgmt-card" style="margin-bottom: 0;">
+          <div class="data-mgmt-title">📤 JSON 백업 파일 불러오기 (복원)</div>
+          <div class="data-mgmt-desc">
+            기존에 백업해 둔 <code>.json</code> 파일을 선택하여 클라우드 DB와 화면 전체에 복원합니다.<br>
+            <span style="color: var(--warning); font-weight: 600;">⚠️ 주의: 불러온 백업 데이터로 현재 기기 목록과 설정이 완전히 대체됩니다.</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <input type="file" id="jsonFileInput" accept=".json" style="background: var(--input-bg); border: 1px solid var(--glass-border); padding: 8px; border-radius: 8px; font-size: 12px; color: var(--text-main);">
+            <button type="button" class="btn-icon" id="btnUploadJson" style="background: var(--accent); color: #fff; justify-content: center;">
+              선택한 파일로 데이터 복원하기
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-icon" id="btnCancelDataModal">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: App Info & Changelog -->
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-header">
+        <div class="modal-title">ℹ️ 애플리케이션 정보</div>
+        <button type="button" class="modal-close" id="btnCloseAboutModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="about-card-hero">
+          <div class="about-app-logo">M</div>
+          <h2 style="font-size: 18px; font-weight: 800;" id="aboutAppTitle">Mobile Device Asset Manager</h2>
+          <p style="font-size: 12px; color: var(--text-sub); margin-top: 4px;" id="aboutAppDesc">리퀴드 글래스 기반 스마트 단말기 자산 관리 솔루션</p>
+          <div class="about-version-badge" id="aboutAppVersion">v2.5.0</div>
+        </div>
+
+        <div class="specs-grid" style="margin-bottom: 16px;">
+          <div class="spec-item">
+            <div class="spec-lbl">배포 환경</div>
+            <div class="spec-val">Vercel Web + GitHub</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-lbl">클라우드 DB</div>
+            <div class="spec-val">Firebase Firestore</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-lbl">스캐너 엔진</div>
+            <div class="spec-val">USB HID + HTML5 Cam</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-lbl">마지막 빌드일</div>
+            <div class="spec-val" id="aboutAppDate">2026-09-19</div>
+          </div>
+        </div>
+
+        <div class="changelog-box">
+          <div style="font-size: 13.5px; font-weight: 700; margin-bottom: 12px;">📋 업데이트 내역 (Changelog)</div>
+          <div id="changelogContainer"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-icon btn-primary" id="btnDoneAboutModal">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Camera Barcode Scanner -->
   <div class="modal-overlay" id="camModal">
     <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
@@ -1039,7 +1196,7 @@
     </div>
   </div>
 
-  <!-- Modal: Add / Edit Device (사진 첨부 필드 삭제 완료) -->
+  <!-- Modal 4: Add / Edit Device -->
   <div class="modal-overlay" id="deviceModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -1116,7 +1273,7 @@
     </div>
   </div>
 
-  <!-- Modal: Options & Color Config -->
+  <!-- Modal 5: Options & Color Config -->
   <div class="modal-overlay" id="configModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -1185,7 +1342,7 @@
     </div>
   </div>
 
-  <!-- Modal: Delete Confirmation -->
+  <!-- Modal 6: Delete Confirmation -->
   <div class="modal-overlay" id="deleteModal">
     <div class="modal-box" style="max-width: 400px;">
       <div class="modal-header">
@@ -1208,7 +1365,51 @@
     <span id="toastMsg">알림 메시지</span>
   </div>
 
+  <!-- =========================================================
+       JavaScript Application Core
+       ========================================================= -->
   <script>
+    // =========================================================
+    // [사용자 직접 수정 영역] 앱 정보 및 패치노트 (Changelog)
+    // 아래 내용만 텍스트로 직접 수정하면 [앱 정보] 팝업에 즉각 반영됩니다.
+    // =========================================================
+    const APP_INFO = {
+      title: "Mobile Device Asset Manager",
+      description: "리퀴드 글래스 기반 스마트 단말기 자산 관리 클라우드 시스템",
+      version: "v2.5.0",
+      releaseDate: "2026-09-19",
+      changelog: [
+        {
+          version: "v2.5.0 (클라우드 데이터 복원 & 가변 반응형 패치)",
+          date: "2026.09.19",
+          notes: [
+            "JSON 백업 파일 복원(업로드) 기능 및 통합 데이터 관리 모달 추가",
+            "모바일/태블릿 가변 반응형(Fluid) 높이 및 부드러운 스크롤 최적화",
+            "Firestore 1MB 용량 초과 방지를 위한 이미지 필드 제거",
+            "사용자 정의 앱 정보 및 패치노트(Changelog) 팝업 신설"
+          ]
+        },
+        {
+          version: "v2.4.0 (판매 완료 탭 분리 & 자동 이동)",
+          date: "2026.09.19",
+          notes: [
+            "기기 목록 영역에 보유 단말기 vs 판매 완료 내역 전용 탭 분리",
+            "상태가 '판매완료'로 변경 저장 시 판매 완료 내역으로 자동 화면 전환",
+            "Firebase Firestore 클라우드 실시간 동기화(Spark Free) 연동"
+          ]
+        },
+        {
+          version: "v2.3.0 (카메라 바코드 & 하이테크 레이저)",
+          date: "2026.09.18",
+          notes: [
+            "스마트폰 카메라 및 PC 웹캠 Data Matrix/바코드 실시간 인식 지원",
+            "기기 조회 시 리퀴드 글래스 레이저 스캔 애니메이션 구동",
+            "제조사, 분류, 보안레벨 커스텀 컬러 피커 지원"
+          ]
+        }
+      ]
+    };
+
     // 1. 기본 상태 및 데이터
     let appConfig = {
       companies: ["삼성전자", "애플", "구글", "소니", "모토로라", "LG전자", "샤오미", "기타"],
@@ -1427,7 +1628,7 @@
       appConfig[configKey].forEach((val, idx) => {
         const chip = document.createElement('div');
         chip.className = 'tag-chip';
-       
+        
         let colorHtml = '';
         if (hasColor) {
           const colorHex = (appConfig.colors && appConfig.colors[val]) || '#6366f1';
@@ -1602,7 +1803,7 @@
         const now = new Date();
         const pad = (n) => String(n).padStart(2, '0');
         found.lastViewed = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-       
+        
         saveToCloud();
 
         if (found.category === '판매완료' && currentInventoryTab !== 'sold') {
@@ -1625,7 +1826,7 @@
       scannerInput.focus();
     }
 
-    // 6. UI 렌더링 (사진 관련 DOM 조작 완전 제거)
+    // 6. UI 렌더링
     function selectDevice(id, triggerAnim = false) {
       currentSelectedId = id;
       const d = devices.find(x => x.id === id);
@@ -1740,6 +1941,30 @@
       }, 2500);
     }
 
+    // [신규] 앱 정보 모달 렌더링 함수
+    function renderAboutModal() {
+      document.getElementById('aboutAppTitle').textContent = APP_INFO.title;
+      document.getElementById('aboutAppDesc').textContent = APP_INFO.description;
+      document.getElementById('aboutAppVersion').textContent = APP_INFO.version;
+      document.getElementById('aboutAppDate').textContent = APP_INFO.releaseDate;
+
+      const container = document.getElementById('changelogContainer');
+      container.innerHTML = '';
+
+      APP_INFO.changelog.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'changelog-item';
+        
+        let notesHtml = item.notes.map(n => `• ${n}`).join('<br>');
+        itemDiv.innerHTML = `
+          <div class="changelog-ver">${item.version}</div>
+          <div class="changelog-date">${item.date}</div>
+          <div class="changelog-desc">${notesHtml}</div>
+        `;
+        container.appendChild(itemDiv);
+      });
+    }
+
     // 7. 카메라 스캐너
     const camModal = document.getElementById('camModal');
     const cameraSelect = document.getElementById('cameraSelect');
@@ -1817,6 +2042,8 @@
     const deviceModal = document.getElementById('deviceModal');
     const deleteModal = document.getElementById('deleteModal');
     const configModal = document.getElementById('configModal');
+    const dataModal = document.getElementById('dataModal');
+    const aboutModal = document.getElementById('aboutModal');
 
     function openAddModal() {
       refreshSelectDropdowns();
@@ -1847,7 +2074,7 @@
       deviceModal.classList.add('active');
     }
 
-    // 9. 초기화 및 이벤트 바인딩
+    // 9. 초기화 및 전체 이벤트 바인딩
     function initializeAppCore() {
       const cached = localStorage.getItem('mobile_devices_cloud_cache');
       if (cached) {
@@ -1864,6 +2091,7 @@
       renderTable();
       if (devices.length > 0) selectDevice(devices[0].id, false);
 
+      // 상단 헤더 버튼들
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
@@ -1876,6 +2104,84 @@
       document.getElementById('btnOpenConfigModal').onclick = () => { renderConfigTags(); configModal.classList.add('active'); };
       document.getElementById('btnOpenAddModal').onclick = openAddModal;
 
+      // [신규] 앱 정보 모달 바인딩
+      document.getElementById('btnOpenAboutModal').onclick = () => {
+        renderAboutModal();
+        aboutModal.classList.add('active');
+      };
+      document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
+      document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
+
+      // [신규] 데이터 관리 모달 열기/닫기
+      document.getElementById('btnOpenDataModal').onclick = () => dataModal.classList.add('active');
+      document.getElementById('btnCloseDataModal').onclick = () => dataModal.classList.remove('active');
+      document.getElementById('btnCancelDataModal').onclick = () => dataModal.classList.remove('active');
+
+      // 1) 데이터 백업 다운로드
+      document.getElementById('btnDownloadJson').onclick = function() {
+        const exportData = { devices, config: appConfig, exportedAt: new Date().toISOString() };
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+        const dlAnchor = document.createElement('a');
+        dlAnchor.setAttribute("href", dataStr);
+        dlAnchor.setAttribute("download", `devices_backup_${Date.now()}.json`);
+        document.body.appendChild(dlAnchor);
+        dlAnchor.click();
+        dlAnchor.remove();
+        showToast('JSON 백업 파일이 다운로드되었습니다.', 'success');
+      };
+
+      // 2) 데이터 업로드 (JSON 복원)
+      document.getElementById('btnUploadJson').onclick = function() {
+        const fileInput = document.getElementById('jsonFileInput');
+        const file = fileInput.files[0];
+        if (!file) {
+          showToast('복원할 .json 파일을 먼저 선택해 주세요.', 'error');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = async function(evt) {
+          try {
+            const imported = JSON.parse(evt.target.result);
+            if (!imported || (!Array.isArray(imported.devices) && !Array.isArray(imported))) {
+              showToast('유효하지 않은 백업 파일 형식입니다.', 'error');
+              return;
+            }
+
+            if (confirm("정말 이 백업 파일로 현재 데이터를 복원하시겠습니까? 기존 데이터는 대체됩니다.")) {
+              if (Array.isArray(imported)) {
+                devices = imported;
+              } else {
+                devices = imported.devices || [];
+                if (imported.config) {
+                  if (Array.isArray(imported.config.companies)) appConfig.companies = imported.config.companies;
+                  if (Array.isArray(imported.config.categories)) appConfig.categories = imported.config.categories;
+                  if (Array.isArray(imported.config.securityLevels)) appConfig.securityLevels = imported.config.securityLevels;
+                  if (Array.isArray(imported.config.carriers)) appConfig.carriers = imported.config.carriers;
+                  if (imported.config.colors) appConfig.colors = { ...appConfig.colors, ...imported.config.colors };
+                }
+              }
+
+              await saveToCloud();
+              refreshSelectDropdowns();
+              renderConfigTags();
+              updateTabCounts();
+              renderTable();
+              if (devices.length > 0) selectDevice(devices[0].id, true);
+
+              fileInput.value = '';
+              dataModal.classList.remove('active');
+              showToast('데이터 복원이 성공적으로 완료되었습니다!', 'success');
+            }
+          } catch (err) {
+            console.error(err);
+            showToast('JSON 파일을 읽는 중 오류가 발생했습니다.', 'error');
+          }
+        };
+        reader.readAsText(file);
+      };
+
+      // 카메라 모달 닫기
       document.getElementById('btnCloseCamModal').onclick = () => { stopCamera(); camModal.classList.remove('active'); };
       document.getElementById('btnCancelCamModal').onclick = () => { stopCamera(); camModal.classList.remove('active'); };
 
@@ -1908,7 +2214,6 @@
         const id = document.getElementById('formDeviceId').value;
         const newCategory = document.getElementById('formCategory').value;
 
-        // 사진 필드 제외된 순수 텍스트 데이터 구성
         const deviceData = {
           id: id || ('dev-' + Date.now()),
           managementNo: document.getElementById('formMgmtNo').value.trim(),
@@ -2006,18 +2311,6 @@
 
       document.getElementById('tableSearchInput').addEventListener('input', renderTable);
       document.getElementById('filterCategory').addEventListener('change', renderTable);
-
-      document.getElementById('btnExportJson').onclick = function() {
-        const exportData = { devices, config: appConfig };
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
-        const dlAnchor = document.createElement('a');
-        dlAnchor.setAttribute("href", dataStr);
-        dlAnchor.setAttribute("download", `devices_cloud_backup_${Date.now()}.json`);
-        document.body.appendChild(dlAnchor);
-        dlAnchor.click();
-        dlAnchor.remove();
-        showToast('설정 및 데이터가 백업되었습니다.', 'success');
-      };
 
       initFirebase();
       setTimeout(() => barcodeInput.focus(), 300);
