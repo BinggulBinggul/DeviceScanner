@@ -13,6 +13,10 @@
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
 
   <style>
+    @view-transition {
+      navigation: auto;
+    }
+
     :root {
       --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
       --transition-speed: 0.25s;
@@ -77,6 +81,20 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @keyframes pageEnterAnim {
+      0% {
+        opacity: 0;
+        transform: scale(0.985) translateY(12px);
+        filter: blur(6px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+    }
+
     body {
       font-family: var(--font-family);
       background: var(--bg-gradient);
@@ -85,6 +103,15 @@
       overflow-x: hidden;
       position: relative;
       user-select: none;
+      animation: pageEnterAnim 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1), transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), filter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.page-leaving {
+      opacity: 0 !important;
+      transform: scale(0.985) translateY(-8px) !important;
+      filter: blur(6px) !important;
+      pointer-events: none;
     }
 
     .orb {
@@ -173,15 +200,26 @@
       border-color: var(--accent);
       transform: translateY(-1px);
     }
+
+    /* 대시보드 복귀 버튼 스타일 (대파 로고 포함) */
     .btn-dashboard {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399 !important;
       border-color: rgba(16, 185, 129, 0.35);
+      gap: 6px;
     }
     .btn-dashboard:hover {
       background: rgba(16, 185, 129, 0.28);
       border-color: #10b981;
     }
+    .btn-dashboard svg {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      vertical-align: middle;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+    }
+
     .btn-cam {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
       color: #fff !important;
@@ -297,7 +335,7 @@
       box-shadow: 0 0 15px #38bdf8, 0 0 30px #818cf8;
       opacity: 0;
       pointer-events: none;
-      z-10;
+      z-index: 10;
     }
     .hero-device-view.hero-updated { animation: heroCardFlash 0.55s ease-out; }
     .hero-device-view.hero-updated .hero-laser-beam { animation: laserSweep 0.55s ease-in-out; }
@@ -991,7 +1029,6 @@
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
 
-  <!-- 중앙 미등록 알림창 -->
   <div class="center-alert-container" id="centerAlert">
     <div class="center-alert-box">
       <div class="center-alert-header">
@@ -1024,8 +1061,18 @@
         </div>
       </div>
       <div class="header-actions">
-        <!-- [신규] 대시보드로 나가기 버튼 -->
-        <a href="./index.html" class="btn-icon btn-dashboard" title="Green Onion Project 메인 대시보드로 이동">🌱 대시보드</a>
+        <!-- [수정 완료] 대파 벡터 SVG 아이콘이 적용된 대시보드 복귀 버튼 -->
+        <a href="./index.html" class="btn-icon btn-dashboard" title="Green Onion Project 메인 대시보드로 이동">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 11C10 7 7 4 4 3C5 7 8 9 10 12" fill="#a7f3d0"/>
+            <path d="M12 10C13 6 16 3 20 2C18 6 15 8 13 11" fill="#6ee7b7"/>
+            <path d="M11.5 10C11 6 12 3 13 1.5C13.8 4 13 7 12.5 10" fill="#a7f3d0"/>
+            <path d="M10 11C9.5 14.5 9.5 18 10 20.5C10.1 21.3 12.9 21.3 13 20.5C13.5 18 13.5 14.5 13 11H10Z" fill="#ffffff"/>
+            <path d="M9.8 14.5H13.2" stroke="#6ee7b7" stroke-width="1.2" stroke-linecap="round"/>
+            <path d="M10.5 21L9.5 23M11.5 21V23.5M12.5 21L13.5 23" stroke="#f1f5f9" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          <span>대시보드</span>
+        </a>
         <button type="button" class="btn-icon btn-cam" id="btnOpenCamModal" title="카메라로 스캔">📷 카메라 스캔</button>
         <button type="button" class="btn-icon" id="btnOpenConfigModal" title="항목 및 색상 설정">⚙️ 항목 설정</button>
         <button type="button" class="btn-icon" id="btnOpenAboutModal" title="앱 정보 및 패치노트">ℹ️ 앱 정보</button>
@@ -1186,7 +1233,7 @@
     </div>
   </div>
 
-  <!-- Modal 2: App Info & Changelog (v1.0 정식출시 반영) -->
+  <!-- Modal 2: App Info & Changelog -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
@@ -1419,16 +1466,11 @@
     </div>
   </div>
 
-  <!-- Toast Notification -->
   <div class="toast" id="toastBox">
     <span id="toastMsg">알림 메시지</span>
   </div>
 
-  <!-- =========================================================
-       JavaScript Application Core
-       ========================================================= -->
   <script>
-    // [사용자 직접 수정 영역] 앱 정보 및 패치노트 (Changelog)
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
       version: "v1.0",
@@ -1447,7 +1489,6 @@
       ]
     };
 
-    // 1. 기본 상태 및 데이터
     let appConfig = {
       companies: ["삼성전자", "애플", "구글", "소니", "모토로라", "LG전자", "샤오미", "기타"],
       categories: ["메인", "서브", "보관", "미사용", "판매완료"],
@@ -1467,15 +1508,11 @@
     let centerAlertTimer = null;
     let currentInventoryTab = 'active';
 
-    // Drag & Drop State
     let draggedRowDevId = null;
-
-    // Camera Scanner Instance
     let html5QrCode = null;
     let availableCameras = [];
     let currentCameraIndex = 0;
 
-    // Web Audio Beep
     let audioCtx = null;
     function playBeep(freq = 880, type = 'sine', duration = 0.12) {
       try {
@@ -1510,7 +1547,6 @@
       elem.style.fontWeight = '700';
     }
 
-    // 2. Firebase Cloud Init
     let firestoreDb = null;
     let inventoryDocRef = null;
 
@@ -1603,7 +1639,6 @@
       }
     }
 
-    // 3. UI 갱신 함수들
     function refreshSelectDropdowns() {
       populateOptions('formCompany', appConfig.companies);
       populateOptions('formCategory', appConfig.categories);
@@ -1784,7 +1819,6 @@
       showToast(`'${val}' 항목이 추가되었습니다.`, 'success');
     }
 
-    // 4. 탭 제어
     function updateTabCounts() {
       const soldCount = devices.filter(d => d.category === '판매완료').length;
       const activeCount = devices.length - soldCount;
@@ -1817,7 +1851,6 @@
       }
     }
 
-    // 5. 바코드 스마트 매칭
     function cleanCodeString(str) {
       if (!str) return "";
       return str.replace(/[\x00-\x1F\x7F-\x9F]/g, "").trim();
@@ -1911,7 +1944,6 @@
       scannerInput.focus();
     }
 
-    // Hero View 초기화
     function resetHeroView() {
       currentSelectedId = null;
       document.getElementById('heroMgmtNo').textContent = 'TEST';
@@ -1941,7 +1973,6 @@
       });
     }
 
-    // 6. UI 렌더링
     function selectDevice(id, triggerAnim = false) {
       currentSelectedId = id;
       const d = devices.find(x => x.id === id);
@@ -2182,7 +2213,6 @@
       }, 2500);
     }
 
-    // [신규] 앱 정보 모달 데이터 렌더링 (v1.0 정식출시 반영)
     function renderAboutModal() {
       document.getElementById('aboutAppTitle').textContent = APP_INFO.title;
       document.getElementById('aboutAppVersion').textContent = APP_INFO.version;
@@ -2207,7 +2237,6 @@
       });
     }
 
-    // 7. 카메라 스캐너
     const camModal = document.getElementById('camModal');
     const cameraSelect = document.getElementById('cameraSelect');
 
@@ -2280,7 +2309,6 @@
       }
     }
 
-    // 8. 모달 제어
     const deviceModal = document.getElementById('deviceModal');
     const deleteModal = document.getElementById('deleteModal');
     const configModal = document.getElementById('configModal');
@@ -2316,7 +2344,6 @@
       deviceModal.classList.add('active');
     }
 
-    // 9. 초기화 및 전체 이벤트 바인딩
     function initializeAppCore() {
       const cached = localStorage.getItem('mobile_devices_cloud_cache');
       if (cached) {
@@ -2332,6 +2359,25 @@
       updateTabCounts();
       renderTable();
       resetHeroView();
+
+      document.querySelectorAll('a[href]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const targetUrl = this.getAttribute('href');
+          if (!targetUrl || targetUrl.startsWith('#') || targetUrl.startsWith('javascript:') || this.getAttribute('target') === '_blank') return;
+          
+          e.preventDefault();
+          document.body.classList.add('page-leaving');
+          setTimeout(() => {
+            window.location.href = targetUrl;
+          }, 220);
+        });
+      });
+
+      window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+          document.body.classList.remove('page-leaving');
+        }
+      });
 
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
