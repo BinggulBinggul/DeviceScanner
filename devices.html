@@ -166,11 +166,21 @@
       gap: 6px;
       transition: all var(--transition-speed);
       white-space: nowrap;
+      text-decoration: none;
     }
     .btn-icon:hover {
       background: var(--glass-card-hover);
       border-color: var(--accent);
       transform: translateY(-1px);
+    }
+    .btn-dashboard {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399 !important;
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+    .btn-dashboard:hover {
+      background: rgba(16, 185, 129, 0.28);
+      border-color: #10b981;
     }
     .btn-cam {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
@@ -287,7 +297,7 @@
       box-shadow: 0 0 15px #38bdf8, 0 0 30px #818cf8;
       opacity: 0;
       pointer-events: none;
-      z-index: 10;
+      z-10;
     }
     .hero-device-view.hero-updated { animation: heroCardFlash 0.55s ease-out; }
     .hero-device-view.hero-updated .hero-laser-beam { animation: laserSweep 0.55s ease-in-out; }
@@ -1014,6 +1024,8 @@
         </div>
       </div>
       <div class="header-actions">
+        <!-- [신규] 대시보드로 나가기 버튼 -->
+        <a href="./index.html" class="btn-icon btn-dashboard" title="Green Onion Project 메인 대시보드로 이동">🌱 대시보드</a>
         <button type="button" class="btn-icon btn-cam" id="btnOpenCamModal" title="카메라로 스캔">📷 카메라 스캔</button>
         <button type="button" class="btn-icon" id="btnOpenConfigModal" title="항목 및 색상 설정">⚙️ 항목 설정</button>
         <button type="button" class="btn-icon" id="btnOpenAboutModal" title="앱 정보 및 패치노트">ℹ️ 앱 정보</button>
@@ -1035,7 +1047,7 @@
     </div>
 
     <div class="workspace">
-      <!-- Left Hero Card (초기 기본값: TEST 및 안내 문구) -->
+      <!-- Left Hero Card -->
       <div class="hero-device-view" id="heroView">
         <div class="hero-laser-beam"></div>
 
@@ -1174,7 +1186,7 @@
     </div>
   </div>
 
-  <!-- Modal 2: App Info & Changelog -->
+  <!-- Modal 2: App Info & Changelog (v1.0 정식출시 반영) -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
@@ -1185,7 +1197,7 @@
         <div class="about-card-hero">
           <div class="about-app-logo">M</div>
           <h2 style="font-size: 18px; font-weight: 800;" id="aboutAppTitle">Mobile Device Asset Manager</h2>
-          <div class="about-version-badge" id="aboutAppVersion">v1.0 BETA</div>
+          <div class="about-version-badge" id="aboutAppVersion">v1.0</div>
         </div>
 
         <div class="specs-grid" style="margin-bottom: 16px;">
@@ -1419,19 +1431,17 @@
     // [사용자 직접 수정 영역] 앱 정보 및 패치노트 (Changelog)
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
-      version: "v1.0 BETA",
+      version: "v1.0",
       deployEnv: "Vercel Web + GitHub",
       cloud: "Firebase Firestore",
       ai: "Gemini",
       releaseDate: "2026-09-20",
       changelog: [
         {
-          version: "v1.0 BETA",
+          version: "v1.0 정식출시",
           date: "2026.09.20",
           notes: [
-            "초기 기능 구현 및 오류 제거",
-            "가변 UI적용",
-            "바코드 리더기 및 스캔 디바이스 카메라 지원"
+            "Green Onion Project와 통합"
           ]
         }
       ]
@@ -1537,7 +1547,6 @@
               updateTabCounts();
               renderTable();
 
-              // 기존에 선택되어 있던 단말기가 있는 경우에만 유지 (자동 1번째 선택 방지)
               if (currentSelectedId) {
                 const stillExists = devices.find(d => d.id === currentSelectedId);
                 if (stillExists) selectDevice(currentSelectedId, false);
@@ -1799,7 +1808,6 @@
       refreshSelectDropdowns();
       renderTable();
 
-      // 현재 선택된 기기가 다른 탭으로 넘어간 경우 초기 안내 화면으로 복귀
       if (currentSelectedId) {
         const currentDev = devices.find(d => d.id === currentSelectedId);
         const isCurrentSold = currentDev && currentDev.category === '판매완료';
@@ -1903,9 +1911,7 @@
       scannerInput.focus();
     }
 
-    // =========================================================
-    // [신규] 아무것도 선택되지 않았을 때의 Hero View 초기화
-    // =========================================================
+    // Hero View 초기화
     function resetHeroView() {
       currentSelectedId = null;
       document.getElementById('heroMgmtNo').textContent = 'TEST';
@@ -2176,6 +2182,7 @@
       }, 2500);
     }
 
+    // [신규] 앱 정보 모달 데이터 렌더링 (v1.0 정식출시 반영)
     function renderAboutModal() {
       document.getElementById('aboutAppTitle').textContent = APP_INFO.title;
       document.getElementById('aboutAppVersion').textContent = APP_INFO.version;
@@ -2324,8 +2331,6 @@
       renderConfigTags();
       updateTabCounts();
       renderTable();
-
-      // [핵심] 첫 번째 단말기를 자동 선택하지 않고, 요청하신 초기 안내 화면으로 시작
       resetHeroView();
 
       document.getElementById('btnThemeToggle').onclick = function() {
