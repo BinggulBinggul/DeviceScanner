@@ -201,7 +201,6 @@
       transform: translateY(-1px);
     }
 
-    /* 대시보드 복귀 버튼 스타일 (대파 로고 포함) */
     .btn-dashboard {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399 !important;
@@ -1061,7 +1060,6 @@
         </div>
       </div>
       <div class="header-actions">
-        <!-- [수정 완료] 대파 벡터 SVG 아이콘이 적용된 대시보드 복귀 버튼 -->
         <a href="./index.html" class="btn-icon btn-dashboard" title="Green Onion Project 메인 대시보드로 이동">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 11C10 7 7 4 4 3C5 7 8 9 10 12" fill="#a7f3d0"/>
@@ -1233,7 +1231,7 @@
     </div>
   </div>
 
-  <!-- Modal 2: App Info & Changelog -->
+  <!-- Modal 2: App Info & Changelog (v1.0 및 v1.0 BETA 모두 보존) -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
@@ -1471,6 +1469,7 @@
   </div>
 
   <script>
+    // [사용자 직접 수정 영역] 앱 정보 및 패치노트 (v1.0 정식출시 + v1.0 BETA 누적 보존)
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
       version: "v1.0",
@@ -1484,6 +1483,15 @@
           date: "2026.09.20",
           notes: [
             "Green Onion Project와 통합"
+          ]
+        },
+        {
+          version: "v1.0 BETA",
+          date: "2026.09.20",
+          notes: [
+            "초기 기능 구현 및 오류 제거",
+            "가변 UI적용",
+            "바코드 리더기 및 스캔 디바이스 카메라 지원"
           ]
         }
       ]
