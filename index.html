@@ -6,6 +6,10 @@
   <title>Green Onion Project - Workspace Hub</title>
 
   <style>
+    @view-transition {
+      navigation: auto;
+    }
+
     :root {
       --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
       --transition-speed: 0.25s;
@@ -56,6 +60,21 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* 부드러운 화면 진입 및 전환 애니메이션 */
+    @keyframes pageEnterAnim {
+      0% {
+        opacity: 0;
+        transform: scale(0.985) translateY(12px);
+        filter: blur(6px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+    }
+
     body {
       font-family: var(--font-family);
       background: var(--bg-gradient);
@@ -66,6 +85,16 @@
       user-select: none;
       display: flex;
       flex-direction: column;
+      animation: pageEnterAnim 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1), transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), filter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* 페이지 이탈 시 부드러운 페이드아웃 */
+    body.page-leaving {
+      opacity: 0 !important;
+      transform: scale(0.985) translateY(-8px) !important;
+      filter: blur(6px) !important;
+      pointer-events: none;
     }
 
     .orb {
@@ -91,7 +120,6 @@
       flex: 1;
     }
 
-    /* Header */
     header.glass-header {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -162,7 +190,6 @@
       transform: translateY(-1px);
     }
 
-    /* Hero Banner */
     .hero-banner {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -204,7 +231,6 @@
       gap: 6px;
     }
 
-    /* [신규] Gemini 인라인 뱃지 스타일 */
     .gemini-badge {
       display: inline-flex;
       align-items: center;
@@ -231,7 +257,6 @@
       letter-spacing: -0.2px;
     }
 
-    /* Section Title */
     .section-title-wrap {
       display: flex;
       align-items: center;
@@ -248,7 +273,6 @@
       gap: 8px;
     }
 
-    /* App Cards Grid */
     .apps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
@@ -354,7 +378,6 @@
       color: var(--text-muted);
     }
 
-    /* Footer */
     footer {
       margin-top: auto;
       text-align: center;
@@ -377,10 +400,8 @@
   <div class="orb orb-3"></div>
 
   <div class="hub-container">
-    <!-- Header -->
     <header class="glass-header">
       <div class="brand-area">
-        <!-- 대파 전용 벡터 SVG 아이콘 -->
         <div class="brand-logo" title="Green Onion">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 11C10 7 7 4 4 3C5 7 8 9 10 12" fill="#a7f3d0"/>
@@ -404,7 +425,6 @@
       </div>
     </header>
 
-    <!-- Hero Banner (요청 문구 + Gemini 로고 반영) -->
     <section class="hero-banner">
       <h1 class="hero-title">Green Onion Project Workspace</h1>
       <p class="hero-desc">
@@ -425,7 +445,6 @@
       </p>
     </section>
 
-    <!-- Applications Section -->
     <div class="section-title-wrap">
       <div class="section-title">
         <span>⚡ 실행 가능한 프로젝트</span>
@@ -482,7 +501,6 @@
       </div>
     </div>
 
-    <!-- Footer -->
     <footer>
       &copy; 2026 Green Onion Project. All rights reserved. Powered by Vercel & Firebase.
     </footer>
@@ -496,6 +514,27 @@
       document.documentElement.setAttribute('data-theme', next);
       this.textContent = next === 'dark' ? '☀️ 테마' : '🌙 테마';
     };
+
+    // [핵심] 부드러운 페이지 이동(트랜지션) 핸들러
+    document.querySelectorAll('a[href]').forEach(link => {
+      link.addEventListener('click', function(e) {
+        const targetUrl = this.getAttribute('href');
+        if (!targetUrl || targetUrl.startsWith('#') || targetUrl.startsWith('javascript:') || this.getAttribute('target') === '_blank') return;
+        
+        e.preventDefault();
+        document.body.classList.add('page-leaving');
+        setTimeout(() => {
+          window.location.href = targetUrl;
+        }, 220);
+      });
+    });
+
+    // 뒤로가기 시 페이드아웃 상태 복구 (BFCache 방어)
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        document.body.classList.remove('page-leaving');
+      }
+    });
   </script>
 </body>
 </html>
