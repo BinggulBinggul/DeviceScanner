@@ -506,7 +506,7 @@
       border-radius: 14px;
       background: var(--glass-card);
     }
-    table { width: 100%; min-width: 680px; border-collapse: collapse; text-align: left; font-size: 12.5px; }
+    table { width: 100%; min-width: 720px; border-collapse: collapse; text-align: left; font-size: 12.5px; }
     thead {
       position: sticky;
       top: 0;
@@ -581,6 +581,7 @@
     tbody tr.drag-target-top { border-top: 2.5px solid var(--accent) !important; }
     tbody tr.drag-target-bottom { border-bottom: 2.5px solid var(--accent) !important; }
 
+    /* 모달 공통 스타일 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -658,6 +659,94 @@
       box-shadow: 0 0 10px var(--accent-glow);
     }
 
+    /* 사이드바 패치노트 모달 전용 레이아웃 */
+    .changelog-container-split {
+      display: flex;
+      gap: 16px;
+      min-height: 320px;
+    }
+    .changelog-sidebar {
+      width: 170px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border-right: 1px solid var(--glass-border);
+      padding-right: 12px;
+    }
+    .changelog-tab-btn {
+      background: var(--input-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-sub);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: left;
+      transition: all var(--transition-speed);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .changelog-tab-btn:hover {
+      background: var(--glass-card-hover);
+      color: var(--text-main);
+    }
+    .changelog-tab-btn.active {
+      background: rgba(99, 102, 241, 0.22);
+      border-color: var(--accent);
+      color: var(--text-main);
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+    .changelog-tab-btn .tab-date {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+    .changelog-tab-btn.active .tab-date {
+      color: #cbd5e1;
+    }
+    .changelog-detail-pane {
+      flex: 1;
+      padding-left: 4px;
+      overflow-y: auto;
+    }
+    .changelog-detail-header {
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .changelog-detail-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+    .changelog-detail-date {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+    .changelog-detail-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .changelog-detail-item {
+      font-size: 13px;
+      line-height: 1.6;
+      color: #e2e8f0;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .changelog-detail-item::before {
+      content: '✓';
+      color: var(--success);
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
     .data-mgmt-card {
       background: var(--glass-card);
       border: 1px solid var(--glass-border);
@@ -711,26 +800,6 @@
       font-weight: 700;
       margin-top: 6px;
     }
-    .changelog-box { margin-top: 14px; }
-    .changelog-item {
-      position: relative;
-      padding-left: 18px;
-      margin-bottom: 16px;
-      border-left: 2px solid var(--glass-border);
-    }
-    .changelog-item::before {
-      content: '';
-      position: absolute;
-      left: -5.5px;
-      top: 4px;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
-    }
-    .changelog-ver { font-size: 13.5px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
-    .changelog-desc { font-size: 12px; color: var(--text-sub); line-height: 1.6; }
 
     .cam-scanner-wrap {
       display: flex;
@@ -1020,6 +1089,21 @@
       .form-group.full {
         grid-column: span 1;
       }
+      .changelog-container-split {
+        flex-direction: column;
+      }
+      .changelog-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--glass-border);
+        padding-right: 0;
+        padding-bottom: 10px;
+        flex-direction: row;
+        overflow-x: auto;
+      }
+      .changelog-tab-btn {
+        flex-shrink: 0;
+      }
     }
   </style>
 </head>
@@ -1060,6 +1144,7 @@
         </div>
       </div>
       <div class="header-actions">
+        <!-- 대시보드 복귀 버튼 -->
         <a href="./index.html" class="btn-icon btn-dashboard" title="Green Onion Project 메인 대시보드로 이동">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 11C10 7 7 4 4 3C5 7 8 9 10 12" fill="#a7f3d0"/>
@@ -1073,7 +1158,9 @@
         </a>
         <button type="button" class="btn-icon btn-cam" id="btnOpenCamModal" title="카메라로 스캔">📷 카메라 스캔</button>
         <button type="button" class="btn-icon" id="btnOpenConfigModal" title="항목 및 색상 설정">⚙️ 항목 설정</button>
-        <button type="button" class="btn-icon" id="btnOpenAboutModal" title="앱 정보 및 패치노트">ℹ️ 앱 정보</button>
+        <!-- [신규] 업데이트 로그 분리 버튼 -->
+        <button type="button" class="btn-icon" id="btnOpenChangelogModal" title="버전별 업데이트 로그">📋 업데이트 로그</button>
+        <button type="button" class="btn-icon" id="btnOpenAboutModal" title="개발자 및 앱 정보">ℹ️ 앱 정보</button>
         <button type="button" class="btn-icon" id="btnThemeToggle" title="화이트/다크 모드">☀️ 테마 전환</button>
         <button type="button" class="btn-icon btn-primary" id="btnOpenAddModal">＋ 신규 기기 등록</button>
       </div>
@@ -1183,7 +1270,7 @@
                 <th>보안</th>
                 <th>IMEI 1</th>
                 <th>S/N</th>
-                <th>마지막 조회</th>
+                <th>마지막 조회 (경과일)</th>
               </tr>
             </thead>
             <tbody id="deviceTableBody"></tbody>
@@ -1231,11 +1318,11 @@
     </div>
   </div>
 
-  <!-- Modal 2: App Info & Changelog (v1.0 및 v1.0 BETA 모두 보존) -->
+  <!-- Modal 2: App & Developer Info (업데이트 로그 분리 후 개발자/시스템 메타데이터 전용) -->
   <div class="modal-overlay" id="aboutModal">
-    <div class="modal-box" style="max-width: 520px;">
+    <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
-        <div class="modal-title">ℹ️ 애플리케이션 정보</div>
+        <div class="modal-title">ℹ️ 애플리케이션 및 개발자 정보</div>
         <button type="button" class="modal-close" id="btnCloseAboutModal">&times;</button>
       </div>
       <div class="modal-body">
@@ -1245,7 +1332,15 @@
           <div class="about-version-badge" id="aboutAppVersion">v1.0</div>
         </div>
 
-        <div class="specs-grid" style="margin-bottom: 16px;">
+        <div class="specs-grid" style="margin-bottom: 8px;">
+          <div class="spec-item">
+            <div class="spec-lbl">프로젝트</div>
+            <div class="spec-val">Green Onion Project</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-lbl">개발자</div>
+            <div class="spec-val" id="aboutDevName">Kim Dogyun</div>
+          </div>
           <div class="spec-item">
             <div class="spec-lbl">배포 환경</div>
             <div class="spec-val" id="aboutDeployEnv">Vercel Web + GitHub</div>
@@ -1263,11 +1358,6 @@
             <div class="spec-val" id="aboutAppDate">2026-09-20</div>
           </div>
         </div>
-
-        <div class="changelog-box">
-          <div style="font-size: 13.5px; font-weight: 700; margin-bottom: 12px;">📋 업데이트 내역</div>
-          <div id="changelogContainer"></div>
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-icon btn-primary" id="btnDoneAboutModal">확인</button>
@@ -1275,7 +1365,28 @@
     </div>
   </div>
 
-  <!-- Modal 3: Camera Scanner -->
+  <!-- Modal 3: [신규] 사이드바 형태 업데이트 로그 (Changelog) 모달 -->
+  <div class="modal-overlay" id="changelogModal">
+    <div class="modal-box" style="max-width: 640px;">
+      <div class="modal-header">
+        <div class="modal-title">📋 업데이트 로그 (Changelog)</div>
+        <button type="button" class="modal-close" id="btnCloseChangelogModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="changelog-container-split">
+          <!-- Left Sidebar: 버전 목록 -->
+          <div class="changelog-sidebar" id="changelogSidebar"></div>
+          <!-- Right Content Pane: 선택된 버전 상세 내역 -->
+          <div class="changelog-detail-pane" id="changelogDetailPane"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-icon btn-primary" id="btnDoneChangelogModal">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Camera Scanner -->
   <div class="modal-overlay" id="camModal">
     <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
@@ -1300,7 +1411,7 @@
     </div>
   </div>
 
-  <!-- Modal 4: Add / Edit Device -->
+  <!-- Modal 5: Add / Edit Device (마지막 조회 일시 직접 수정 필드 추가) -->
   <div class="modal-overlay" id="deviceModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -1355,6 +1466,11 @@
               <label>시리얼 번호 (S/N)</label>
               <input type="text" id="formSn" placeholder="단말기 일련번호">
             </div>
+            <!-- [신규] 마지막 조회 일시 직접 수정 필드 -->
+            <div class="form-group">
+              <label>마지막 조회 일시 (직접 수정 가능)</label>
+              <input type="text" id="formLastViewed" placeholder="YYYY-MM-DD HH:mm:ss">
+            </div>
             <div class="form-group full">
               <label>IMEI 1</label>
               <input type="text" id="formImei1" placeholder="15자리 IMEI">
@@ -1377,7 +1493,7 @@
     </div>
   </div>
 
-  <!-- Modal 5: Options & Color Config -->
+  <!-- Modal 6: Options & Color Config -->
   <div class="modal-overlay" id="configModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -1446,7 +1562,7 @@
     </div>
   </div>
 
-  <!-- Modal 6: Delete Confirmation -->
+  <!-- Modal 7: Delete Confirmation -->
   <div class="modal-overlay" id="deleteModal">
     <div class="modal-box" style="max-width: 400px;">
       <div class="modal-header">
@@ -1468,11 +1584,15 @@
     <span id="toastMsg">알림 메시지</span>
   </div>
 
+  <!-- =========================================================
+       JavaScript Application Core
+       ========================================================= -->
   <script>
-    // [사용자 직접 수정 영역] 앱 정보 및 패치노트 (v1.0 정식출시 + v1.0 BETA 누적 보존)
+    // [사용자 직접 수정 영역] 앱 정보 & 사이드바 연동 패치노트 (Changelog)
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
       version: "v1.0",
+      developer: "Kim Dogyun",
       deployEnv: "Vercel Web + GitHub",
       cloud: "Firebase Firestore",
       ai: "Gemini",
@@ -1482,7 +1602,10 @@
           version: "v1.0 정식출시",
           date: "2026.09.20",
           notes: [
-            "Green Onion Project와 통합"
+            "Green Onion Project 메인 대시보드와 통합",
+            "대시보드와 기기 관리 간 부드러운 글래스 트랜지션 애니메이션 적용",
+            "독립된 사이드바 형태의 업데이트 로그(Changelog) 팝업 신설",
+            "마지막 조회 일시 사용자 직접 수정 기능 및 경과 일수(D-Day) 자동 계산 배지 지원"
           ]
         },
         {
@@ -1490,8 +1613,9 @@
           date: "2026.09.20",
           notes: [
             "초기 기능 구현 및 오류 제거",
-            "가변 UI적용",
-            "바코드 리더기 및 스캔 디바이스 카메라 지원"
+            "가변 UI 적용 및 모바일 반응형 최적화",
+            "바코드 리더기 및 스캔 디바이스 카메라 지원",
+            "Firebase 클라우드 실시간 동기화 및 순서 변경 지원"
           ]
         }
       ]
@@ -1515,6 +1639,7 @@
     let deviceToDeleteId = null;
     let centerAlertTimer = null;
     let currentInventoryTab = 'active';
+    let currentChangelogIndex = 0;
 
     let draggedRowDevId = null;
     let html5QrCode = null;
@@ -1553,6 +1678,46 @@
       elem.style.borderColor = hexToRgba(color, 0.4);
       elem.style.color = color;
       elem.style.fontWeight = '700';
+    }
+
+    // [신규] 마지막 조회일로부터 며칠 경과했는지 계산하는 엔진
+    function getElapsedDaysInfo(dateStr) {
+      if (!dateStr || dateStr.trim() === '' || dateStr === '-') {
+        return { text: '', badgeHtml: '' };
+      }
+
+      // 'YYYY-MM-DD' 또는 'YYYY-MM-DD HH:mm:ss' 파싱
+      const cleaned = dateStr.trim().replace(' ', 'T');
+      const targetDate = new Date(cleaned);
+      if (isNaN(targetDate.getTime())) {
+        return { text: '', badgeHtml: '' };
+      }
+
+      const now = new Date();
+      const targetMidnight = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
+      const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const diffDays = Math.floor((nowMidnight - targetMidnight) / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0) {
+        return {
+          text: '(오늘)',
+          badgeHtml: `<span class="badge" style="background: rgba(16, 185, 129, 0.18); color: var(--success); border-color: rgba(16, 185, 129, 0.35); margin-left: 6px;">오늘</span>`
+        };
+      } else if (diffDays > 0) {
+        let color = '#3b82f6';
+        if (diffDays >= 30) color = '#ef4444';
+        else if (diffDays >= 7) color = '#f59e0b';
+
+        return {
+          text: `(${diffDays}일 전)`,
+          badgeHtml: `<span class="badge" style="background: ${hexToRgba(color, 0.16)}; color: ${color}; border-color: ${hexToRgba(color, 0.35)}; margin-left: 6px;">${diffDays}일 전</span>`
+        };
+      } else {
+        return {
+          text: '(미래 날짜)',
+          badgeHtml: `<span class="badge" style="background: rgba(100, 116, 139, 0.2); color: var(--text-sub); margin-left: 6px;">예정</span>`
+        };
+      }
     }
 
     let firestoreDb = null;
@@ -1994,7 +2159,9 @@
       }
 
       document.getElementById('heroMgmtNo').textContent = d.managementNo || '-';
-      document.getElementById('heroLastViewed').textContent = d.lastViewed ? `조회: ${d.lastViewed}` : '조회 기록 없음';
+      
+      const elapsed = getElapsedDaysInfo(d.lastViewed);
+      document.getElementById('heroLastViewed').textContent = d.lastViewed ? `조회: ${d.lastViewed} ${elapsed.text}` : '조회 기록 없음';
       document.getElementById('heroDeviceName').textContent = d.name || '기기명 미등록';
       document.getElementById('heroCarrier').textContent = d.carrier || '-';
 
@@ -2122,6 +2289,7 @@
 
         const isFirst = idx === 0;
         const isLast = idx === filtered.length - 1;
+        const elapsed = getElapsedDaysInfo(d.lastViewed);
 
         tr.innerHTML = `
           <td>
@@ -2138,7 +2306,10 @@
           <td><span class="badge" style="background:${hexToRgba(secColor, 0.16)}; border-color:${hexToRgba(secColor, 0.35)}; color:${secColor};">Lv. ${d.securityLevel || 'None'}</span></td>
           <td style="font-family: monospace;">${d.imei1 || '-'}</td>
           <td style="font-family: monospace;">${d.sn || '-'}</td>
-          <td style="color: var(--text-sub); font-size: 11.5px;">${d.lastViewed || '-'}</td>
+          <td style="color: var(--text-sub); font-size: 11.5px; white-space: nowrap;">
+            <span>${d.lastViewed || '-'}</span>
+            ${elapsed.badgeHtml}
+          </td>
         `;
 
         tr.onclick = (e) => {
@@ -2221,28 +2392,49 @@
       }, 2500);
     }
 
+    // [신규] 앱 정보 모달 데이터 바인딩 (개발자 및 시스템 메타데이터)
     function renderAboutModal() {
       document.getElementById('aboutAppTitle').textContent = APP_INFO.title;
       document.getElementById('aboutAppVersion').textContent = APP_INFO.version;
+      document.getElementById('aboutDevName').textContent = APP_INFO.developer;
       document.getElementById('aboutDeployEnv').textContent = APP_INFO.deployEnv;
       document.getElementById('aboutCloudDb').textContent = APP_INFO.cloud;
       document.getElementById('aboutAi').textContent = APP_INFO.ai;
       document.getElementById('aboutAppDate').textContent = APP_INFO.releaseDate;
+    }
 
-      const container = document.getElementById('changelogContainer');
-      container.innerHTML = '';
+    // [신규] 사이드바 형태 패치노트 모달 렌더링 함수
+    function renderChangelogModal(activeIndex = 0) {
+      currentChangelogIndex = activeIndex;
+      const sidebar = document.getElementById('changelogSidebar');
+      const detailPane = document.getElementById('changelogDetailPane');
+      sidebar.innerHTML = '';
 
-      APP_INFO.changelog.forEach(item => {
-        const itemDiv = document.createElement('div');
-        itemDiv.className = 'changelog-item';
-        
-        let notesHtml = item.notes.map(n => `* ${n}`).join('<br>');
-        itemDiv.innerHTML = `
-          <div class="changelog-ver">${item.version} (${item.date})</div>
-          <div class="changelog-desc">${notesHtml}</div>
+      APP_INFO.changelog.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `changelog-tab-btn ${idx === currentChangelogIndex ? 'active' : ''}`;
+        btn.innerHTML = `
+          <span>${item.version}</span>
+          <span class="tab-date">${item.date}</span>
         `;
-        container.appendChild(itemDiv);
+        btn.onclick = () => renderChangelogModal(idx);
+        sidebar.appendChild(btn);
       });
+
+      const selected = APP_INFO.changelog[currentChangelogIndex] || APP_INFO.changelog[0];
+      if (selected) {
+        let notesHtml = selected.notes.map(note => `<li class="changelog-detail-item">${note}</li>`).join('');
+        detailPane.innerHTML = `
+          <div class="changelog-detail-header">
+            <div class="changelog-detail-title">${selected.version}</div>
+            <div class="changelog-detail-date">📅 배포일: ${selected.date}</div>
+          </div>
+          <ul class="changelog-detail-list">
+            ${notesHtml}
+          </ul>
+        `;
+      }
     }
 
     const camModal = document.getElementById('camModal');
@@ -2322,12 +2514,14 @@
     const configModal = document.getElementById('configModal');
     const dataModal = document.getElementById('dataModal');
     const aboutModal = document.getElementById('aboutModal');
+    const changelogModal = document.getElementById('changelogModal');
 
     function openAddModal() {
       refreshSelectDropdowns();
       document.getElementById('modalTitle').textContent = '신규 단말기 등록';
       document.getElementById('formDeviceId').value = '';
       document.getElementById('deviceForm').reset();
+      document.getElementById('formLastViewed').value = '';
       deviceModal.classList.add('active');
     }
 
@@ -2346,6 +2540,7 @@
       document.getElementById('formCarrier').value = d.carrier || appConfig.carriers[0];
       document.getElementById('formColor').value = d.color || '';
       document.getElementById('formSn').value = d.sn || '';
+      document.getElementById('formLastViewed').value = d.lastViewed || '';
       document.getElementById('formImei1').value = d.imei1 || '';
       document.getElementById('formImei2').value = d.imei2 || '';
       document.getElementById('formNotes').value = d.notes || '';
@@ -2399,12 +2594,21 @@
       document.getElementById('btnOpenConfigModal').onclick = () => { renderConfigTags(); configModal.classList.add('active'); };
       document.getElementById('btnOpenAddModal').onclick = openAddModal;
 
+      // 앱 정보 모달 열기/닫기
       document.getElementById('btnOpenAboutModal').onclick = () => {
         renderAboutModal();
         aboutModal.classList.add('active');
       };
       document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
       document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
+
+      // [신규] 사이드바 업데이트 로그 모달 열기/닫기
+      document.getElementById('btnOpenChangelogModal').onclick = () => {
+        renderChangelogModal(0);
+        changelogModal.classList.add('active');
+      };
+      document.getElementById('btnCloseChangelogModal').onclick = () => changelogModal.classList.remove('active');
+      document.getElementById('btnDoneChangelogModal').onclick = () => changelogModal.classList.remove('active');
 
       document.getElementById('btnOpenDataModal').onclick = () => dataModal.classList.add('active');
       document.getElementById('btnCloseDataModal').onclick = () => dataModal.classList.remove('active');
@@ -2494,6 +2698,7 @@
       document.getElementById('btnCloseDeviceModal').onclick = () => deviceModal.classList.remove('active');
       document.getElementById('btnCancelDeviceModal').onclick = () => deviceModal.classList.remove('active');
 
+      // 기기 등록/수정 저장
       document.getElementById('btnSubmitDeviceForm').onclick = async function() {
         const form = document.getElementById('deviceForm');
         if (!form.checkValidity()) {
@@ -2503,6 +2708,7 @@
 
         const id = document.getElementById('formDeviceId').value;
         const newCategory = document.getElementById('formCategory').value;
+        const editedLastViewed = document.getElementById('formLastViewed').value.trim();
 
         const deviceData = {
           id: id || ('dev-' + Date.now()),
@@ -2520,7 +2726,7 @@
           imei1: document.getElementById('formImei1').value.trim(),
           imei2: document.getElementById('formImei2').value.trim(),
           notes: document.getElementById('formNotes').value.trim(),
-          lastViewed: id ? (devices.find(x => x.id === id)?.lastViewed || '') : ''
+          lastViewed: editedLastViewed
         };
 
         if (id) {
