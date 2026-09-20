@@ -107,17 +107,19 @@
     }
     .brand-area { display: flex; align-items: center; gap: 14px; }
     .brand-logo {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
       background: var(--accent-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
-      font-weight: 900;
-      font-size: 20px;
       box-shadow: 0 0 18px var(--accent-glow);
+    }
+    .brand-logo svg {
+      width: 26px;
+      height: 26px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
     }
     .brand-title { font-size: 18px; font-weight: 800; letter-spacing: -0.4px; }
     .status-badge {
@@ -346,7 +348,20 @@
     <!-- Header -->
     <header class="glass-header">
       <div class="brand-area">
-        <div class="brand-logo">🌱</div>
+        <!-- [신규] 대파 전용 벡터 SVG 아이콘 -->
+        <div class="brand-logo" title="Green Onion">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- 파 잎 (초록 줄기 갈래) -->
+            <path d="M11 11C10 7 7 4 4 3C5 7 8 9 10 12" fill="#a7f3d0"/>
+            <path d="M12 10C13 6 16 3 20 2C18 6 15 8 13 11" fill="#6ee7b7"/>
+            <path d="M11.5 10C11 6 12 3 13 1.5C13.8 4 13 7 12.5 10" fill="#a7f3d0"/>
+            <!-- 파 밑동 (흰 대) -->
+            <path d="M10 11C9.5 14.5 9.5 18 10 20.5C10.1 21.3 12.9 21.3 13 20.5C13.5 18 13.5 14.5 13 11H10Z" fill="#ffffff"/>
+            <path d="M9.8 14.5H13.2" stroke="#6ee7b7" stroke-width="1.2" stroke-linecap="round"/>
+            <!-- 파 뿌리 -->
+            <path d="M10.5 21L9.5 23M11.5 21V23.5M12.5 21L13.5 23" stroke="#f1f5f9" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div>
           <div class="brand-title">Green Onion Project</div>
         </div>
@@ -376,11 +391,11 @@
     </div>
 
     <div class="apps-grid">
-      <!-- 1. 단말기 자산 관리 시스템 (연결 완료) -->
+      <!-- 1. 단말기 자산 관리 시스템 (v1.0 정식 버전 반영) -->
       <a href="./devices.html" class="app-card">
         <div class="card-top">
           <div class="card-icon-wrap">📱</div>
-          <span class="card-badge badge-live">v1.0 BETA</span>
+          <span class="card-badge badge-live">v1.0</span>
         </div>
         <h3 class="card-title">단말기 자산 관리 시스템</h3>
         <p class="card-desc">
@@ -392,15 +407,15 @@
         </div>
       </a>
 
-      <!-- 2. 여분 준비중 1 -->
+      <!-- 2. 개인 메모장 (준비 중) -->
       <div class="app-card disabled">
         <div class="card-top">
-          <div class="card-icon-wrap">⚡</div>
+          <div class="card-icon-wrap">📝</div>
           <span class="card-badge badge-soon">준비 중</span>
         </div>
-        <h3 class="card-title">스마트 워크스페이스 도구</h3>
+        <h3 class="card-title">개인 메모장</h3>
         <p class="card-desc">
-          새로운 업무 자동화 및 자산 모니터링 도구가 준비 중입니다. 다음 업데이트를 기대해 주세요.
+          아이디어 정리, 할 일 체크 및 빠른 기록 관리를 위한 클라우드 동기화 메모장 도구가 준비 중입니다.
         </p>
         <div class="card-footer">
           <span class="card-action-text disabled-text">출시 예정</span>
@@ -408,15 +423,15 @@
         </div>
       </div>
 
-      <!-- 3. 여분 준비중 2 -->
+      <!-- 3. 세 번째 기능 (기능 예시 없이 순수 '준비 중') -->
       <div class="app-card disabled">
         <div class="card-top">
-          <div class="card-icon-wrap">📊</div>
+          <div class="card-icon-wrap">✨</div>
           <span class="card-badge badge-soon">준비 중</span>
         </div>
-        <h3 class="card-title">데이터 분석 & 리포트</h3>
+        <h3 class="card-title">준비 중</h3>
         <p class="card-desc">
-          통합 프로젝트 상태 지표 및 자산 변동 내역 통계 분석 대시보드가 준비 중입니다.
+          새로운 프로젝트가 준비 중입니다. 다음 업데이트를 기대해 주세요.
         </p>
         <div class="card-footer">
           <span class="card-action-text disabled-text">출시 예정</span>
