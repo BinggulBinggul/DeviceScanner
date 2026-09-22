@@ -6,7 +6,7 @@
   <title>Green Onion Project - Workspace Hub</title>
 
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#030712">
+  <meta name="theme-color" content="#030712" id="themeMeta">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -19,6 +19,7 @@
     }
 
     [data-theme="dark"] {
+      --bg-base: #030712;
       --bg-gradient: radial-gradient(circle at 20% 15%, #064e3b 0%, #06261f 35%, #030712 100%);
       --orb-1: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(5, 150, 105, 0.2) 0%, transparent 70%);
@@ -45,6 +46,7 @@
     }
 
     [data-theme="light"] {
+      --bg-base: #f8fafc;
       --bg-gradient: radial-gradient(circle at 20% 15%, #d1fae5 0%, #f0fdf4 40%, #f8fafc 100%);
       --orb-1: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(52, 211, 153, 0.15) 0%, transparent 70%);
@@ -72,6 +74,21 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* 하단 색상 어긋남 완벽 해결: html과 body의 배경 및 색상 스킴 통일 */
+    html {
+      background-color: var(--bg-base);
+      color-scheme: dark;
+      min-height: 100%;
+    }
+    html[data-theme="dark"] {
+      background-color: #030712;
+      color-scheme: dark;
+    }
+    html[data-theme="light"] {
+      background-color: #f8fafc;
+      color-scheme: light;
+    }
+
     @keyframes pageEnterAnim {
       0% { opacity: 0; transform: scale(0.985) translateY(12px); filter: blur(6px); }
       100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
@@ -79,9 +96,12 @@
 
     body {
       font-family: var(--font-family);
-      background: var(--bg-gradient);
+      background: var(--bg-gradient) no-repeat center center fixed;
+      background-size: cover;
+      background-color: var(--bg-base);
       color: var(--text-main);
       min-height: 100vh;
+      min-height: 100dvh;
       overflow-x: hidden;
       position: relative;
       user-select: none;
@@ -109,20 +129,18 @@
     .orb-2 { width: 450px; height: 450px; bottom: -50px; right: -50px; background: var(--orb-2); }
     .orb-3 { width: 350px; height: 350px; top: 35%; left: 45%; background: var(--orb-3); }
 
-    /* 안전구역 완전 제거: 상단 10px 밀착, 하단 플로팅 독 공간 확보 */
     .hub-container {
       position: relative;
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
       width: 100%;
-      padding: 10px 20px 100px 20px;
+      padding: 10px 20px calc(100px + env(safe-area-inset-bottom, 0px)) 20px;
       display: flex;
       flex-direction: column;
       flex: 1;
     }
 
-    /* 미니멀 헤더 */
     header.glass-header {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -173,7 +191,6 @@
       box-shadow: 0 0 8px var(--accent);
     }
 
-    /* Hero Banner */
     .hero-banner {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -360,10 +377,10 @@
     }
     .card-action-text.disabled-text { color: var(--text-muted); }
 
-    /* 대시보드 전용 하단 플로팅 독 */
+    /* 하단 플로팅 독 */
     .floating-dock-wrap {
       position: fixed;
-      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
       z-index: 1000;
@@ -432,7 +449,6 @@
       letter-spacing: -0.2px;
     }
 
-    /* 강조 캡슐 스타일들 */
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
@@ -457,7 +473,6 @@
     }
     .pill-item.pill-accent-memo .pill-label { color: #fff; }
 
-    /* 독립 테마 버튼 */
     .floating-theme-island {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -487,7 +502,6 @@
     .floating-theme-island .pill-icon { font-size: 16px; height: 18px; }
     .floating-theme-island .pill-label { font-size: 9px; font-weight: 700; color: var(--text-sub); }
 
-    /* 정보 모달 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -556,7 +570,7 @@
     }
 
     @media (max-width: 768px) {
-      .hub-container { padding: 8px 12px 100px 12px; }
+      .hub-container { padding: 8px 12px calc(100px + env(safe-area-inset-bottom, 0px)) 12px; }
       .hero-title { font-size: 22px; }
       .hero-banner { padding: 22px 18px; }
       .apps-grid { grid-template-columns: 1fr; }
@@ -626,7 +640,7 @@
     </div>
 
     <div class="apps-grid">
-      <!-- 1. 단말기 자산 관리 시스템 (v1.1 반영) -->
+      <!-- 1. 단말기 자산 관리 시스템 -->
       <a href="./devices.html" class="app-card">
         <div class="card-top">
           <div class="card-icon-wrap">📱</div>
@@ -646,7 +660,7 @@
       <a href="./memo.html" class="app-card">
         <div class="card-top">
           <div class="card-icon-wrap">📝</div>
-          <span class="card-badge badge-live">v1.0</span>
+          <span class="card-badge badge-live">v1.1</span>
         </div>
         <h3 class="card-title">개인 메모장</h3>
         <p class="card-desc">
@@ -683,7 +697,6 @@
   <!-- 대시보드 하단 플로팅 독 -->
   <div class="floating-dock-wrap">
     <nav class="floating-pill-bar">
-      <!-- 1. 대시보드 홈 (초록 강조) -->
       <a href="./index.html" class="pill-item pill-accent-dash" title="현재 대시보드">
         <div class="pill-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -698,33 +711,28 @@
         <span class="pill-label">대시보드</span>
       </a>
 
-      <!-- 2. 단말기 관리 바로가기 (하늘색 강조) -->
       <a href="./devices.html" class="pill-item pill-accent-devices" title="단말기 자산 관리 바로가기">
         <div class="pill-icon">📱</div>
         <span class="pill-label">단말기 관리</span>
       </a>
 
-      <!-- 3. 메모장 바로가기 (보라 강조) -->
       <a href="./memo.html" class="pill-item pill-accent-memo" title="개인 메모장 바로가기">
         <div class="pill-icon">📝</div>
         <span class="pill-label">메모장</span>
       </a>
 
-      <!-- 4. 프로젝트 정보 -->
       <button type="button" class="pill-item" id="btnOpenAboutModal" title="프로젝트 정보">
         <div class="pill-icon">ℹ️</div>
         <span class="pill-label">정보</span>
       </button>
     </nav>
 
-    <!-- 5. 독립 분리된 원형 테마 버튼 -->
     <button type="button" class="floating-theme-island" id="btnThemeToggle" title="화이트/다크 모드 전환">
       <div class="pill-icon" id="themePillIcon">☀️</div>
       <span class="pill-label" id="themePillLabel">테마</span>
     </button>
   </div>
 
-  <!-- 대시보드 프로젝트 정보 모달 -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -763,21 +771,23 @@
   </div>
 
   <script>
-    // 테마 토글
     document.getElementById('btnThemeToggle').onclick = function() {
       const cur = document.documentElement.getAttribute('data-theme');
       const next = cur === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       document.getElementById('themePillIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+      
+      const themeMeta = document.getElementById('themeMeta');
+      if (themeMeta) {
+        themeMeta.setAttribute('content', next === 'dark' ? '#030712' : '#f8fafc');
+      }
     };
 
-    // 정보 모달
     const aboutModal = document.getElementById('aboutModal');
     document.getElementById('btnOpenAboutModal').onclick = () => aboutModal.classList.add('active');
     document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
     document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
 
-    // 부드러운 페이지 전환
     document.querySelectorAll('a[href]').forEach(link => {
       link.addEventListener('click', function(e) {
         const targetUrl = this.getAttribute('href');
