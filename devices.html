@@ -2,22 +2,20 @@
 <html lang="ko" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Mobile Device Asset Manager</title>
-  <link rel="manifest" href="./manifest.json">
-
   
-  <!-- 1. 카메라 스캐너 SDK -->
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#030712">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <!-- 2. Firebase CDN (호환성 보장 Compat 버전) -->
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
 
   <style>
-    @view-transition {
-      navigation: auto;
-    }
+    @view-transition { navigation: auto; }
 
     :root {
       --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
@@ -93,16 +91,8 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     @keyframes pageEnterAnim {
-      0% {
-        opacity: 0;
-        transform: scale(0.985) translateY(12px);
-        filter: blur(6px);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        filter: blur(0);
-      }
+      0% { opacity: 0; transform: scale(0.985) translateY(12px); filter: blur(6px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
     }
 
     body {
@@ -135,13 +125,14 @@
     .orb-2 { width: 400px; height: 400px; bottom: -50px; right: -50px; background: var(--orb-2); }
     .orb-3 { width: 300px; height: 300px; top: 40%; left: 45%; background: var(--orb-3); }
 
+    /* 펀치홀 상단 및 플로팅 독 하단 세이프존 자동 연산 */
     .app-container {
       position: relative;
       z-index: 1;
       display: flex;
       flex-direction: column;
       height: 100vh;
-      padding: 16px 20px 96px 20px;
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 20px calc(96px + env(safe-area-inset-bottom, 0px)) 20px;
       gap: 14px;
     }
 
@@ -210,12 +201,10 @@
       transform: translateY(-1px);
     }
 
-    /* =========================================================
-       하단 리퀴드 글래스 플로팅 독 & 독립 테마 버튼 래퍼
-       ========================================================= */
+    /* 하단 플로팅 독 */
     .floating-dock-wrap {
       position: fixed;
-      bottom: 20px;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
       z-index: 1000;
@@ -226,7 +215,6 @@
       pointer-events: none;
     }
 
-    /* 메인 7구 메뉴 바 알약 */
     .floating-pill-bar {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -262,9 +250,7 @@
       color: var(--text-main);
       transform: translateY(-2px);
     }
-    .pill-item:active {
-      transform: scale(0.94);
-    }
+    .pill-item:active { transform: scale(0.94); }
 
     .pill-icon {
       font-size: 16px;
@@ -287,7 +273,7 @@
       letter-spacing: -0.2px;
     }
 
-    /* 1. 대시보드 강조 캡슐 (초록) */
+    /* 강조 캡슐 스타일들 */
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
@@ -301,7 +287,6 @@
       box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
     }
 
-    /* 2. 카메라 강조 캡슐 (스카이블루) */
     .pill-item.pill-accent-cam {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
       color: #fff !important;
@@ -315,7 +300,6 @@
       box-shadow: 0 6px 18px rgba(6, 182, 212, 0.5);
     }
 
-    /* 3. 기기 등록 강조 캡슐 (보라/인디고) */
     .pill-item.pill-primary {
       background: linear-gradient(135deg, var(--accent), #7c3aed);
       color: #fff !important;
@@ -708,7 +692,7 @@
     tbody tr.drag-target-top { border-top: 2.5px solid var(--accent) !important; }
     tbody tr.drag-target-bottom { border-bottom: 2.5px solid var(--accent) !important; }
 
-    /* 모달 공통 스타일 */
+    /* 모달 공통 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -1143,17 +1127,14 @@
         height: auto;
         min-height: 100vh;
         overflow-y: visible;
-        padding: 12px 10px 100px 10px;
+        padding: calc(12px + env(safe-area-inset-top, 0px)) 10px calc(100px + env(safe-area-inset-bottom, 0px)) 10px;
         gap: 12px;
       }
       header.glass-header {
         padding: 12px 14px;
         gap: 10px;
       }
-      .brand-area {
-        width: 100%;
-        justify-content: space-between;
-      }
+      .brand-area { width: 100%; justify-content: space-between; }
       .workspace {
         display: flex;
         flex-direction: column;
@@ -1183,25 +1164,12 @@
         gap: 8px;
         padding: 10px 14px;
       }
-      .scanner-status {
-        justify-content: center;
-      }
-      .search-filter-wrap {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .table-search {
-        width: 100%;
-      }
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      .form-group.full {
-        grid-column: span 1;
-      }
-      .changelog-container-split {
-        flex-direction: column;
-      }
+      .scanner-status { justify-content: center; }
+      .search-filter-wrap { flex-direction: column; align-items: stretch; }
+      .table-search { width: 100%; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: span 1; }
+      .changelog-container-split { flex-direction: column; }
       .changelog-sidebar {
         width: 100%;
         border-right: none;
@@ -1211,51 +1179,24 @@
         flex-direction: row;
         overflow-x: auto;
       }
-      .changelog-tab-btn {
-        flex-shrink: 0;
-      }
+      .changelog-tab-btn { flex-shrink: 0; }
 
-      /* 모바일 전용 초소형 핏 (7구 알약 독 + 1 테마 아일랜드 완벽 수용) */
       .floating-dock-wrap {
-        bottom: 12px;
+        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
         gap: 5px;
         max-width: 99vw;
       }
-      .floating-pill-bar {
-        padding: 3px 5px;
-        gap: 1px;
-      }
-      .pill-item {
-        padding: 4px 5px;
-        min-width: 36px;
-      }
-      .pill-icon {
-        font-size: 14px;
-        height: 16px;
-      }
-      .pill-icon svg {
-        width: 15px;
-        height: 15px;
-      }
-      .pill-label {
-        font-size: 8.5px;
-      }
+      .floating-pill-bar { padding: 3px 5px; gap: 1px; }
+      .pill-item { padding: 4px 5px; min-width: 36px; }
+      .pill-icon { font-size: 14px; height: 16px; }
+      .pill-icon svg { width: 15px; height: 15px; }
+      .pill-label { font-size: 8.5px; }
       .pill-item.pill-accent-dash,
       .pill-item.pill-accent-cam,
-      .pill-item.pill-primary {
-        padding: 4px 7px;
-      }
-      .floating-theme-island {
-        width: 38px;
-        height: 38px;
-      }
-      .floating-theme-island .pill-icon {
-        font-size: 14px;
-        height: 15px;
-      }
-      .floating-theme-island .pill-label {
-        font-size: 8px;
-      }
+      .pill-item.pill-primary { padding: 4px 7px; }
+      .floating-theme-island { width: 38px; height: 38px; }
+      .floating-theme-island .pill-icon { font-size: 14px; height: 15px; }
+      .floating-theme-island .pill-label { font-size: 8px; }
     }
   </style>
 </head>
@@ -1310,7 +1251,6 @@
     </div>
 
     <div class="workspace">
-      <!-- Left Hero Card -->
       <div class="hero-device-view" id="heroView">
         <div class="hero-laser-beam"></div>
 
@@ -1364,7 +1304,6 @@
         </div>
       </div>
 
-      <!-- Right Inventory Table -->
       <div class="inventory-panel">
         <div class="inventory-nav-tabs">
           <button type="button" class="inv-tab-btn active" id="tabActive">
@@ -1411,12 +1350,10 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       하단 리퀴드 글래스 플로팅 독 (요청 순서 및 강조 반영)
-       ========================================================= -->
+  <!-- 하단 플로팅 독 (순서: 대시보드 -> 카메라 -> 기기등록 -> 로그 -> 정보 -> 백업 -> 설정 -> 독립 테마) -->
   <div class="floating-dock-wrap">
     <nav class="floating-pill-bar">
-      <!-- 1. 대시보드 (강조: 대파 초록 캡슐) -->
+      <!-- 1. 대시보드 (초록 강조) -->
       <a href="./index.html" class="pill-item pill-accent-dash" title="Green Onion Project 메인 대시보드로 이동">
         <div class="pill-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1431,13 +1368,13 @@
         <span class="pill-label">대시보드</span>
       </a>
 
-      <!-- 2. 카메라 (강조: 스카이블루 캡슐) -->
+      <!-- 2. 카메라 (하늘색 강조) -->
       <button type="button" class="pill-item pill-accent-cam" id="btnOpenCamModal" title="카메라로 바코드 스캔">
         <div class="pill-icon">📷</div>
         <span class="pill-label">카메라</span>
       </button>
 
-      <!-- 3. 기기 등록 (강조 추가: 보라/인디고 캡슐) -->
+      <!-- 3. 기기 등록 (보라 강조) -->
       <button type="button" class="pill-item pill-primary" id="btnOpenAddModal" title="새로운 단말기 등록">
         <div class="pill-icon">＋</div>
         <span class="pill-label">기기 등록</span>
@@ -1455,7 +1392,7 @@
         <span class="pill-label">정보</span>
       </button>
 
-      <!-- 6. [신규 추가] 백업 (정보와 설정 사이) -->
+      <!-- 6. 백업 (정보와 설정 사이) -->
       <button type="button" class="pill-item" id="btnOpenDataModalDock" title="JSON 데이터 백업 및 복원 관리">
         <div class="pill-icon">💾</div>
         <span class="pill-label">백업</span>
@@ -1468,7 +1405,7 @@
       </button>
     </nav>
 
-    <!-- 8. [독립 분리] 원형 테마 버튼 -->
+    <!-- 8. 독립 분리된 원형 테마 버튼 -->
     <button type="button" class="floating-theme-island" id="btnThemeToggle" title="화이트/다크 모드 전환">
       <div class="pill-icon" id="themePillIcon">☀️</div>
       <span class="pill-label" id="themePillLabel">테마</span>
@@ -1560,7 +1497,7 @@
     </div>
   </div>
 
-  <!-- Modal 3: 사이드바 형태 업데이트 로그 (Changelog) 모달 -->
+  <!-- Modal 3: 사이드바 패치노트 모달 -->
   <div class="modal-overlay" id="changelogModal">
     <div class="modal-box" style="max-width: 640px;">
       <div class="modal-header">
@@ -1776,9 +1713,6 @@
     <span id="toastMsg">알림 메시지</span>
   </div>
 
-  <!-- =========================================================
-       JavaScript Application Core
-       ========================================================= -->
   <script>
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
@@ -1881,15 +1815,10 @@
     }
 
     function getElapsedDaysInfo(dateStr) {
-      if (!dateStr || dateStr.trim() === '' || dateStr === '-') {
-        return { text: '', badgeHtml: '' };
-      }
-
+      if (!dateStr || dateStr.trim() === '' || dateStr === '-') return { text: '', badgeHtml: '' };
       const cleaned = dateStr.trim().replace(' ', 'T');
       const targetDate = new Date(cleaned);
-      if (isNaN(targetDate.getTime())) {
-        return { text: '', badgeHtml: '' };
-      }
+      if (isNaN(targetDate.getTime())) return { text: '', badgeHtml: '' };
 
       const now = new Date();
       const targetMidnight = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate());
@@ -1905,7 +1834,6 @@
         let color = '#3b82f6';
         if (diffDays >= 30) color = '#ef4444';
         else if (diffDays >= 7) color = '#f59e0b';
-
         return {
           text: `(${diffDays}일 전)`,
           badgeHtml: `<span class="badge" style="background: ${hexToRgba(color, 0.16)}; color: ${color}; border-color: ${hexToRgba(color, 0.35)}; margin-left: 6px;">${diffDays}일 전</span>`
@@ -2046,7 +1974,6 @@
 
     window.handleRenameTag = function(configKey, idx) {
       const oldVal = appConfig[configKey][idx];
-
       if (oldVal === '판매완료') {
         showToast("'판매완료' 항목은 시스템 탭 연동 기준으로 보호되어 이름 변경이 불가능합니다.", 'error');
         return;
@@ -2062,18 +1989,12 @@
       }
 
       appConfig[configKey][idx] = trimmed;
-
       if (appConfig.colors && appConfig.colors[oldVal]) {
         appConfig.colors[trimmed] = appConfig.colors[oldVal];
         delete appConfig.colors[oldVal];
       }
 
-      const fieldMap = {
-        'companies': 'company',
-        'categories': 'category',
-        'securityLevels': 'securityLevel',
-        'carriers': 'carrier'
-      };
+      const fieldMap = { 'companies': 'company', 'categories': 'category', 'securityLevels': 'securityLevel', 'carriers': 'carrier' };
       const targetField = fieldMap[configKey];
       let updatedDevCount = 0;
 
@@ -2091,7 +2012,6 @@
       renderConfigTags();
       renderTable();
       if (currentSelectedId) selectDevice(currentSelectedId, false);
-
       showToast(`'${oldVal}'이(가) '${trimmed}'(으)로 변경되었습니다. (기기 ${updatedDevCount}대 자동 반영)`, 'success');
     };
 
@@ -2518,15 +2438,8 @@
         const btnUp = tr.querySelector('.btn-step-up');
         const btnDown = tr.querySelector('.btn-step-down');
 
-        btnUp.onclick = (e) => {
-          e.stopPropagation();
-          moveDeviceStep(d.id, -1);
-        };
-
-        btnDown.onclick = (e) => {
-          e.stopPropagation();
-          moveDeviceStep(d.id, 1);
-        };
+        btnUp.onclick = (e) => { e.stopPropagation(); moveDeviceStep(d.id, -1); };
+        btnDown.onclick = (e) => { e.stopPropagation(); moveDeviceStep(d.id, 1); };
 
         tr.addEventListener('dragstart', (e) => {
           draggedRowDevId = d.id;
@@ -2546,16 +2459,11 @@
         tr.addEventListener('dragover', (e) => {
           e.preventDefault();
           if (!draggedRowDevId || draggedRowDevId === d.id) return;
-
           const rect = tr.getBoundingClientRect();
           const midY = rect.top + rect.height / 2;
           tr.classList.remove('drag-target-top', 'drag-target-bottom');
-
-          if (e.clientY < midY) {
-            tr.classList.add('drag-target-top');
-          } else {
-            tr.classList.add('drag-target-bottom');
-          }
+          if (e.clientY < midY) tr.classList.add('drag-target-top');
+          else tr.classList.add('drag-target-bottom');
         });
 
         tr.addEventListener('dragleave', () => {
@@ -2566,10 +2474,8 @@
           e.preventDefault();
           tr.classList.remove('drag-target-top', 'drag-target-bottom');
           if (!draggedRowDevId || draggedRowDevId === d.id) return;
-
           const rect = tr.getBoundingClientRect();
           const placeAfter = e.clientY >= (rect.top + rect.height / 2);
-
           reorderDeviceDrop(draggedRowDevId, d.id, placeAfter);
         });
 
@@ -2585,9 +2491,7 @@
       text.textContent = msg;
       box.style.display = 'flex';
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(() => {
-        box.style.display = 'none';
-      }, 2500);
+      window._toastTimer = setTimeout(() => { box.style.display = 'none'; }, 2500);
     }
 
     function renderAboutModal() {
@@ -2610,10 +2514,7 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = `changelog-tab-btn ${idx === currentChangelogIndex ? 'active' : ''}`;
-        btn.innerHTML = `
-          <span>${item.version}</span>
-          <span class="tab-date">${item.date}</span>
-        `;
+        btn.innerHTML = `<span>${item.version}</span><span class="tab-date">${item.date}</span>`;
         btn.onclick = () => renderChangelogModal(idx);
         sidebar.appendChild(btn);
       });
@@ -2626,9 +2527,7 @@
             <div class="changelog-detail-title">${selected.version}</div>
             <div class="changelog-detail-date">📅 배포일: ${selected.date}</div>
           </div>
-          <ul class="changelog-detail-list">
-            ${notesHtml}
-          </ul>
+          <ul class="changelog-detail-list">${notesHtml}</ul>
         `;
       }
     }
@@ -2642,9 +2541,7 @@
         showToast('카메라 라이브러리를 불러오는 중입니다.', 'error');
         return;
       }
-      if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("cameraReader");
-      }
+      if (!html5QrCode) html5QrCode = new Html5Qrcode("cameraReader");
 
       try {
         availableCameras = await Html5Qrcode.getCameras();
@@ -2670,9 +2567,7 @@
     }
 
     async function startCamera(cameraId) {
-      if (html5QrCode && html5QrCode.isScanning) {
-        await html5QrCode.stop();
-      }
+      if (html5QrCode && html5QrCode.isScanning) await html5QrCode.stop();
 
       const scanConfig = {
         fps: 15,
@@ -2763,22 +2658,16 @@
         link.addEventListener('click', function(e) {
           const targetUrl = this.getAttribute('href');
           if (!targetUrl || targetUrl.startsWith('#') || targetUrl.startsWith('javascript:') || this.getAttribute('target') === '_blank') return;
-          
           e.preventDefault();
           document.body.classList.add('page-leaving');
-          setTimeout(() => {
-            window.location.href = targetUrl;
-          }, 220);
+          setTimeout(() => { window.location.href = targetUrl; }, 220);
         });
       });
 
       window.addEventListener('pageshow', (event) => {
-        if (event.persisted) {
-          document.body.classList.remove('page-leaving');
-        }
+        if (event.persisted) document.body.classList.remove('page-leaving');
       });
 
-      // 테마 전환 (독립 분리된 아일랜드 버튼 바인딩)
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
@@ -2786,20 +2675,12 @@
         document.getElementById('themePillIcon').textContent = next === 'dark' ? '☀️' : '🌙';
       };
 
-      // 하단 플로팅 독 버튼 이벤트 바인딩
       document.getElementById('btnOpenCamModal').onclick = openCameraScanner;
       document.getElementById('btnQuickCam').onclick = openCameraScanner;
       document.getElementById('btnOpenAddModal').onclick = openAddModal;
-      document.getElementById('btnOpenChangelogModal').onclick = () => {
-        renderChangelogModal(0);
-        changelogModal.classList.add('active');
-      };
-      document.getElementById('btnOpenAboutModal').onclick = () => {
-        renderAboutModal();
-        aboutModal.classList.add('active');
-      };
+      document.getElementById('btnOpenChangelogModal').onclick = () => { renderChangelogModal(0); changelogModal.classList.add('active'); };
+      document.getElementById('btnOpenAboutModal').onclick = () => { renderAboutModal(); aboutModal.classList.add('active'); };
 
-      // 백업 모달 열기 이벤트 (툴바 및 하단 독 버튼 공통 바인딩)
       const openDataModalHandler = () => dataModal.classList.add('active');
       const btnDataToolbar = document.getElementById('btnOpenDataModal');
       const btnDataDock = document.getElementById('btnOpenDataModalDock');
@@ -2807,13 +2688,10 @@
       if (btnDataDock) btnDataDock.onclick = openDataModalHandler;
 
       document.getElementById('btnOpenConfigModal').onclick = () => { renderConfigTags(); configModal.classList.add('active'); };
-
       document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
       document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
-
       document.getElementById('btnCloseChangelogModal').onclick = () => changelogModal.classList.remove('active');
       document.getElementById('btnDoneChangelogModal').onclick = () => changelogModal.classList.remove('active');
-
       document.getElementById('btnCloseDataModal').onclick = () => dataModal.classList.remove('active');
       document.getElementById('btnCancelDataModal').onclick = () => dataModal.classList.remove('active');
 
@@ -2836,7 +2714,6 @@
           showToast('복원할 .json 파일을 먼저 선택해 주세요.', 'error');
           return;
         }
-
         const reader = new FileReader();
         reader.onload = async function(evt) {
           try {
@@ -2845,7 +2722,6 @@
               showToast('유효하지 않은 백업 파일 형식입니다.', 'error');
               return;
             }
-
             if (confirm("정말 이 백업 파일로 현재 데이터를 복원하시겠습니까? 기존 데이터는 대체됩니다.")) {
               if (Array.isArray(imported)) {
                 devices = imported;
@@ -2859,14 +2735,12 @@
                   if (imported.config.colors) appConfig.colors = { ...appConfig.colors, ...imported.config.colors };
                 }
               }
-
               await saveToCloud();
               refreshSelectDropdowns();
               renderConfigTags();
               updateTabCounts();
               renderTable();
               resetHeroView();
-
               fileInput.value = '';
               dataModal.classList.remove('active');
               showToast('데이터 복원이 성공적으로 완료되었습니다!', 'success');
@@ -2991,7 +2865,6 @@
 
       document.getElementById('btnCloseConfigModal').onclick = () => configModal.classList.remove('active');
       document.getElementById('btnDoneConfigModal').onclick = () => configModal.classList.remove('active');
-
       document.getElementById('btnAddCompanyTag').onclick = () => handleAddTag('companies', 'inputNewCompany', 'inputNewCompanyColor');
       document.getElementById('btnAddCategoryTag').onclick = () => handleAddTag('categories', 'inputNewCategory', 'inputNewCategoryColor');
       document.getElementById('btnAddSecLevelTag').onclick = () => handleAddTag('securityLevels', 'inputNewSecLevel', 'inputNewSecLevelColor');
@@ -2999,7 +2872,6 @@
 
       document.getElementById('tabActive').onclick = () => switchInventoryTab('active');
       document.getElementById('tabSold').onclick = () => switchInventoryTab('sold');
-
       document.getElementById('btnCenterAlertClose').onclick = hideCenterAlert;
 
       const barcodeInput = document.getElementById('barcodeScannerInput');
