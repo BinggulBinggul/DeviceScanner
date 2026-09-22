@@ -40,7 +40,7 @@
 
       --shadow-color: rgba(0, 0, 0, 0.5);
 
-      --dock-bg: rgba(15, 23, 42, 0.88);
+      --dock-bg: rgba(15, 23, 42, 0.9);
       --dock-border: rgba(255, 255, 255, 0.15);
       --dock-item-hover: rgba(255, 255, 255, 0.08);
     }
@@ -74,20 +74,13 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* 하단 색상 어긋남 완벽 해결: html과 body의 배경 및 색상 스킴 통일 */
+    /* html 및 body 배경색 하단 틈새 완전 밀착 동기화 */
     html {
       background-color: var(--bg-base);
-      color-scheme: dark;
       min-height: 100%;
     }
-    html[data-theme="dark"] {
-      background-color: #030712;
-      color-scheme: dark;
-    }
-    html[data-theme="light"] {
-      background-color: #f8fafc;
-      color-scheme: light;
-    }
+    html[data-theme="dark"] { background-color: #030712; }
+    html[data-theme="light"] { background-color: #f8fafc; }
 
     @keyframes pageEnterAnim {
       0% { opacity: 0; transform: scale(0.985) translateY(12px); filter: blur(6px); }
@@ -165,11 +158,7 @@
       justify-content: center;
       box-shadow: 0 0 18px var(--accent-glow);
     }
-    .brand-logo svg {
-      width: 24px;
-      height: 24px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
-    }
+    .brand-logo svg { width: 24px; height: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25)); }
     .brand-title { font-size: 17.5px; font-weight: 800; letter-spacing: -0.4px; }
     .status-badge {
       font-size: 11.5px;
@@ -183,13 +172,7 @@
       align-items: center;
       gap: 5px;
     }
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent);
-    }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 
     .hero-banner {
       background: var(--glass-bg);
@@ -206,21 +189,12 @@
     .hero-banner::after {
       content: '';
       position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 320px;
-      height: 320px;
+      top: -50%; right: -10%;
+      width: 320px; height: 320px;
       background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
+      border-radius: 50%; pointer-events: none;
     }
-    .hero-title {
-      font-size: 26px;
-      font-weight: 900;
-      letter-spacing: -0.6px;
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
+    .hero-title { font-size: 26px; font-weight: 900; letter-spacing: -0.6px; margin-bottom: 10px; line-height: 1.3; }
     .hero-desc {
       font-size: 14.5px;
       color: var(--text-sub);
@@ -246,11 +220,7 @@
       vertical-align: middle;
       font-size: 13.5px;
     }
-    .gemini-logo-svg {
-      width: 17px;
-      height: 17px;
-      filter: drop-shadow(0 0 4px rgba(78, 130, 238, 0.5));
-    }
+    .gemini-logo-svg { width: 17px; height: 17px; filter: drop-shadow(0 0 4px rgba(78, 130, 238, 0.5)); }
     .gemini-text {
       background: linear-gradient(135deg, #4E82EE 10%, #9A70EB 50%, #F576A4 90%);
       -webkit-background-clip: text;
@@ -259,26 +229,15 @@
     }
 
     .section-title-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      padding: 0 4px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; padding: 0 4px;
     }
-    .section-title {
-      font-size: 16.5px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .section-title { font-size: 16.5px; font-weight: 800; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; }
 
     .apps-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-      gap: 18px;
-      margin-bottom: 30px;
+      gap: 18px; margin-bottom: 30px;
     }
 
     .app-card {
@@ -286,15 +245,11 @@
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 22px;
-      display: flex;
-      flex-direction: column;
+      border-radius: 20px; padding: 22px;
+      display: flex; flex-direction: column;
       box-shadow: 0 10px 30px var(--shadow-color);
       transition: all var(--transition-speed);
-      position: relative;
-      text-decoration: none;
-      color: inherit;
+      position: relative; text-decoration: none; color: inherit;
     }
     .app-card:hover:not(.disabled) {
       background: var(--glass-card-hover);
@@ -302,82 +257,32 @@
       transform: translateY(-4px);
       box-shadow: 0 16px 40px rgba(16, 185, 129, 0.18);
     }
-    .app-card.disabled {
-      opacity: 0.65;
-      cursor: not-allowed;
-    }
+    .app-card.disabled { opacity: 0.65; cursor: not-allowed; }
 
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
     .card-icon-wrap {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--glass-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
+      width: 46px; height: 46px; border-radius: 14px;
+      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--glass-border);
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
     }
     .app-card:hover:not(.disabled) .card-icon-wrap {
-      background: rgba(16, 185, 129, 0.18);
-      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.18); border-color: rgba(16, 185, 129, 0.4);
     }
-    .card-badge {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 20px;
-    }
-    .badge-live {
-      background: rgba(16, 185, 129, 0.2);
-      color: var(--accent);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-    }
-    .badge-soon {
-      background: rgba(148, 163, 184, 0.15);
-      color: var(--text-muted);
-      border: 1px solid rgba(148, 163, 184, 0.3);
-    }
+    .card-badge { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+    .badge-live { background: rgba(16, 185, 129, 0.2); color: var(--accent); border: 1px solid rgba(16, 185, 129, 0.4); }
+    .badge-soon { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); border: 1px solid rgba(148, 163, 184, 0.3); }
 
-    .card-title {
-      font-size: 17.5px;
-      font-weight: 800;
-      margin-bottom: 8px;
-      letter-spacing: -0.3px;
-    }
-    .card-desc {
-      font-size: 13px;
-      color: var(--text-sub);
-      line-height: 1.55;
-      margin-bottom: 20px;
-      flex: 1;
-    }
+    .card-title { font-size: 17.5px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.3px; }
+    .card-desc { font-size: 13px; color: var(--text-sub); line-height: 1.55; margin-bottom: 20px; flex: 1; }
 
     .card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      padding-top: 12px;
-      margin-top: auto;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; margin-top: auto;
     }
-    .card-action-text {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
+    .card-action-text { font-size: 13px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 5px; }
     .card-action-text.disabled-text { color: var(--text-muted); }
 
-    /* 하단 플로팅 독 */
+    /* 대시보드 하단 플로팅 독 */
     .floating-dock-wrap {
       position: fixed;
       bottom: calc(16px + env(safe-area-inset-bottom, 0px));
@@ -406,69 +311,35 @@
     }
 
     .pill-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 6px 11px;
-      border-radius: 9999px;
-      background: transparent;
-      border: none;
-      color: var(--text-sub);
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      font-family: inherit;
-      min-width: 48px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 6px 11px; border-radius: 9999px; background: transparent; border: none;
+      color: var(--text-sub); cursor: pointer; text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; min-width: 48px;
     }
-    .pill-item:hover {
-      background: var(--dock-item-hover);
-      color: var(--text-main);
-      transform: translateY(-2px);
-    }
+    .pill-item:hover { background: var(--dock-item-hover); color: var(--text-main); transform: translateY(-2px); }
     .pill-item:active { transform: scale(0.94); }
 
-    .pill-icon {
-      font-size: 16px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .pill-icon svg {
-      width: 18px;
-      height: 18px;
-      vertical-align: middle;
-      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
-    }
-    .pill-label {
-      font-size: 9.5px;
-      font-weight: 700;
-      margin-top: 2px;
-      white-space: nowrap;
-      letter-spacing: -0.2px;
-    }
+    .pill-icon { font-size: 16px; height: 20px; display: flex; align-items: center; justify-content: center; }
+    .pill-icon svg { width: 18px; height: 18px; vertical-align: middle; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
+    .pill-label { font-size: 9.5px; font-weight: 700; margin-top: 2px; white-space: nowrap; letter-spacing: -0.2px; }
 
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
-      color: #fff !important;
-      padding: 6px 13px;
+      color: #fff !important; padding: 6px 13px;
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
     }
     .pill-item.pill-accent-dash .pill-label { color: #fff; }
 
     .pill-item.pill-accent-devices {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
-      color: #fff !important;
-      padding: 6px 13px;
+      color: #fff !important; padding: 6px 13px;
       box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
     }
     .pill-item.pill-accent-devices .pill-label { color: #fff; }
 
     .pill-item.pill-accent-memo {
       background: linear-gradient(135deg, #6366f1, #7c3aed);
-      color: #fff !important;
-      padding: 6px 13px;
+      color: #fff !important; padding: 6px 13px;
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
     }
     .pill-item.pill-accent-memo .pill-label { color: #fff; }
@@ -480,97 +351,45 @@
       -webkit-backdrop-filter: blur(28px);
       border: 1.5px solid var(--dock-border);
       border-radius: 9999px;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      width: 48px; height: 48px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: var(--text-main);
       box-shadow: 0 16px 40px var(--shadow-color), 0 0 20px rgba(16, 185, 129, 0.15);
-      cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 0;
-      flex-shrink: 0;
+      cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); padding: 0; flex-shrink: 0;
     }
-    .floating-theme-island:hover {
-      background: var(--dock-item-hover);
-      transform: translateY(-2px) scale(1.06);
-      border-color: var(--accent);
-    }
+    .floating-theme-island:hover { background: var(--dock-item-hover); transform: translateY(-2px) scale(1.06); border-color: var(--accent); }
     .floating-theme-island:active { transform: scale(0.92); }
     .floating-theme-island .pill-icon { font-size: 16px; height: 18px; }
     .floating-theme-island .pill-label { font-size: 9px; font-weight: 700; color: var(--text-sub); }
 
+    /* 정보 모달 */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      padding: 16px;
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; z-index: 2000; padding: 16px;
     }
     .modal-overlay.active { display: flex; }
     .modal-box {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
-      overflow: hidden;
-      animation: pageEnterAnim 0.2s ease-out;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: 20px; width: 100%; max-width: 500px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5); overflow: hidden; animation: pageEnterAnim 0.2s ease-out;
     }
-    .modal-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--glass-border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
     .modal-title { font-size: 16.5px; font-weight: 700; }
-    .modal-close {
-      background: transparent;
-      border: none;
-      color: var(--text-sub);
-      font-size: 22px;
-      cursor: pointer;
-    }
+    .modal-close { background: transparent; border: none; color: var(--text-sub); font-size: 22px; cursor: pointer; }
     .modal-body { padding: 18px 20px; }
-    .modal-footer {
-      padding: 14px 20px;
-      border-top: 1px solid var(--glass-border);
-      display: flex;
-      justify-content: flex-end;
-    }
-    .specs-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .spec-item {
-      background: var(--glass-card);
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      padding: 9px 12px;
-    }
+    .modal-footer { padding: 14px 20px; border-top: 1px solid var(--glass-border); display: flex; justify-content: flex-end; }
+    .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .spec-item { background: var(--glass-card); border: 1px solid var(--glass-border); border-radius: 10px; padding: 9px 12px; }
     .spec-lbl { font-size: 11px; color: var(--text-sub); margin-bottom: 2px; }
     .spec-val { font-size: 13px; font-weight: 600; }
 
     footer {
-      margin-top: auto;
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-muted);
-      padding: 20px 0 10px;
+      margin-top: auto; text-align: center; font-size: 12px; color: var(--text-muted); padding: 20px 0 10px;
     }
 
     @media (max-width: 768px) {
-      .hub-container { padding: 8px 12px calc(100px + env(safe-area-inset-bottom, 0px)) 12px; }
+      .hub-container { padding: 8px 12px 100px 12px; }
       .hero-title { font-size: 22px; }
       .hero-banner { padding: 22px 18px; }
       .apps-grid { grid-template-columns: 1fr; }
@@ -648,7 +467,7 @@
         </div>
         <h3 class="card-title">단말기 자산 관리 시스템</h3>
         <p class="card-desc">
-          바코드 및 카메라 스캐너 지원, 플로팅 독 및 태블릿 완전 대응, Firebase 실시간 동기화 인벤토리 시스템.
+          바코드 및 카메라 스캐너 지원, 태블릿/모바일 가로 스크롤 완벽 대응, Firebase 실시간 동기화 인벤토리 시스템.
         </p>
         <div class="card-footer">
           <span class="card-action-text">시스템 열기 &rarr;</span>
@@ -664,7 +483,7 @@
         </div>
         <h3 class="card-title">개인 메모장</h3>
         <p class="card-desc">
-          텍스트 및 숫자 기반 빠른 기록, 플로팅 알약 독, 카테고리 분류, 상단 핀 고정 및 클라우드 동기화 지원.
+          텍스트 및 숫자 기반 빠른 기록, 태블릿 대응 가이드, 카테고리 분류, 상단 핀 고정 및 클라우드 동기화 지원.
         </p>
         <div class="card-footer">
           <span class="card-action-text">메모장 열기 &rarr;</span>
@@ -746,22 +565,10 @@
           <div style="font-size: 12px; color: var(--text-sub); margin-top: 4px;">통합 모바일 자산 관리 & 개인 메모 워크스페이스</div>
         </div>
         <div class="specs-grid">
-          <div class="spec-item">
-            <div class="spec-lbl">개발자</div>
-            <div class="spec-val">Kim Dogyun</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">배포 환경</div>
-            <div class="spec-val">Vercel Web + GitHub</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">사용 클라우드</div>
-            <div class="spec-val">Firebase Firestore</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">사용 AI</div>
-            <div class="spec-val">Gemini</div>
-          </div>
+          <div class="spec-item"><div class="spec-lbl">개발자</div><div class="spec-val">Kim Dogyun</div></div>
+          <div class="spec-item"><div class="spec-lbl">배포 환경</div><div class="spec-val">Vercel Web + GitHub</div></div>
+          <div class="spec-item"><div class="spec-lbl">사용 클라우드</div><div class="spec-val">Firebase Firestore</div></div>
+          <div class="spec-item"><div class="spec-lbl">사용 AI</div><div class="spec-val">Gemini</div></div>
         </div>
       </div>
       <div class="modal-footer">
@@ -776,11 +583,6 @@
       const next = cur === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       document.getElementById('themePillIcon').textContent = next === 'dark' ? '☀️' : '🌙';
-      
-      const themeMeta = document.getElementById('themeMeta');
-      if (themeMeta) {
-        themeMeta.setAttribute('content', next === 'dark' ? '#030712' : '#f8fafc');
-      }
     };
 
     const aboutModal = document.getElementById('aboutModal');
