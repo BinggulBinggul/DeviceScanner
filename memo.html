@@ -2,19 +2,19 @@
 <html lang="ko" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Personal Memo - Green Onion Project</title>
+
   <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#030712">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-
-  <!-- Firebase SDK Compat -->
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
 
   <style>
-    @view-transition {
-      navigation: auto;
-    }
+    @view-transition { navigation: auto; }
 
     :root {
       --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
@@ -52,7 +52,7 @@
     }
 
     [data-theme="light"] {
-      --bg-gradient: radial-gradient(circle at 20% 20%, #d1fae5 0%, #f0fdf4 40%, #f8fafc 100%);
+      --bg-gradient: radial-gradient(circle at 20% 15%, #d1fae5 0%, #f0fdf4 40%, #f8fafc 100%);
       --orb-1: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(52, 211, 153, 0.15) 0%, transparent 70%);
       --orb-3: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, transparent 70%);
@@ -84,16 +84,8 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     @keyframes pageEnterAnim {
-      0% {
-        opacity: 0;
-        transform: scale(0.985) translateY(12px);
-        filter: blur(6px);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        filter: blur(0);
-      }
+      0% { opacity: 0; transform: scale(0.985) translateY(12px); filter: blur(6px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
     }
 
     body {
@@ -128,21 +120,19 @@
     .orb-2 { width: 450px; height: 450px; bottom: -50px; right: -50px; background: var(--orb-2); }
     .orb-3 { width: 350px; height: 350px; top: 35%; left: 45%; background: var(--orb-3); }
 
-    /* 메인 앱 컨테이너 (하단 플로팅 독 여백 확보) */
     .app-container {
       position: relative;
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
       width: 100%;
-      padding: 16px 20px 96px 20px;
+      padding: calc(16px + env(safe-area-inset-top, 0px)) 20px calc(96px + env(safe-area-inset-bottom, 0px)) 20px;
       display: flex;
       flex-direction: column;
       flex: 1;
       gap: 14px;
     }
 
-    /* 상단 헤더: 미니멀 개방형 */
     header.glass-header {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -185,12 +175,10 @@
       gap: 4px;
     }
 
-    /* =========================================================
-       하단 리퀴드 글래스 플로팅 독 & 독립 테마 버튼
-       ========================================================= */
+    /* 하단 플로팅 독 */
     .floating-dock-wrap {
       position: fixed;
-      bottom: 20px;
+      bottom: calc(20px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
       z-index: 1000;
@@ -236,9 +224,7 @@
       color: var(--text-main);
       transform: translateY(-2px);
     }
-    .pill-item:active {
-      transform: scale(0.94);
-    }
+    .pill-item:active { transform: scale(0.94); }
 
     .pill-icon {
       font-size: 16px;
@@ -261,7 +247,6 @@
       letter-spacing: -0.2px;
     }
 
-    /* 1. 대시보드 강조 캡슐 */
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
@@ -275,7 +260,6 @@
       box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
     }
 
-    /* 2. 새 메모 강조 캡슐 */
     .pill-item.pill-primary {
       background: linear-gradient(135deg, #6366f1, #7c3aed);
       color: #fff !important;
@@ -289,7 +273,6 @@
       box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
     }
 
-    /* 6. 독립 분리된 원형 테마 버튼 */
     .floating-theme-island {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -319,7 +302,6 @@
     .floating-theme-island .pill-icon { font-size: 16px; height: 18px; }
     .floating-theme-island .pill-label { font-size: 9px; font-weight: 700; color: var(--text-sub); }
 
-    /* 툴바 */
     .memo-toolbar {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -368,7 +350,6 @@
       cursor: pointer;
     }
 
-    /* 메모 카드 그리드 */
     .memo-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
@@ -488,7 +469,6 @@
       border-radius: 20px;
     }
 
-    /* 모달 공통 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -573,7 +553,6 @@
     }
     .char-counter { font-size: 11.5px; color: var(--text-muted); text-align: right; }
 
-    /* 사이드바 패치노트 모달 전용 레이아웃 */
     .changelog-container-split {
       display: flex;
       gap: 16px;
@@ -602,21 +581,14 @@
       flex-direction: column;
       gap: 3px;
     }
-    .changelog-tab-btn:hover {
-      background: var(--glass-card-hover);
-      color: var(--text-main);
-    }
+    .changelog-tab-btn:hover { background: var(--glass-card-hover); color: var(--text-main); }
     .changelog-tab-btn.active {
       background: rgba(16, 185, 129, 0.22);
       border-color: var(--accent);
       color: var(--text-main);
       box-shadow: 0 0 12px var(--accent-glow);
     }
-    .changelog-tab-btn .tab-date {
-      font-size: 10px;
-      color: var(--text-muted);
-      font-weight: 400;
-    }
+    .changelog-tab-btn .tab-date { font-size: 10px; color: var(--text-muted); font-weight: 400; }
     .changelog-tab-btn.active .tab-date { color: #cbd5e1; }
     .changelog-detail-pane {
       flex: 1;
@@ -656,7 +628,6 @@
       margin-top: 1px;
     }
 
-    /* 앱 정보 카드 그리드 */
     .about-card-hero {
       text-align: center;
       padding: 10px 0 16px;
@@ -754,11 +725,11 @@
     .toast.info { border-left: 4px solid var(--accent); }
 
     @media (max-width: 900px) {
-      .app-container { padding: 12px 10px 100px 10px; }
+      .app-container { padding: calc(12px + env(safe-area-inset-top, 0px)) 10px calc(100px + env(safe-area-inset-bottom, 0px)) 10px; }
       header.glass-header { padding: 12px 14px; }
       .memo-grid { grid-template-columns: 1fr; }
       .search-filter-wrap { flex-direction: column; align-items: stretch; }
-      .floating-dock-wrap { bottom: 14px; gap: 6px; max-width: 98vw; }
+      .floating-dock-wrap { bottom: calc(14px + env(safe-area-inset-bottom, 0px)); gap: 6px; max-width: 98vw; }
       .floating-pill-bar { padding: 4px 6px; gap: 2px; }
       .pill-item { padding: 5px 6px; min-width: 40px; }
       .pill-icon { font-size: 15px; height: 18px; }
@@ -790,7 +761,6 @@
   <div class="orb orb-3"></div>
 
   <div class="app-container">
-    <!-- 미니멀 상단 헤더 -->
     <header class="glass-header">
       <div class="brand-area">
         <div class="brand-logo">📝</div>
@@ -803,7 +773,6 @@
       </div>
     </header>
 
-    <!-- 툴바 -->
     <div class="memo-toolbar">
       <div class="search-filter-wrap">
         <input type="text" class="memo-search" id="memoSearchInput" placeholder="메모 검색 (제목, 텍스트, 숫자)...">
@@ -816,16 +785,13 @@
       </div>
     </div>
 
-    <!-- 메모 그리드 -->
     <div class="memo-grid" id="memoGrid"></div>
   </div>
 
-  <!-- =========================================================
-       하단 플로팅 독 (순서: 대시보드 -> 새 메모 -> 로그 -> 정보 -> 백업 -> 독립 테마)
-       ========================================================= -->
+  <!-- 하단 플로팅 독 -->
   <div class="floating-dock-wrap">
     <nav class="floating-pill-bar">
-      <!-- 1. 대시보드 (강조: 대파 에메랄드 캡슐) -->
+      <!-- 1. 대시보드 (초록 강조) -->
       <a href="./index.html" class="pill-item pill-accent-dash" title="Green Onion Project 메인 대시보드로 이동">
         <div class="pill-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -840,7 +806,7 @@
         <span class="pill-label">대시보드</span>
       </a>
 
-      <!-- 2. 새 메모 (강조: 보라/인디고 캡슐) -->
+      <!-- 2. 새 메모 (보라 강조) -->
       <button type="button" class="pill-item pill-primary" id="btnOpenAddModal" title="새 메모 작성">
         <div class="pill-icon">＋</div>
         <span class="pill-label">새 메모</span>
@@ -913,7 +879,7 @@
     </div>
   </div>
 
-  <!-- Modal 2: 사이드바 형태 업데이트 로그 (Changelog) 모달 -->
+  <!-- Modal 2: 사이드바 패치노트 모달 -->
   <div class="modal-overlay" id="changelogModal">
     <div class="modal-box" style="max-width: 640px;">
       <div class="modal-header">
@@ -979,16 +945,11 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div class="toast" id="toastBox">
     <span id="toastMsg">알림</span>
   </div>
 
-  <!-- =========================================================
-       JavaScript Application Core
-       ========================================================= -->
   <script>
-    // 앱 정보 & 패치노트 (사이드바 연동)
     const APP_INFO = {
       title: "Personal Memo Hub",
       version: "v1.0",
@@ -1102,15 +1063,12 @@
       text.textContent = msg;
       box.style.display = 'flex';
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(() => {
-        box.style.display = 'none';
-      }, 2300);
+      window._toastTimer = setTimeout(() => { box.style.display = 'none'; }, 2300);
     }
 
     function renderCategories() {
       const select = document.getElementById('filterCategory');
       const curVal = select.value;
-      
       const distinctCats = Array.from(new Set([...categories, ...memos.map(m => m.category).filter(Boolean)]));
       select.innerHTML = '<option value="ALL">전체 카테고리</option>';
       distinctCats.forEach(c => {
@@ -1161,7 +1119,6 @@
       filtered.forEach(m => {
         const card = document.createElement('div');
         card.className = `memo-card ${m.pinned ? 'pinned' : ''}`;
-        
         const dateDisplay = (m.updatedAt || m.createdAt || '').slice(0, 16);
 
         card.innerHTML = `
@@ -1272,10 +1229,7 @@
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = `changelog-tab-btn ${idx === currentChangelogIndex ? 'active' : ''}`;
-        btn.innerHTML = `
-          <span>${item.version}</span>
-          <span class="tab-date">${item.date}</span>
-        `;
+        btn.innerHTML = `<span>${item.version}</span><span class="tab-date">${item.date}</span>`;
         btn.onclick = () => renderChangelogModal(idx);
         sidebar.appendChild(btn);
       });
@@ -1288,9 +1242,7 @@
             <div class="changelog-detail-title">${selected.version}</div>
             <div class="changelog-detail-date">📅 배포일: ${selected.date}</div>
           </div>
-          <ul class="changelog-detail-list">
-            ${notesHtml}
-          </ul>
+          <ul class="changelog-detail-list">${notesHtml}</ul>
         `;
       }
     }
@@ -1312,12 +1264,9 @@
         link.addEventListener('click', function(e) {
           const targetUrl = this.getAttribute('href');
           if (!targetUrl || targetUrl.startsWith('#') || targetUrl.startsWith('javascript:') || this.getAttribute('target') === '_blank') return;
-          
           e.preventDefault();
           document.body.classList.add('page-leaving');
-          setTimeout(() => {
-            window.location.href = targetUrl;
-          }, 220);
+          setTimeout(() => { window.location.href = targetUrl; }, 220);
         });
       });
 
@@ -1325,7 +1274,6 @@
         if (event.persisted) document.body.classList.remove('page-leaving');
       });
 
-      // 테마 전환 (독립 분리된 아일랜드 버튼 바인딩)
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
@@ -1333,20 +1281,12 @@
         document.getElementById('themePillIcon').textContent = next === 'dark' ? '☀️' : '🌙';
       };
 
-      // 하단 플로팅 독 버튼 이벤트 바인딩
       document.getElementById('btnOpenAddModal').onclick = openAddModal;
-
-      document.getElementById('btnOpenChangelogModal').onclick = () => {
-        renderChangelogModal(0);
-        changelogModal.classList.add('active');
-      };
+      document.getElementById('btnOpenChangelogModal').onclick = () => { renderChangelogModal(0); changelogModal.classList.add('active'); };
       document.getElementById('btnCloseChangelogModal').onclick = () => changelogModal.classList.remove('active');
       document.getElementById('btnDoneChangelogModal').onclick = () => changelogModal.classList.remove('active');
 
-      document.getElementById('btnOpenAboutModal').onclick = () => {
-        renderAboutModal();
-        aboutModal.classList.add('active');
-      };
+      document.getElementById('btnOpenAboutModal').onclick = () => { renderAboutModal(); aboutModal.classList.add('active'); };
       document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
       document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
 
@@ -1386,31 +1326,18 @@
         if (id) {
           const idx = memos.findIndex(x => x.id === id);
           if (idx !== -1) {
-            memos[idx] = {
-              ...memos[idx],
-              title,
-              category,
-              pinned,
-              content,
-              updatedAt: nowStr
-            };
+            memos[idx] = { ...memos[idx], title, category, pinned, content, updatedAt: nowStr };
           }
         } else {
           const newMemo = {
             id: 'memo-' + Date.now(),
-            title,
-            category,
-            pinned,
-            content,
-            createdAt: nowStr,
-            updatedAt: nowStr
+            title, category, pinned, content,
+            createdAt: nowStr, updatedAt: nowStr
           };
           memos.unshift(newMemo);
         }
 
-        if (!categories.includes(category)) {
-          categories.push(category);
-        }
+        if (!categories.includes(category)) categories.push(category);
 
         await saveToCloud();
         renderMemos();
