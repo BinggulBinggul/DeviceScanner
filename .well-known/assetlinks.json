@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "app.vercel.greenonion.twa",
-        "sha256_cert_fingerprints": ["DB:23:B9:CE:94:A1:56:01:D8:53:56:30:F0:93:02:75:57:6A:FE:A8:2E:BF:84:65:6E:23:66:69:43:2B:CA:2E"]
+        "sha256_cert_fingerprints": ["4F:CD:F9:A3:CB:9E:88:33:C6:6D:44:88:48:C5:56:1A:8E:5F:6D:2E:62:F1:BD:4B:FE:EC:1B:0D:33:7F:6D:7A"]
       }
     }]
