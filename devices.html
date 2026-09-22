@@ -208,7 +208,9 @@
       transform: translateY(-1px);
     }
 
-    /* 하단 플로팅 독 & 독립 테마 버튼 래퍼 */
+    /* =========================================================
+       하단 리퀴드 글래스 플로팅 독 & 독립 테마 버튼 래퍼
+       ========================================================= */
     .floating-dock-wrap {
       position: fixed;
       bottom: 20px;
@@ -218,11 +220,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      max-width: 96vw;
+      max-width: 98vw;
       pointer-events: none;
     }
 
-    /* 메인 6구 메뉴 바 알약 */
+    /* 메인 7구 메뉴 바 알약 */
     .floating-pill-bar {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -233,7 +235,7 @@
       padding: 5px 8px;
       display: flex;
       align-items: center;
-      gap: 3px;
+      gap: 2px;
       box-shadow: 0 16px 40px var(--shadow-color), 0 0 24px rgba(99, 102, 241, 0.12);
     }
 
@@ -242,7 +244,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 6px 10px;
+      padding: 6px 9px;
       border-radius: 9999px;
       background: transparent;
       border: none;
@@ -251,7 +253,7 @@
       text-decoration: none;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       font-family: inherit;
-      min-width: 48px;
+      min-width: 44px;
     }
     .pill-item:hover {
       background: var(--dock-item-hover);
@@ -276,46 +278,56 @@
       filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
     }
     .pill-label {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
       margin-top: 2px;
       white-space: nowrap;
       letter-spacing: -0.2px;
     }
 
-    /* 1. 대시보드 강조 캡슐 */
+    /* 1. 대시보드 강조 캡슐 (초록) */
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
-      padding: 6px 13px;
+      padding: 6px 12px;
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
     }
-    .pill-item.pill-accent-dash .pill-label {
-      color: #fff;
-    }
+    .pill-item.pill-accent-dash .pill-label { color: #fff; }
     .pill-item.pill-accent-dash:hover {
       background: linear-gradient(135deg, #059669, #047857);
       transform: translateY(-2px) scale(1.04);
       box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
     }
 
-    /* 2. 카메라 강조 캡슐 */
+    /* 2. 카메라 강조 캡슐 (스카이블루) */
     .pill-item.pill-accent-cam {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
       color: #fff !important;
-      padding: 6px 13px;
+      padding: 6px 12px;
       box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
     }
-    .pill-item.pill-accent-cam .pill-label {
-      color: #fff;
-    }
+    .pill-item.pill-accent-cam .pill-label { color: #fff; }
     .pill-item.pill-accent-cam:hover {
       background: linear-gradient(135deg, #0369a1, #0891b2);
       transform: translateY(-2px) scale(1.04);
       box-shadow: 0 6px 18px rgba(6, 182, 212, 0.5);
     }
 
-    /* 7. 독립 분리된 원형 테마 버튼 */
+    /* 3. 기기 등록 강조 캡슐 (보라/인디고) */
+    .pill-item.pill-primary {
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      color: #fff !important;
+      padding: 6px 12px;
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+    .pill-item.pill-primary .pill-label { color: #fff; }
+    .pill-item.pill-primary:hover {
+      background: linear-gradient(135deg, #4f46e5, #6d28d9);
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 6px 18px var(--accent-glow);
+    }
+
+    /* 독립 분리된 원형 테마 버튼 */
     .floating-theme-island {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -341,18 +353,9 @@
       transform: translateY(-2px) scale(1.06);
       border-color: var(--accent);
     }
-    .floating-theme-island:active {
-      transform: scale(0.92);
-    }
-    .floating-theme-island .pill-icon {
-      font-size: 16px;
-      height: 18px;
-    }
-    .floating-theme-island .pill-label {
-      font-size: 9px;
-      font-weight: 700;
-      color: var(--text-sub);
-    }
+    .floating-theme-island:active { transform: scale(0.92); }
+    .floating-theme-island .pill-icon { font-size: 16px; height: 18px; }
+    .floating-theme-island .pill-label { font-size: 9px; font-weight: 700; color: var(--text-sub); }
 
     .scanner-panel {
       background: var(--glass-bg);
@@ -703,7 +706,7 @@
     tbody tr.drag-target-top { border-top: 2.5px solid var(--accent) !important; }
     tbody tr.drag-target-bottom { border-bottom: 2.5px solid var(--accent) !important; }
 
-    /* 모달 스타일 */
+    /* 모달 공통 스타일 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -824,9 +827,7 @@
       color: var(--text-muted);
       font-weight: 400;
     }
-    .changelog-tab-btn.active .tab-date {
-      color: #cbd5e1;
-    }
+    .changelog-tab-btn.active .tab-date { color: #cbd5e1; }
     .changelog-detail-pane {
       flex: 1;
       padding-left: 4px;
@@ -843,10 +844,7 @@
       margin-bottom: 4px;
       color: var(--text-main);
     }
-    .changelog-detail-date {
-      font-size: 12px;
-      color: var(--text-sub);
-    }
+    .changelog-detail-date { font-size: 12px; color: var(--text-sub); }
     .changelog-detail-list {
       list-style: none;
       display: flex;
@@ -1215,44 +1213,46 @@
         flex-shrink: 0;
       }
 
+      /* 모바일 전용 초소형 핏 (7구 알약 독 + 1 테마 아일랜드 완벽 수용) */
       .floating-dock-wrap {
-        bottom: 14px;
-        gap: 6px;
-        max-width: 98vw;
+        bottom: 12px;
+        gap: 5px;
+        max-width: 99vw;
       }
       .floating-pill-bar {
-        padding: 4px 6px;
-        gap: 2px;
+        padding: 3px 5px;
+        gap: 1px;
       }
       .pill-item {
-        padding: 5px 6px;
-        min-width: 40px;
+        padding: 4px 5px;
+        min-width: 36px;
       }
       .pill-icon {
-        font-size: 15px;
-        height: 18px;
+        font-size: 14px;
+        height: 16px;
       }
       .pill-icon svg {
-        width: 16px;
-        height: 16px;
+        width: 15px;
+        height: 15px;
       }
       .pill-label {
-        font-size: 9px;
+        font-size: 8.5px;
       }
       .pill-item.pill-accent-dash,
-      .pill-item.pill-accent-cam {
-        padding: 5px 9px;
+      .pill-item.pill-accent-cam,
+      .pill-item.pill-primary {
+        padding: 4px 7px;
       }
       .floating-theme-island {
-        width: 42px;
-        height: 42px;
+        width: 38px;
+        height: 38px;
       }
       .floating-theme-island .pill-icon {
-        font-size: 15px;
-        height: 16px;
+        font-size: 14px;
+        height: 15px;
       }
       .floating-theme-island .pill-label {
-        font-size: 8.5px;
+        font-size: 8px;
       }
     }
   </style>
@@ -1409,10 +1409,12 @@
     </div>
   </div>
 
-  <!-- 하단 플로팅 독 (순서 개편 및 테마 독립 분리) -->
+  <!-- =========================================================
+       하단 리퀴드 글래스 플로팅 독 (요청 순서 및 강조 반영)
+       ========================================================= -->
   <div class="floating-dock-wrap">
     <nav class="floating-pill-bar">
-      <!-- 1. 대시보드 (강조: 대파 에메랄드 캡슐) -->
+      <!-- 1. 대시보드 (강조: 대파 초록 캡슐) -->
       <a href="./index.html" class="pill-item pill-accent-dash" title="Green Onion Project 메인 대시보드로 이동">
         <div class="pill-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1433,8 +1435,8 @@
         <span class="pill-label">카메라</span>
       </button>
 
-      <!-- 3. 기기 등록 (강조 제거) -->
-      <button type="button" class="pill-item" id="btnOpenAddModal" title="새로운 단말기 등록">
+      <!-- 3. 기기 등록 (강조 추가: 보라/인디고 캡슐) -->
+      <button type="button" class="pill-item pill-primary" id="btnOpenAddModal" title="새로운 단말기 등록">
         <div class="pill-icon">＋</div>
         <span class="pill-label">기기 등록</span>
       </button>
@@ -1451,14 +1453,20 @@
         <span class="pill-label">정보</span>
       </button>
 
-      <!-- 6. 설정 -->
+      <!-- 6. [신규 추가] 백업 (정보와 설정 사이) -->
+      <button type="button" class="pill-item" id="btnOpenDataModalDock" title="JSON 데이터 백업 및 복원 관리">
+        <div class="pill-icon">💾</div>
+        <span class="pill-label">백업</span>
+      </button>
+
+      <!-- 7. 설정 -->
       <button type="button" class="pill-item" id="btnOpenConfigModal" title="항목 및 색상 설정">
         <div class="pill-icon">⚙️</div>
         <span class="pill-label">설정</span>
       </button>
     </nav>
 
-    <!-- 7. 독립 분리된 원형 테마 버튼 -->
+    <!-- 8. [독립 분리] 원형 테마 버튼 -->
     <button type="button" class="floating-theme-island" id="btnThemeToggle" title="화이트/다크 모드 전환">
       <div class="pill-icon" id="themePillIcon">☀️</div>
       <span class="pill-label" id="themePillLabel">테마</span>
@@ -1770,7 +1778,6 @@
        JavaScript Application Core
        ========================================================= -->
   <script>
-    // [사용자 직접 수정 영역] 앱 정보 & 사이드바 연동 패치노트 (v1.1 신규 반영)
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
       version: "v1.1",
@@ -1794,7 +1801,7 @@
           notes: [
             "Green Onion Project 메인 대시보드와 통합",
             "하단 리퀴드 글래스 플로팅 독 순서 개편 및 테마 버튼 독립 분리",
-            "대시보드(초록) 및 카메라(하늘색) 캡슐 강조 UI 적용",
+            "대시보드(초록), 카메라(하늘색), 기기 등록(보라) 캡슐 강조 UI 적용",
             "독립된 사이드바 형태의 업데이트 로그(Changelog) 팝업 지원",
             "마지막 조회 일시 직접 수정 및 경과 일수(D-Day) 자동 계산 배지 지원"
           ]
@@ -2777,7 +2784,7 @@
         document.getElementById('themePillIcon').textContent = next === 'dark' ? '☀️' : '🌙';
       };
 
-      // 6구 알약 독 버튼 이벤트 바인딩
+      // 하단 플로팅 독 버튼 이벤트 바인딩
       document.getElementById('btnOpenCamModal').onclick = openCameraScanner;
       document.getElementById('btnQuickCam').onclick = openCameraScanner;
       document.getElementById('btnOpenAddModal').onclick = openAddModal;
@@ -2789,6 +2796,14 @@
         renderAboutModal();
         aboutModal.classList.add('active');
       };
+
+      // 백업 모달 열기 이벤트 (툴바 및 하단 독 버튼 공통 바인딩)
+      const openDataModalHandler = () => dataModal.classList.add('active');
+      const btnDataToolbar = document.getElementById('btnOpenDataModal');
+      const btnDataDock = document.getElementById('btnOpenDataModalDock');
+      if (btnDataToolbar) btnDataToolbar.onclick = openDataModalHandler;
+      if (btnDataDock) btnDataDock.onclick = openDataModalHandler;
+
       document.getElementById('btnOpenConfigModal').onclick = () => { renderConfigTags(); configModal.classList.add('active'); };
 
       document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
@@ -2797,7 +2812,6 @@
       document.getElementById('btnCloseChangelogModal').onclick = () => changelogModal.classList.remove('active');
       document.getElementById('btnDoneChangelogModal').onclick = () => changelogModal.classList.remove('active');
 
-      document.getElementById('btnOpenDataModal').onclick = () => dataModal.classList.add('active');
       document.getElementById('btnCloseDataModal').onclick = () => dataModal.classList.remove('active');
       document.getElementById('btnCancelDataModal').onclick = () => dataModal.classList.remove('active');
 
