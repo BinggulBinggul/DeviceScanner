@@ -6,7 +6,8 @@
   <title>Mobile Device Asset Manager</title>
   
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#030712">
+  <!-- 안드로이드 시스템 상태바 및 하단 제스처 바 색상 동기화 메타 태그 -->
+  <meta name="theme-color" content="#030712" id="themeMeta">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -23,6 +24,7 @@
     }
 
     [data-theme="dark"] {
+      --bg-base: #030712;
       --bg-gradient: radial-gradient(circle at 15% 15%, #1e1b4b 0%, #090d16 50%, #030712 100%);
       --orb-1: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
@@ -50,12 +52,13 @@
       --modal-bg: rgba(15, 23, 42, 0.95);
       --shadow-color: rgba(0, 0, 0, 0.45);
 
-      --dock-bg: rgba(15, 23, 42, 0.88);
+      --dock-bg: rgba(15, 23, 42, 0.9);
       --dock-border: rgba(255, 255, 255, 0.15);
       --dock-item-hover: rgba(255, 255, 255, 0.08);
     }
 
     [data-theme="light"] {
+      --bg-base: #f1f5f9;
       --bg-gradient: radial-gradient(circle at 20% 20%, #e0e7ff 0%, #f1f5f9 50%, #e2e8f0 100%);
       --orb-1: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, transparent 70%);
@@ -90,27 +93,45 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    @keyframes pageEnterAnim {
-      0% { opacity: 0; transform: scale(0.985) translateY(12px); filter: blur(6px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    /* [핵심 1] 최상단 html/body 배경색 강제 밀착 */
+    html {
+      background-color: #030712;
+      min-height: 100%;
+      min-height: 100dvh;
+    }
+    html[data-theme="light"] {
+      background-color: #f1f5f9;
     }
 
     body {
       font-family: var(--font-family);
-      background: var(--bg-gradient);
+      background-color: transparent;
       color: var(--text-main);
       min-height: 100vh;
+      min-height: 100dvh;
       overflow-x: hidden;
       position: relative;
       user-select: none;
       animation: pageEnterAnim 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1), transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), filter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1), transform 0.24s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     body.page-leaving {
       opacity: 0 !important;
       transform: scale(0.985) translateY(-8px) !important;
-      filter: blur(6px) !important;
+      pointer-events: none;
+    }
+
+    /* [핵심 2] 화면 전체를 100dvh로 빈틈없이 감싸는 고정 배경 레이어 */
+    .app-bg-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--bg-gradient);
+      z-index: -10;
       pointer-events: none;
     }
 
@@ -119,20 +140,20 @@
       border-radius: 50%;
       filter: blur(80px);
       pointer-events: none;
-      z-index: 0;
+      z-index: -5;
     }
     .orb-1 { width: 450px; height: 450px; top: -100px; left: -100px; background: var(--orb-1); }
     .orb-2 { width: 400px; height: 400px; bottom: -50px; right: -50px; background: var(--orb-2); }
     .orb-3 { width: 300px; height: 300px; top: 40%; left: 45%; background: var(--orb-3); }
 
-    /* 안전구역 완전 제거: 상단 10px 고정, 하단 플로팅 독 공간 확보 */
+    /* [핵심 3] 상단 펀치홀 0px 밀착 및 하단 플로팅 독 겹침 방지 여백 */
     .app-container {
       position: relative;
       z-index: 1;
       display: flex;
       flex-direction: column;
       height: 100vh;
-      padding: 10px 16px calc(96px + env(safe-area-inset-bottom, 0px)) 16px;
+      padding: 10px 16px calc(110px + env(safe-area-inset-bottom, 0px)) 16px;
       gap: 12px;
       min-width: 0;
     }
@@ -202,10 +223,10 @@
       transform: translateY(-1px);
     }
 
-    /* 하단 플로팅 독 & 독립 테마 버튼 래퍼 */
+    /* 하단 플로팅 독 */
     .floating-dock-wrap {
       position: fixed;
-      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
       z-index: 1000;
@@ -274,7 +295,6 @@
       letter-spacing: -0.2px;
     }
 
-    /* 1. 대시보드 (초록) */
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
@@ -283,7 +303,6 @@
     }
     .pill-item.pill-accent-dash .pill-label { color: #fff; }
 
-    /* 2. 카메라 (하늘색) */
     .pill-item.pill-accent-cam {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
       color: #fff !important;
@@ -292,7 +311,6 @@
     }
     .pill-item.pill-accent-cam .pill-label { color: #fff; }
 
-    /* 3. 기기 등록 (보라) */
     .pill-item.pill-primary {
       background: linear-gradient(135deg, var(--accent), #7c3aed);
       color: #fff !important;
@@ -301,7 +319,6 @@
     }
     .pill-item.pill-primary .pill-label { color: #fff; }
 
-    /* 8. 독립 분리된 원형 테마 버튼 */
     .floating-theme-island {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -396,7 +413,6 @@
       padding: 4px;
     }
 
-    /* 워크스페이스: min-width: 0 필수 부여 */
     .workspace {
       display: grid;
       grid-template-columns: 420px minmax(0, 1fr);
@@ -507,7 +523,6 @@
     .hero-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 10px; }
     .hero-actions button { flex: 1; justify-content: center; }
 
-    /* 인벤토리 패널 & 가로 스크롤 완전 해결 */
     .inventory-panel {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -603,7 +618,6 @@
       cursor: pointer;
     }
 
-    /* 핵심: 가로 스크롤 터치 컨테이너 */
     .table-container {
       flex: 1;
       width: 100%;
@@ -618,14 +632,8 @@
       background: var(--glass-card);
       position: relative;
     }
-    .table-container::-webkit-scrollbar {
-      height: 6px;
-      width: 6px;
-    }
-    .table-container::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-    }
+    .table-container::-webkit-scrollbar { height: 6px; width: 6px; }
+    .table-container::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
 
     table {
       width: 100%;
@@ -1033,15 +1041,13 @@
     .toast.error { border-left: 4px solid var(--danger); }
     .toast.info { border-left: 4px solid var(--accent); }
 
-    /* =========================================================
-       태블릿 (1024px 이하) & 모바일 완벽 대응 미디어 쿼리
-       ========================================================= */
+    /* 태블릿(1024px) 및 모바일 완벽 대응 미디어 쿼리 */
     @media (max-width: 1024px) {
       .app-container {
         height: auto;
         min-height: 100vh;
         overflow-y: visible;
-        padding: 8px 10px calc(96px + env(safe-area-inset-bottom, 0px)) 10px;
+        padding: 8px 10px calc(110px + env(safe-area-inset-bottom, 0px)) 10px;
         gap: 12px;
       }
       header.glass-header {
@@ -1050,7 +1056,6 @@
       }
       .brand-area { width: 100%; justify-content: space-between; }
       
-      /* 태블릿에서도 세로 1열로 전환하여 테이블이 100% 가로폭을 확보 */
       .workspace {
         display: flex;
         flex-direction: column;
@@ -1103,7 +1108,6 @@
       }
       .changelog-tab-btn { flex-shrink: 0; }
 
-      /* 모바일 플로팅 독 초소형 비율 */
       .floating-dock-wrap {
         bottom: calc(12px + env(safe-area-inset-bottom, 0px));
         gap: 5px;
@@ -1117,13 +1121,15 @@
       .pill-item.pill-accent-dash,
       .pill-item.pill-accent-cam,
       .pill-item.pill-primary { padding: 4px 7px; }
-      .floating-theme-island { width: 38px; height: 38px; }
+      .floating-theme-island { width: 40px; height: 40px; }
       .floating-theme-island .pill-icon { font-size: 14px; height: 15px; }
       .floating-theme-island .pill-label { font-size: 8px; }
     }
   </style>
 </head>
 <body>
+  <!-- [핵심] 화면 100%를 오차 없이 덮는 고정 배경 레이어 -->
+  <div class="app-bg-fixed"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
@@ -1192,34 +1198,13 @@
         </div>
 
         <div class="specs-grid">
-          <div class="spec-item">
-            <div class="spec-lbl">AP (프로세서)</div>
-            <div class="spec-val" id="heroAp">-</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">RAM / 저장공간</div>
-            <div class="spec-val" id="heroRamStorage">-</div>
-          </div>
-          <div class="spec-item full">
-            <div class="spec-lbl">IMEI 1</div>
-            <div class="spec-val" id="heroImei1">-</div>
-          </div>
-          <div class="spec-item full">
-            <div class="spec-lbl">IMEI 2</div>
-            <div class="spec-val" id="heroImei2">-</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">시리얼 번호 (S/N)</div>
-            <div class="spec-val" id="heroSn">-</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">색상</div>
-            <div class="spec-val" id="heroColor">-</div>
-          </div>
-          <div class="spec-item full">
-            <div class="spec-lbl">비고 (메모)</div>
-            <div class="spec-val" id="heroNotes" style="font-weight: 400; color: var(--text-sub);">-</div>
-          </div>
+          <div class="spec-item"><div class="spec-lbl">AP (프로세서)</div><div class="spec-val" id="heroAp">-</div></div>
+          <div class="spec-item"><div class="spec-lbl">RAM / 저장공간</div><div class="spec-val" id="heroRamStorage">-</div></div>
+          <div class="spec-item full"><div class="spec-lbl">IMEI 1</div><div class="spec-val" id="heroImei1">-</div></div>
+          <div class="spec-item full"><div class="spec-lbl">IMEI 2</div><div class="spec-val" id="heroImei2">-</div></div>
+          <div class="spec-item"><div class="spec-lbl">시리얼 번호 (S/N)</div><div class="spec-val" id="heroSn">-</div></div>
+          <div class="spec-item"><div class="spec-lbl">색상</div><div class="spec-val" id="heroColor">-</div></div>
+          <div class="spec-item full"><div class="spec-lbl">비고 (메모)</div><div class="spec-val" id="heroNotes" style="font-weight: 400; color: var(--text-sub);">-</div></div>
         </div>
 
         <div class="hero-actions">
@@ -1231,29 +1216,20 @@
       <!-- Right Inventory Table -->
       <div class="inventory-panel">
         <div class="inventory-nav-tabs">
-          <button type="button" class="inv-tab-btn active" id="tabActive">
-            📱 보유 단말기
-            <span class="tab-count-badge" id="badgeActiveCount">0</span>
-          </button>
-          <button type="button" class="inv-tab-btn" id="tabSold">
-            🏷️ 판매 완료 내역
-            <span class="tab-count-badge" id="badgeSoldCount">0</span>
-          </button>
+          <button type="button" class="inv-tab-btn active" id="tabActive">📱 보유 단말기 <span class="tab-count-badge" id="badgeActiveCount">0</span></button>
+          <button type="button" class="inv-tab-btn" id="tabSold">🏷️ 판매 완료 내역 <span class="tab-count-badge" id="badgeSoldCount">0</span></button>
         </div>
 
         <div class="inventory-toolbar">
           <div class="search-filter-wrap">
             <input type="text" class="table-search" id="tableSearchInput" placeholder="검색 (장치명/관리번호/IMEI/제조사)...">
-            <select class="filter-select" id="filterCategory">
-              <option value="ALL">모든 분류</option>
-            </select>
+            <select class="filter-select" id="filterCategory"><option value="ALL">모든 분류</option></select>
           </div>
           <div style="display: flex; gap: 8px;">
             <button type="button" class="btn-icon" id="btnOpenDataModal">💾 데이터 관리</button>
           </div>
         </div>
 
-        <!-- 가로 스크롤 가능 컨테이너 -->
         <div class="table-container">
           <table>
             <thead>
@@ -1276,11 +1252,10 @@
     </div>
   </div>
 
-  <!-- 하단 플로팅 독 (순서: 대시보드 -> 카메라 -> 기기등록 -> 로그 -> 정보 -> 백업 -> 설정 -> 독립 테마) -->
+  <!-- 하단 플로팅 독 -->
   <div class="floating-dock-wrap">
     <nav class="floating-pill-bar">
-      <!-- 1. 대시보드 (초록) -->
-      <a href="./index.html" class="pill-item pill-accent-dash" title="Green Onion Project 메인 대시보드로 이동">
+      <a href="./index.html" class="pill-item pill-accent-dash" title="메인 대시보드로 이동">
         <div class="pill-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 11C10 7 7 4 4 3C5 7 8 9 10 12" fill="#a7f3d0"/>
@@ -1294,51 +1269,44 @@
         <span class="pill-label">대시보드</span>
       </a>
 
-      <!-- 2. 카메라 (하늘색) -->
       <button type="button" class="pill-item pill-accent-cam" id="btnOpenCamModal" title="카메라로 바코드 스캔">
         <div class="pill-icon">📷</div>
         <span class="pill-label">카메라</span>
       </button>
 
-      <!-- 3. 기기 등록 (보라) -->
       <button type="button" class="pill-item pill-primary" id="btnOpenAddModal" title="새로운 단말기 등록">
         <div class="pill-icon">＋</div>
         <span class="pill-label">기기 등록</span>
       </button>
 
-      <!-- 4. 로그 -->
       <button type="button" class="pill-item" id="btnOpenChangelogModal" title="버전별 업데이트 로그">
         <div class="pill-icon">📋</div>
         <span class="pill-label">로그</span>
       </button>
 
-      <!-- 5. 정보 -->
       <button type="button" class="pill-item" id="btnOpenAboutModal" title="애플리케이션 및 개발자 정보">
         <div class="pill-icon">ℹ️</div>
         <span class="pill-label">정보</span>
       </button>
 
-      <!-- 6. 백업 (정보와 설정 사이) -->
       <button type="button" class="pill-item" id="btnOpenDataModalDock" title="JSON 데이터 백업 및 복원 관리">
         <div class="pill-icon">💾</div>
         <span class="pill-label">백업</span>
       </button>
 
-      <!-- 7. 설정 -->
       <button type="button" class="pill-item" id="btnOpenConfigModal" title="항목 및 색상 설정">
         <div class="pill-icon">⚙️</div>
         <span class="pill-label">설정</span>
       </button>
     </nav>
 
-    <!-- 8. 독립 분리된 원형 테마 버튼 -->
     <button type="button" class="floating-theme-island" id="btnThemeToggle" title="화이트/다크 모드 전환">
       <div class="pill-icon" id="themePillIcon">☀️</div>
       <span class="pill-label" id="themePillLabel">테마</span>
     </button>
   </div>
 
-  <!-- Modal 1: Data Management -->
+  <!-- 모달들 -->
   <div class="modal-overlay" id="dataModal">
     <div class="modal-box" style="max-width: 520px;">
       <div class="modal-header">
@@ -1348,35 +1316,22 @@
       <div class="modal-body">
         <div class="data-mgmt-card">
           <div class="data-mgmt-title">📥 JSON 백업 파일 다운로드</div>
-          <div class="data-mgmt-desc">
-            현재 클라우드에 저장된 모든 단말기 목록과 설정(순서 포함)을 <code>.json</code> 파일로 내보냅니다.
-          </div>
-          <button type="button" class="btn-icon btn-primary" id="btnDownloadJson" style="width: 100%; justify-content: center;">
-            현재 데이터 JSON 백업받기
-          </button>
+          <div class="data-mgmt-desc">현재 클라우드에 저장된 모든 단말기 목록과 설정을 <code>.json</code> 파일로 내보냅니다.</div>
+          <button type="button" class="btn-icon btn-primary" id="btnDownloadJson" style="width: 100%; justify-content: center;">현재 데이터 JSON 백업받기</button>
         </div>
-
         <div class="data-mgmt-card" style="margin-bottom: 0;">
           <div class="data-mgmt-title">📤 JSON 백업 파일 불러오기 (복원)</div>
-          <div class="data-mgmt-desc">
-            기존에 백업해 둔 <code>.json</code> 파일을 선택하여 클라우드 DB와 화면에 복원합니다.<br>
-            <span style="color: var(--warning); font-weight: 600;">⚠️ 주의: 기존 데이터가 선택한 파일의 데이터로 대체됩니다.</span>
-          </div>
+          <div class="data-mgmt-desc">백업 파일로 클라우드 DB를 복원합니다. <span style="color: var(--warning); font-weight: 600;">⚠️ 기존 데이터가 대체됩니다.</span></div>
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <input type="file" id="jsonFileInput" accept=".json" style="background: var(--input-bg); border: 1px solid var(--glass-border); padding: 8px; border-radius: 8px; font-size: 12px; color: var(--text-main);">
-            <button type="button" class="btn-icon" id="btnUploadJson" style="background: var(--accent); color: #fff; justify-content: center;">
-              선택한 파일로 데이터 복원하기
-            </button>
+            <button type="button" class="btn-icon" id="btnUploadJson" style="background: var(--accent); color: #fff; justify-content: center;">선택한 파일로 데이터 복원하기</button>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-icon" id="btnCancelDataModal">닫기</button>
-      </div>
+      <div class="modal-footer"><button type="button" class="btn-icon" id="btnCancelDataModal">닫기</button></div>
     </div>
   </div>
 
-  <!-- Modal 2: App & Developer Info -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
@@ -1389,41 +1344,19 @@
           <h2 style="font-size: 18px; font-weight: 800;" id="aboutAppTitle">Mobile Device Asset Manager</h2>
           <div class="about-version-badge" id="aboutAppVersion">v1.1</div>
         </div>
-
         <div class="specs-grid" style="margin-bottom: 8px;">
-          <div class="spec-item">
-            <div class="spec-lbl">프로젝트</div>
-            <div class="spec-val">Green Onion Project</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">개발자</div>
-            <div class="spec-val" id="aboutDevName">Kim Dogyun</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">배포 환경</div>
-            <div class="spec-val">Vercel Web + GitHub</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">사용중인 클라우드</div>
-            <div class="spec-val">Firebase Firestore</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">사용 AI</div>
-            <div class="spec-val">Gemini</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">마지막 빌드 날짜</div>
-            <div class="spec-val" id="aboutAppDate">2026-09-22</div>
-          </div>
+          <div class="spec-item"><div class="spec-lbl">프로젝트</div><div class="spec-val">Green Onion Project</div></div>
+          <div class="spec-item"><div class="spec-lbl">개발자</div><div class="spec-val" id="aboutDevName">Kim Dogyun</div></div>
+          <div class="spec-item"><div class="spec-lbl">배포 환경</div><div class="spec-val">Vercel Web + GitHub</div></div>
+          <div class="spec-item"><div class="spec-lbl">사용중인 클라우드</div><div class="spec-val">Firebase Firestore</div></div>
+          <div class="spec-item"><div class="spec-lbl">사용 AI</div><div class="spec-val" id="aboutAi">Gemini</div></div>
+          <div class="spec-item"><div class="spec-lbl">마지막 빌드 날짜</div><div class="spec-val" id="aboutAppDate">2026-09-22</div></div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-icon btn-primary" id="btnDoneAboutModal">확인</button>
-      </div>
+      <div class="modal-footer"><button type="button" class="btn-icon btn-primary" id="btnDoneAboutModal">확인</button></div>
     </div>
   </div>
 
-  <!-- Modal 3: 사이드바 형태 업데이트 로그 (Changelog) 모달 -->
   <div class="modal-overlay" id="changelogModal">
     <div class="modal-box" style="max-width: 640px;">
       <div class="modal-header">
@@ -1436,17 +1369,14 @@
           <div class="changelog-detail-pane" id="changelogDetailPane"></div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-icon btn-primary" id="btnDoneChangelogModal">닫기</button>
-      </div>
+      <div class="modal-footer"><button type="button" class="btn-icon btn-primary" id="btnDoneChangelogModal">닫기</button></div>
     </div>
   </div>
 
-  <!-- Modal 4: Camera Scanner -->
   <div class="modal-overlay" id="camModal">
     <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
-        <div class="modal-title">📷 카메라 바코드/데이터매트릭스 스캐너</div>
+        <div class="modal-title">📷 카메라 바코드 스캐너</div>
         <button type="button" class="modal-close" id="btnCloseCamModal">&times;</button>
       </div>
       <div class="modal-body">
@@ -1456,18 +1386,13 @@
             <select id="cameraSelect" class="cam-select"></select>
             <button type="button" class="btn-icon btn-cam" id="btnSwitchCam">카메라 변경</button>
           </div>
-          <p style="font-size: 12px; color: var(--text-sub); text-align: center;">
-            💡 데이터 매트릭스나 바코드를 사각형 중앙에 비추면 자동 인식됩니다.
-          </p>
+          <p style="font-size: 12px; color: var(--text-sub); text-align: center;">💡 사각형 중앙에 바코드를 비추면 자동 인식됩니다.</p>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-icon" id="btnCancelCamModal">닫기</button>
-      </div>
+      <div class="modal-footer"><button type="button" class="btn-icon" id="btnCancelCamModal">닫기</button></div>
     </div>
   </div>
 
-  <!-- Modal 5: Add / Edit Device -->
   <div class="modal-overlay" id="deviceModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -1478,66 +1403,21 @@
         <form id="deviceForm">
           <input type="hidden" id="formDeviceId">
           <div class="form-grid">
-            <div class="form-group">
-              <label>자체 관리 번호 *</label>
-              <input type="text" id="formMgmtNo" placeholder="예: SM001, PIX001" required>
-            </div>
-            <div class="form-group">
-              <label>회사 분류 *</label>
-              <select id="formCompany" required></select>
-            </div>
-            <div class="form-group full">
-              <label>장치명 *</label>
-              <input type="text" id="formName" placeholder="예: 갤럭시 S24 울트라" required>
-            </div>
-            <div class="form-group">
-              <label>분류 *</label>
-              <select id="formCategory" required></select>
-            </div>
-            <div class="form-group">
-              <label>보안 레벨 *</label>
-              <select id="formSecLevel" required></select>
-            </div>
-            <div class="form-group">
-              <label>AP 정보</label>
-              <input type="text" id="formAp" placeholder="예: Snapdragon 8 Gen 3">
-            </div>
-            <div class="form-group">
-              <label>RAM 정보</label>
-              <input type="text" id="formRam" placeholder="예: 12GB">
-            </div>
-            <div class="form-group">
-              <label>스토리지 정보</label>
-              <input type="text" id="formStorage" placeholder="예: 512GB">
-            </div>
-            <div class="form-group">
-              <label>통신사</label>
-              <select id="formCarrier"></select>
-            </div>
-            <div class="form-group">
-              <label>색상</label>
-              <input type="text" id="formColor" placeholder="예: 티타늄 그레이">
-            </div>
-            <div class="form-group">
-              <label>시리얼 번호 (S/N)</label>
-              <input type="text" id="formSn" placeholder="단말기 일련번호">
-            </div>
-            <div class="form-group">
-              <label>마지막 조회 일시 (직접 수정 가능)</label>
-              <input type="text" id="formLastViewed" placeholder="YYYY-MM-DD HH:mm:ss">
-            </div>
-            <div class="form-group full">
-              <label>IMEI 1</label>
-              <input type="text" id="formImei1" placeholder="15자리 IMEI">
-            </div>
-            <div class="form-group full">
-              <label>IMEI 2</label>
-              <input type="text" id="formImei2" placeholder="eSIM 또는 보조 IMEI">
-            </div>
-            <div class="form-group full">
-              <label>비고 (메모)</label>
-              <textarea id="formNotes" rows="3" placeholder="기기 상태, 파손 여부, 용도 메모"></textarea>
-            </div>
+            <div class="form-group"><label>자체 관리 번호 *</label><input type="text" id="formMgmtNo" placeholder="예: SM001" required></div>
+            <div class="form-group"><label>회사 분류 *</label><select id="formCompany" required></select></div>
+            <div class="form-group full"><label>장치명 *</label><input type="text" id="formName" placeholder="예: 갤럭시 S24 울트라" required></div>
+            <div class="form-group"><label>분류 *</label><select id="formCategory" required></select></div>
+            <div class="form-group"><label>보안 레벨 *</label><select id="formSecLevel" required></select></div>
+            <div class="form-group"><label>AP 정보</label><input type="text" id="formAp" placeholder="AP"></div>
+            <div class="form-group"><label>RAM 정보</label><input type="text" id="formRam" placeholder="RAM"></div>
+            <div class="form-group"><label>스토리지 정보</label><input type="text" id="formStorage" placeholder="스토리지"></div>
+            <div class="form-group"><label>통신사</label><select id="formCarrier"></select></div>
+            <div class="form-group"><label>색상</label><input type="text" id="formColor" placeholder="색상"></div>
+            <div class="form-group"><label>시리얼 번호 (S/N)</label><input type="text" id="formSn" placeholder="S/N"></div>
+            <div class="form-group"><label>마지막 조회 일시</label><input type="text" id="formLastViewed" placeholder="YYYY-MM-DD HH:mm:ss"></div>
+            <div class="form-group full"><label>IMEI 1</label><input type="text" id="formImei1" placeholder="IMEI 1"></div>
+            <div class="form-group full"><label>IMEI 2</label><input type="text" id="formImei2" placeholder="IMEI 2"></div>
+            <div class="form-group full"><label>비고 (메모)</label><textarea id="formNotes" rows="3" placeholder="비고"></textarea></div>
           </div>
         </form>
       </div>
@@ -1548,7 +1428,6 @@
     </div>
   </div>
 
-  <!-- Modal 6: Options & Color Config -->
   <div class="modal-overlay" id="configModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -1556,68 +1435,46 @@
         <button type="button" class="modal-close" id="btnCloseConfigModal">&times;</button>
       </div>
       <div class="modal-body">
-        <p style="font-size: 12px; color: var(--text-sub); margin-bottom: 14px;">
-          💡 <strong>✏️ 아이콘</strong>을 눌러 이름을 직접 변경하거나, <strong>색상 원형</strong>을 눌러 배지 색상을 변경할 수 있습니다.
-        </p>
-
         <div class="config-section">
-          <div class="config-title">
-            <span>회사 분류 (제조사)</span>
-            <span style="font-size: 11px; color: var(--text-sub);">드롭다운 및 배지 색상</span>
-          </div>
+          <div class="config-title"><span>회사 분류 (제조사)</span></div>
           <div class="tag-list" id="tagListCompany"></div>
           <div class="tag-add-bar">
-            <input type="text" id="inputNewCompany" placeholder="새 제조사 (예: Nothing, 화웨이)">
+            <input type="text" id="inputNewCompany" placeholder="새 제조사">
             <input type="color" id="inputNewCompanyColor" value="#3b82f6">
             <button type="button" id="btnAddCompanyTag">추가</button>
           </div>
         </div>
-
         <div class="config-section">
-          <div class="config-title">
-            <span>분류 (상태)</span>
-            <span style="font-size: 11px; color: var(--text-sub);">기기 상태 배지 색상</span>
-          </div>
+          <div class="config-title"><span>분류 (상태)</span></div>
           <div class="tag-list" id="tagListCategory"></div>
           <div class="tag-add-bar">
-            <input type="text" id="inputNewCategory" placeholder="새 분류 (예: 테스트용, 수리중)">
+            <input type="text" id="inputNewCategory" placeholder="새 분류">
             <input type="color" id="inputNewCategoryColor" value="#10b981">
             <button type="button" id="btnAddCategoryTag">추가</button>
           </div>
         </div>
-
         <div class="config-section">
-          <div class="config-title">
-            <span>보안 레벨</span>
-            <span style="font-size: 11px; color: var(--text-sub);">보안 등급 배지 색상</span>
-          </div>
+          <div class="config-title"><span>보안 레벨</span></div>
           <div class="tag-list" id="tagListSecLevel"></div>
           <div class="tag-add-bar">
-            <input type="text" id="inputNewSecLevel" placeholder="새 보안레벨 (예: 4, 기밀)">
+            <input type="text" id="inputNewSecLevel" placeholder="새 보안레벨">
             <input type="color" id="inputNewSecLevelColor" value="#ef4444">
             <button type="button" id="btnAddSecLevelTag">추가</button>
           </div>
         </div>
-
         <div class="config-section">
-          <div class="config-title">
-            <span>통신사 구분</span>
-            <span style="font-size: 11px; color: var(--text-sub);">개통 통신망 구분</span>
-          </div>
+          <div class="config-title"><span>통신사 구분</span></div>
           <div class="tag-list" id="tagListCarrier"></div>
           <div class="tag-add-bar">
-            <input type="text" id="inputNewCarrier" placeholder="새 통신사 (예: 알뜰폰, 해외eSIM)">
+            <input type="text" id="inputNewCarrier" placeholder="새 통신사">
             <button type="button" id="btnAddCarrierTag">추가</button>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-icon btn-primary" id="btnDoneConfigModal">설정 완료</button>
-      </div>
+      <div class="modal-footer"><button type="button" class="btn-icon btn-primary" id="btnDoneConfigModal">설정 완료</button></div>
     </div>
   </div>
 
-  <!-- Modal 7: Delete Confirmation -->
   <div class="modal-overlay" id="deleteModal">
     <div class="modal-box" style="max-width: 400px;">
       <div class="modal-header">
@@ -1635,9 +1492,7 @@
     </div>
   </div>
 
-  <div class="toast" id="toastBox">
-    <span id="toastMsg">알림 메시지</span>
-  </div>
+  <div class="toast" id="toastBox"><span id="toastMsg">알림 메시지</span></div>
 
   <script>
     const APP_INFO = {
@@ -1653,9 +1508,9 @@
           version: "v1.1",
           date: "2026.09.22",
           notes: [
-            "플로팅 디자인 적용",
-            "메뉴 위치 최적화 및 태블릿/모바일 가로 스크롤 완벽 대응",
-            "펀치홀 카메라 상단 0px 완전 전체화면 지원"
+            "하단 배경 틈새 색상 일체화 및 시스템 바 색상 동기화",
+            "플로팅 디자인 적용 및 태블릿 가로 스크롤/짤림 완벽 해결",
+            "펀치홀 카메라 상단 0px 전체화면 밀착 지원"
           ]
         },
         {
@@ -1664,19 +1519,7 @@
           notes: [
             "Green Onion Project 메인 대시보드와 통합",
             "하단 리퀴드 글래스 플로팅 독 순서 개편 및 테마 버튼 독립 분리",
-            "대시보드(초록), 카메라(하늘색), 기기 등록(보라) 캡슐 강조 UI 적용",
-            "독립된 사이드바 형태의 업데이트 로그(Changelog) 팝업 지원",
-            "마지막 조회 일시 직접 수정 및 경과 일수(D-Day) 자동 계산 배지 지원"
-          ]
-        },
-        {
-          version: "v1.0 BETA",
-          date: "2026.09.20",
-          notes: [
-            "초기 기능 구현 및 오류 제거",
-            "가변 UI 적용 및 모바일 반응형 최적화",
-            "바코드 리더기 및 스캔 디바이스 카메라 지원",
-            "Firebase 클라우드 실시간 동기화 및 순서 변경 지원"
+            "대시보드(초록), 카메라(하늘색), 기기 등록(보라) 캡슐 강조 UI 적용"
           ]
         }
       ]
@@ -1701,7 +1544,6 @@
     let centerAlertTimer = null;
     let currentInventoryTab = 'active';
     let currentChangelogIndex = 0;
-
     let draggedRowDevId = null;
     let html5QrCode = null;
     let availableCameras = [];
@@ -1753,23 +1595,14 @@
       const diffDays = Math.floor((nowMidnight - targetMidnight) / (1000 * 60 * 60 * 24));
 
       if (diffDays === 0) {
-        return {
-          text: '(오늘)',
-          badgeHtml: `<span class="badge" style="background: rgba(16, 185, 129, 0.18); color: var(--success); border-color: rgba(16, 185, 129, 0.35); margin-left: 6px;">오늘</span>`
-        };
+        return { text: '(오늘)', badgeHtml: `<span class="badge" style="background: rgba(16, 185, 129, 0.18); color: var(--success); border-color: rgba(16, 185, 129, 0.35); margin-left: 6px;">오늘</span>` };
       } else if (diffDays > 0) {
         let color = '#3b82f6';
         if (diffDays >= 30) color = '#ef4444';
         else if (diffDays >= 7) color = '#f59e0b';
-        return {
-          text: `(${diffDays}일 전)`,
-          badgeHtml: `<span class="badge" style="background: ${hexToRgba(color, 0.16)}; color: ${color}; border-color: ${hexToRgba(color, 0.35)}; margin-left: 6px;">${diffDays}일 전</span>`
-        };
+        return { text: `(${diffDays}일 전)`, badgeHtml: `<span class="badge" style="background: ${hexToRgba(color, 0.16)}; color: ${color}; border-color: ${hexToRgba(color, 0.35)}; margin-left: 6px;">${diffDays}일 전</span>` };
       } else {
-        return {
-          text: '(미래 날짜)',
-          badgeHtml: `<span class="badge" style="background: rgba(100, 116, 139, 0.2); color: var(--text-sub); margin-left: 6px;">예정</span>`
-        };
+        return { text: '(미래 날짜)', badgeHtml: `<span class="badge" style="background: rgba(100, 116, 139, 0.2); color: var(--text-sub); margin-left: 6px;">예정</span>` };
       }
     }
 
@@ -1787,7 +1620,6 @@
             messagingSenderId: "903936009990",
             appId: "1:903936009990:web:a154227c0349101c30a087"
           };
-
           const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
           firestoreDb = app.firestore();
           inventoryDocRef = firestoreDb.collection("device_inventory").doc("main_data");
@@ -1817,29 +1649,16 @@
             } else {
               saveToCloud();
             }
-          }, (err) => {
-            console.warn("Firestore 리스너 대기:", err);
-            setCloudStatus(false);
-          });
+          }, (err) => { console.warn(err); setCloudStatus(false); });
         }
-      } catch (err) {
-        console.warn("Firebase 초기화 에러:", err);
-        setCloudStatus(false);
-      }
+      } catch (err) { console.warn(err); setCloudStatus(false); }
     }
 
     async function saveToCloud() {
       const payload = { devices, config: appConfig, updatedAt: new Date().toISOString() };
       try { localStorage.setItem('mobile_devices_cloud_cache', JSON.stringify(payload)); } catch (e) {}
-
       if (inventoryDocRef) {
-        try {
-          await inventoryDocRef.set(payload);
-          setCloudStatus(true);
-        } catch (err) {
-          console.warn("클라우드 저장 실패:", err);
-          setCloudStatus(false);
-        }
+        try { await inventoryDocRef.set(payload); setCloudStatus(true); } catch (err) { setCloudStatus(false); }
       }
       updateTabCounts();
     }
@@ -1871,8 +1690,7 @@
       appConfig.categories.forEach(c => {
         if (currentInventoryTab === 'active' && c === '판매완료') return;
         const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
+        opt.value = c; opt.textContent = c;
         filterCat.appendChild(opt);
       });
       filterCat.value = appConfig.categories.includes(curFilterVal) ? curFilterVal : 'ALL';
@@ -1885,8 +1703,7 @@
       el.innerHTML = '';
       items.forEach(it => {
         const opt = document.createElement('option');
-        opt.value = it;
-        opt.textContent = it;
+        opt.value = it; opt.textContent = it;
         el.appendChild(opt);
       });
       if (items.includes(curVal)) el.value = curVal;
@@ -1894,45 +1711,21 @@
 
     window.handleRenameTag = function(configKey, idx) {
       const oldVal = appConfig[configKey][idx];
-      if (oldVal === '판매완료') {
-        showToast("'판매완료' 항목은 시스템 탭 연동 기준으로 보호되어 이름 변경이 불가능합니다.", 'error');
-        return;
-      }
-
+      if (oldVal === '판매완료') { showToast("'판매완료' 항목은 보호되어 이름 변경이 불가합니다.", 'error'); return; }
       const newVal = prompt(`'${oldVal}' 항목의 새로운 이름을 입력하세요:`, oldVal);
       if (!newVal || newVal.trim() === '' || newVal.trim() === oldVal) return;
-
       const trimmed = newVal.trim();
-      if (appConfig[configKey].includes(trimmed)) {
-        showToast('이미 동일한 이름의 항목이 존재합니다.', 'error');
-        return;
-      }
-
+      if (appConfig[configKey].includes(trimmed)) { showToast('이미 동일한 이름이 존재합니다.', 'error'); return; }
       appConfig[configKey][idx] = trimmed;
       if (appConfig.colors && appConfig.colors[oldVal]) {
         appConfig.colors[trimmed] = appConfig.colors[oldVal];
         delete appConfig.colors[oldVal];
       }
-
-      const fieldMap = { 'companies': 'company', 'categories': 'category', 'securityLevels': 'securityLevel', 'carriers': 'carrier' };
-      const targetField = fieldMap[configKey];
-      let updatedDevCount = 0;
-
-      if (targetField) {
-        devices.forEach(d => {
-          if (d[targetField] === oldVal) {
-            d[targetField] = trimmed;
-            updatedDevCount++;
-          }
-        });
-      }
-
       saveToCloud();
       refreshSelectDropdowns();
       renderConfigTags();
       renderTable();
-      if (currentSelectedId) selectDevice(currentSelectedId, false);
-      showToast(`'${oldVal}'이(가) '${trimmed}'(으)로 변경되었습니다. (기기 ${updatedDevCount}대 자동 반영)`, 'success');
+      showToast(`'${oldVal}'이(가) '${trimmed}'(으)로 변경되었습니다.`, 'success');
     };
 
     function renderConfigTags() {
@@ -1950,57 +1743,36 @@
       appConfig[configKey].forEach((val, idx) => {
         const chip = document.createElement('div');
         chip.className = 'tag-chip';
-        
         let colorHtml = '';
         if (hasColor) {
           const colorHex = (appConfig.colors && appConfig.colors[val]) || '#6366f1';
-          colorHtml = `<input type="color" class="tag-color-input" value="${colorHex}" title="색상 변경" data-key="${val}">`;
+          colorHtml = `<input type="color" class="tag-color-input" value="${colorHex}" data-key="${val}">`;
           chip.style.borderColor = hexToRgba(colorHex, 0.4);
         }
-
-        chip.innerHTML = `
-          ${colorHtml}
-          <span>${val}</span>
-          <span class="tag-chip-edit" data-type="${configKey}" data-idx="${idx}" title="이름 수정">✏️</span>
-          <span class="tag-chip-del" data-type="${configKey}" data-idx="${idx}" title="삭제">&times;</span>
-        `;
+        chip.innerHTML = `${colorHtml}<span>${val}</span><span class="tag-chip-edit" data-type="${configKey}" data-idx="${idx}">✏️</span><span class="tag-chip-del" data-type="${configKey}" data-idx="${idx}">&times;</span>`;
         container.appendChild(chip);
       });
 
       container.querySelectorAll('.tag-color-input').forEach(inp => {
         inp.onchange = (e) => {
-          const itemKey = e.target.getAttribute('data-key');
           if (!appConfig.colors) appConfig.colors = {};
-          appConfig.colors[itemKey] = e.target.value;
-          saveToCloud();
-          renderConfigTags();
-          renderTable();
-          if (currentSelectedId) selectDevice(currentSelectedId, false);
+          appConfig.colors[e.target.getAttribute('data-key')] = e.target.value;
+          saveToCloud(); renderConfigTags(); renderTable();
         };
       });
 
-      container.querySelectorAll('.tag-chip-edit').forEach(editBtn => {
-        editBtn.onclick = (e) => {
-          const type = e.target.getAttribute('data-type');
-          const idx = parseInt(e.target.getAttribute('data-idx'), 10);
-          handleRenameTag(type, idx);
-        };
+      container.querySelectorAll('.tag-chip-edit').forEach(btn => {
+        btn.onclick = (e) => handleRenameTag(e.target.getAttribute('data-type'), parseInt(e.target.getAttribute('data-idx'), 10));
       });
 
-      container.querySelectorAll('.tag-chip-del').forEach(delBtn => {
-        delBtn.onclick = (e) => {
+      container.querySelectorAll('.tag-chip-del').forEach(btn => {
+        btn.onclick = (e) => {
           const type = e.target.getAttribute('data-type');
           const idx = parseInt(e.target.getAttribute('data-idx'), 10);
-          if (appConfig[type].length <= 1) {
-            showToast('최소 1개 이상의 옵션은 유지되어야 합니다.', 'error');
-            return;
-          }
-          const removed = appConfig[type].splice(idx, 1);
-          saveToCloud();
-          refreshSelectDropdowns();
-          renderConfigTags();
-          renderTable();
-          showToast(`'${removed[0]}' 항목이 제거되었습니다.`, 'info');
+          if (appConfig[type].length <= 1) { showToast('최소 1개 이상 유지되어야 합니다.', 'error'); return; }
+          appConfig[type].splice(idx, 1);
+          saveToCloud(); refreshSelectDropdowns(); renderConfigTags(); renderTable();
+          showToast('항목이 제거되었습니다.', 'info');
         };
       });
     }
@@ -2009,34 +1781,22 @@
       const input = document.getElementById(inputId);
       const val = input.value.trim();
       if (!val) return;
-
-      if (appConfig[configKey].includes(val)) {
-        showToast('이미 등록되어 있는 항목입니다.', 'error');
-        return;
-      }
-
+      if (appConfig[configKey].includes(val)) { showToast('이미 존재합니다.', 'error'); return; }
       appConfig[configKey].push(val);
       if (colorInputId) {
-        const colorVal = document.getElementById(colorInputId).value;
         if (!appConfig.colors) appConfig.colors = {};
-        appConfig.colors[val] = colorVal;
+        appConfig.colors[val] = document.getElementById(colorInputId).value;
       }
-
       input.value = '';
-      saveToCloud();
-      refreshSelectDropdowns();
-      renderConfigTags();
-      renderTable();
-      showToast(`'${val}' 항목이 추가되었습니다.`, 'success');
+      saveToCloud(); refreshSelectDropdowns(); renderConfigTags(); renderTable();
+      showToast(`'${val}' 추가 완료`, 'success');
     }
 
     function updateTabCounts() {
       const soldCount = devices.filter(d => d.category === '판매완료').length;
       const activeCount = devices.length - soldCount;
-      const bActive = document.getElementById('badgeActiveCount');
-      const bSold = document.getElementById('badgeSoldCount');
-      if (bActive) bActive.textContent = activeCount;
-      if (bSold) bSold.textContent = soldCount;
+      document.getElementById('badgeActiveCount').textContent = activeCount;
+      document.getElementById('badgeSoldCount').textContent = soldCount;
     }
 
     function switchInventoryTab(tabName) {
@@ -2052,20 +1812,14 @@
       }
       refreshSelectDropdowns();
       renderTable();
-
       if (currentSelectedId) {
         const currentDev = devices.find(d => d.id === currentSelectedId);
         const isCurrentSold = currentDev && currentDev.category === '판매완료';
-        if ((tabName === 'sold' && !isCurrentSold) || (tabName === 'active' && isCurrentSold)) {
-          resetHeroView();
-        }
+        if ((tabName === 'sold' && !isCurrentSold) || (tabName === 'active' && isCurrentSold)) resetHeroView();
       }
     }
 
-    function cleanCodeString(str) {
-      if (!str) return "";
-      return str.replace(/[\x00-\x1F\x7F-\x9F]/g, "").trim();
-    }
+    function cleanCodeString(str) { return !str ? "" : str.replace(/[\x00-\x1F\x7F-\x9F]/g, "").trim(); }
 
     function findDeviceSmart(rawCode) {
       const clean = cleanCodeString(rawCode);
@@ -2078,28 +1832,10 @@
         const im1 = (d.imei1 || "").replace(/[^A-Z0-9]/g, "").toUpperCase();
         const im2 = (d.imei2 || "").replace(/[^A-Z0-9]/g, "").toUpperCase();
         const sn = (d.sn || "").replace(/[^A-Z0-9]/g, "").toUpperCase();
-
         if (mgmt && (mgmt === upper || mgmt === alnum)) return d;
         if (im1 && (im1 === upper || im1 === alnum)) return d;
         if (im2 && (im2 === upper || im2 === alnum)) return d;
         if (sn && (sn === upper || sn === alnum)) return d;
-      }
-
-      for (const d of devices) {
-        const im1 = (d.imei1 || "").replace(/[^A-Z0-9]/g, "").toUpperCase();
-        const im2 = (d.imei2 || "").replace(/[^A-Z0-9]/g, "").toUpperCase();
-        const sn = (d.sn || "").replace(/[^A-Z0-9]/g, "").toUpperCase();
-        const mgmt = (d.managementNo || "").replace(/[^A-Z0-9]/g, "").toUpperCase();
-
-        if (im1.length >= 8 && alnum.includes(im1)) return d;
-        if (im2.length >= 8 && alnum.includes(im2)) return d;
-        if (sn.length >= 5 && alnum.includes(sn)) return d;
-        if (mgmt.length >= 3 && alnum.includes(mgmt)) return d;
-
-        if (alnum.length >= 6) {
-          if (im1 && im1.includes(alnum)) return d;
-          if (sn && sn.includes(alnum)) return d;
-        }
       }
       return null;
     }
@@ -2107,22 +1843,14 @@
     function showCenterAlert(code, reason) {
       const alertBox = document.getElementById('centerAlert');
       document.getElementById('centerAlertCode').textContent = code;
-      document.getElementById('centerAlertReason').textContent = reason || "사유: 일치하는 단말기가 DB에 없습니다.";
-
-      const progress = alertBox.querySelector('.center-alert-progress');
-      progress.style.animation = 'none';
-      void progress.offsetWidth;
-      progress.style.animation = 'alertCountdown 1.3s linear forwards';
-
+      document.getElementById('centerAlertReason').textContent = reason || "일치하는 단말기가 없습니다.";
       alertBox.classList.add('show');
       clearTimeout(centerAlertTimer);
       centerAlertTimer = setTimeout(hideCenterAlert, 1300);
     }
 
     function hideCenterAlert() {
-      const alertBox = document.getElementById('centerAlert');
-      alertBox.classList.remove('show');
-      clearTimeout(centerAlertTimer);
+      document.getElementById('centerAlert').classList.remove('show');
       document.getElementById('barcodeScannerInput').focus();
     }
 
@@ -2132,14 +1860,10 @@
         const now = new Date();
         const pad = (n) => String(n).padStart(2, '0');
         found.lastViewed = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-        
         saveToCloud();
 
-        if (found.category === '판매완료' && currentInventoryTab !== 'sold') {
-          switchInventoryTab('sold');
-        } else if (found.category !== '판매완료' && currentInventoryTab === 'sold') {
-          switchInventoryTab('active');
-        }
+        if (found.category === '판매완료' && currentInventoryTab !== 'sold') switchInventoryTab('sold');
+        else if (found.category !== '판매완료' && currentInventoryTab === 'sold') switchInventoryTab('active');
 
         selectDevice(found.id, true);
         renderTable();
@@ -2147,12 +1871,10 @@
         showToast(`[${found.managementNo}] ${found.name} 조회 완료`, 'success');
       } else {
         playBeep(280, 'sawtooth', 0.28);
-        showCenterAlert(code, "사유: 등록된 관리 번호, IMEI 1/2, 시리얼(S/N) 중 일치하는 데이터가 DB에 없습니다.");
+        showCenterAlert(code, "사유: 등록된 관리 번호, IMEI, S/N 중 일치하는 데이터가 없습니다.");
       }
-
       const scannerInput = document.getElementById('barcodeScannerInput');
-      scannerInput.value = '';
-      scannerInput.focus();
+      scannerInput.value = ''; scannerInput.focus();
     }
 
     function resetHeroView() {
@@ -2160,28 +1882,14 @@
       document.getElementById('heroMgmtNo').textContent = 'TEST';
       document.getElementById('heroLastViewed').textContent = '-';
       document.getElementById('heroDeviceName').textContent = '카메라 스캔 기능을 사용하여 스캔하세요';
-
-      const badgeIds = ['heroCompany', 'heroCategory', 'heroSecLevel', 'heroCarrier'];
-      badgeIds.forEach(id => {
+      ['heroCompany', 'heroCategory', 'heroSecLevel', 'heroCarrier'].forEach(id => {
         const el = document.getElementById(id);
-        el.textContent = '-';
-        el.style.background = 'rgba(255, 255, 255, 0.08)';
-        el.style.borderColor = 'transparent';
-        el.style.color = 'var(--text-sub)';
-        el.style.fontWeight = '500';
+        el.textContent = '-'; el.style.background = 'rgba(255,255,255,0.08)'; el.style.color = 'var(--text-sub)';
       });
-
-      document.getElementById('heroAp').textContent = '-';
-      document.getElementById('heroRamStorage').textContent = '-';
-      document.getElementById('heroImei1').textContent = '-';
-      document.getElementById('heroImei2').textContent = '-';
-      document.getElementById('heroSn').textContent = '-';
-      document.getElementById('heroColor').textContent = '-';
-      document.getElementById('heroNotes').textContent = '-';
-
-      document.querySelectorAll('#deviceTableBody tr').forEach(row => {
-        row.classList.remove('selected-row');
+      ['heroAp', 'heroRamStorage', 'heroImei1', 'heroImei2', 'heroSn', 'heroColor', 'heroNotes'].forEach(id => {
+        document.getElementById(id).textContent = '-';
       });
+      document.querySelectorAll('#deviceTableBody tr').forEach(r => r.classList.remove('selected-row'));
     }
 
     function selectDevice(id, triggerAnim = false) {
@@ -2197,23 +1905,19 @@
       }
 
       document.getElementById('heroMgmtNo').textContent = d.managementNo || '-';
-      
       const elapsed = getElapsedDaysInfo(d.lastViewed);
       document.getElementById('heroLastViewed').textContent = d.lastViewed ? `조회: ${d.lastViewed} ${elapsed.text}` : '조회 기록 없음';
       document.getElementById('heroDeviceName').textContent = d.name || '기기명 미등록';
       document.getElementById('heroCarrier').textContent = d.carrier || '-';
 
-      const elCompany = document.getElementById('heroCompany');
-      elCompany.textContent = d.company || '-';
-      applyBadgeColor(elCompany, d.company, '#3b82f6');
-
-      const elCat = document.getElementById('heroCategory');
-      elCat.textContent = d.category || '미지정';
-      applyBadgeColor(elCat, d.category, '#10b981');
-
-      const elSec = document.getElementById('heroSecLevel');
-      elSec.textContent = `보안 Lv. ${d.securityLevel || 'None'}`;
-      applyBadgeColor(elSec, d.securityLevel, '#ef4444');
+      applyBadgeColor(document.getElementById('heroCompany'), d.company, '#3b82f6');
+      document.getElementById('heroCompany').textContent = d.company || '-';
+      
+      applyBadgeColor(document.getElementById('heroCategory'), d.category, '#10b981');
+      document.getElementById('heroCategory').textContent = d.category || '미지정';
+      
+      applyBadgeColor(document.getElementById('heroSecLevel'), d.securityLevel, '#ef4444');
+      document.getElementById('heroSecLevel').textContent = `보안 Lv. ${d.securityLevel || 'None'}`;
 
       document.getElementById('heroAp').textContent = d.ap || '-';
       document.getElementById('heroRamStorage').textContent = `${d.ram || '-'} / ${d.storage || '-'}`;
@@ -2240,7 +1944,6 @@
           if (d.category === '판매완료') return false;
           if (filterCat !== 'ALL' && d.category !== filterCat) return false;
         }
-
         if (!query) return true;
         return (
           (d.managementNo || '').toLowerCase().includes(query) ||
@@ -2256,13 +1959,11 @@
       const filtered = getCurrentlyFilteredDevices();
       const currIdx = filtered.findIndex(d => d.id === devId);
       if (currIdx === -1) return;
-
       const targetIdx = currIdx + direction;
       if (targetIdx < 0 || targetIdx >= filtered.length) return;
 
       const currDev = filtered[currIdx];
       const targetDev = filtered[targetIdx];
-
       const realCurrIdx = devices.findIndex(d => d.id === currDev.id);
       const realTargetIdx = devices.findIndex(d => d.id === targetDev.id);
       if (realCurrIdx === -1 || realTargetIdx === -1) return;
@@ -2272,42 +1973,28 @@
       if (direction > 0) devices.splice(newTargetPos + 1, 0, currDev);
       else devices.splice(newTargetPos, 0, currDev);
 
-      saveToCloud();
-      renderTable();
-      showToast('순서가 변경되었습니다.', 'info');
+      saveToCloud(); renderTable(); showToast('순서가 변경되었습니다.', 'info');
     }
 
     function reorderDeviceDrop(sourceId, targetId, placeAfter) {
       if (!sourceId || !targetId || sourceId === targetId) return;
       const sourceIndex = devices.findIndex(d => d.id === sourceId);
       if (sourceIndex === -1) return;
-
       const [movedItem] = devices.splice(sourceIndex, 1);
       const targetIndex = devices.findIndex(d => d.id === targetId);
-
-      if (targetIndex === -1) {
-        devices.push(movedItem);
-      } else {
-        const insertPos = placeAfter ? targetIndex + 1 : targetIndex;
-        devices.splice(insertPos, 0, movedItem);
-      }
-
-      saveToCloud();
-      renderTable();
-      showToast('순서가 변경되었습니다.', 'info');
+      if (targetIndex === -1) devices.push(movedItem);
+      else devices.splice(placeAfter ? targetIndex + 1 : targetIndex, 0, movedItem);
+      saveToCloud(); renderTable(); showToast('순서가 변경되었습니다.', 'info');
     }
 
     function renderTable() {
       const tbody = document.getElementById('deviceTableBody');
       if (!tbody) return;
       tbody.innerHTML = '';
-
       const filtered = getCurrentlyFilteredDevices();
 
       if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 30px; color: var(--text-sub);">
-          ${currentInventoryTab === 'sold' ? '판매 완료된 기기가 없습니다.' : '조건과 일치하는 단말기가 없습니다.'}
-        </td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 30px; color: var(--text-sub);">${currentInventoryTab === 'sold' ? '판매 완료된 기기가 없습니다.' : '조건과 일치하는 단말기가 없습니다.'}</td></tr>`;
         return;
       }
 
@@ -2320,79 +2007,44 @@
         const companyColor = (appConfig.colors && appConfig.colors[d.company]) || '#3b82f6';
         const catColor = (appConfig.colors && appConfig.colors[d.category]) || '#10b981';
         const secColor = (appConfig.colors && appConfig.colors[d.securityLevel]) || '#ef4444';
-
-        const isFirst = idx === 0;
-        const isLast = idx === filtered.length - 1;
         const elapsed = getElapsedDaysInfo(d.lastViewed);
 
         tr.innerHTML = `
           <td>
             <div class="order-control-cell">
               <span class="order-drag-handle" title="끌어서 순서 변경">⠿</span>
-              <button type="button" class="order-step-btn btn-step-up" title="위로 이동" ${isFirst ? 'disabled' : ''}>▲</button>
-              <button type="button" class="order-step-btn btn-step-down" title="아래로 이동" ${isLast ? 'disabled' : ''}>▼</button>
+              <button type="button" class="order-step-btn btn-step-up" title="위로 이동" ${idx === 0 ? 'disabled' : ''}>▲</button>
+              <button type="button" class="order-step-btn btn-step-down" title="아래로 이동" ${idx === filtered.length - 1 ? 'disabled' : ''}>▼</button>
             </div>
           </td>
           <td style="font-weight: 700; color: var(--accent);">${d.managementNo || '-'}</td>
-          <td><span class="badge" style="background:${hexToRgba(companyColor, 0.16)}; border-color:${hexToRgba(companyColor, 0.35)}; color:${companyColor};">${d.company || '-'}</span></td>
+          <td><span class="badge" style="background:${hexToRgba(companyColor, 0.16)}; color:${companyColor};">${d.company || '-'}</span></td>
           <td style="font-weight: 600;">${d.name || '-'}</td>
-          <td><span class="badge" style="background:${hexToRgba(catColor, 0.16)}; border-color:${hexToRgba(catColor, 0.35)}; color:${catColor};">${d.category || '-'}</span></td>
-          <td><span class="badge" style="background:${hexToRgba(secColor, 0.16)}; border-color:${hexToRgba(secColor, 0.35)}; color:${secColor};">Lv. ${d.securityLevel || 'None'}</span></td>
+          <td><span class="badge" style="background:${hexToRgba(catColor, 0.16)}; color:${catColor};">${d.category || '-'}</span></td>
+          <td><span class="badge" style="background:${hexToRgba(secColor, 0.16)}; color:${secColor};">Lv. ${d.securityLevel || 'None'}</span></td>
           <td style="font-family: monospace;">${d.imei1 || '-'}</td>
           <td style="font-family: monospace;">${d.sn || '-'}</td>
-          <td style="color: var(--text-sub); font-size: 11.5px; white-space: nowrap;">
-            <span>${d.lastViewed || '-'}</span>
-            ${elapsed.badgeHtml}
-          </td>
+          <td style="color: var(--text-sub); font-size: 11.5px; white-space: nowrap;"><span>${d.lastViewed || '-'}</span>${elapsed.badgeHtml}</td>
         `;
 
-        tr.onclick = (e) => {
-          if (e.target.closest('.order-control-cell')) return;
-          selectDevice(d.id, true);
-        };
+        tr.onclick = (e) => { if (!e.target.closest('.order-control-cell')) selectDevice(d.id, true); };
+        tr.querySelector('.btn-step-up').onclick = (e) => { e.stopPropagation(); moveDeviceStep(d.id, -1); };
+        tr.querySelector('.btn-step-down').onclick = (e) => { e.stopPropagation(); moveDeviceStep(d.id, 1); };
 
-        const btnUp = tr.querySelector('.btn-step-up');
-        const btnDown = tr.querySelector('.btn-step-down');
-
-        btnUp.onclick = (e) => { e.stopPropagation(); moveDeviceStep(d.id, -1); };
-        btnDown.onclick = (e) => { e.stopPropagation(); moveDeviceStep(d.id, 1); };
-
-        tr.addEventListener('dragstart', (e) => {
-          draggedRowDevId = d.id;
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('text/plain', d.id);
-          tr.classList.add('dragging-row');
-        });
-
-        tr.addEventListener('dragend', () => {
-          draggedRowDevId = null;
-          tr.classList.remove('dragging-row');
-          document.querySelectorAll('#deviceTableBody tr').forEach(r => {
-            r.classList.remove('drag-target-top', 'drag-target-bottom', 'dragging-row');
-          });
-        });
-
+        tr.addEventListener('dragstart', (e) => { draggedRowDevId = d.id; e.dataTransfer.setData('text/plain', d.id); tr.classList.add('dragging-row'); });
+        tr.addEventListener('dragend', () => { draggedRowDevId = null; document.querySelectorAll('#deviceTableBody tr').forEach(r => r.classList.remove('drag-target-top', 'drag-target-bottom', 'dragging-row')); });
         tr.addEventListener('dragover', (e) => {
           e.preventDefault();
           if (!draggedRowDevId || draggedRowDevId === d.id) return;
           const rect = tr.getBoundingClientRect();
-          const midY = rect.top + rect.height / 2;
           tr.classList.remove('drag-target-top', 'drag-target-bottom');
-          if (e.clientY < midY) tr.classList.add('drag-target-top');
-          else tr.classList.add('drag-target-bottom');
+          tr.classList.add(e.clientY < (rect.top + rect.height / 2) ? 'drag-target-top' : 'drag-target-bottom');
         });
-
-        tr.addEventListener('dragleave', () => {
-          tr.classList.remove('drag-target-top', 'drag-target-bottom');
-        });
-
+        tr.addEventListener('dragleave', () => tr.classList.remove('drag-target-top', 'drag-target-bottom'));
         tr.addEventListener('drop', (e) => {
-          e.preventDefault();
-          tr.classList.remove('drag-target-top', 'drag-target-bottom');
+          e.preventDefault(); tr.classList.remove('drag-target-top', 'drag-target-bottom');
           if (!draggedRowDevId || draggedRowDevId === d.id) return;
-          const rect = tr.getBoundingClientRect();
-          const placeAfter = e.clientY >= (rect.top + rect.height / 2);
-          reorderDeviceDrop(draggedRowDevId, d.id, placeAfter);
+          reorderDeviceDrop(draggedRowDevId, d.id, e.clientY >= (tr.getBoundingClientRect().top + tr.getBoundingClientRect().height / 2));
         });
 
         tbody.appendChild(tr);
@@ -2403,9 +2055,7 @@
       const box = document.getElementById('toastBox');
       const text = document.getElementById('toastMsg');
       if (!box) return;
-      box.className = `toast ${type}`;
-      text.textContent = msg;
-      box.style.display = 'flex';
+      box.className = `toast ${type}`; text.textContent = msg; box.style.display = 'flex';
       clearTimeout(window._toastTimer);
       window._toastTimer = setTimeout(() => { box.style.display = 'none'; }, 2500);
     }
@@ -2425,7 +2075,6 @@
       const sidebar = document.getElementById('changelogSidebar');
       const detailPane = document.getElementById('changelogDetailPane');
       sidebar.innerHTML = '';
-
       APP_INFO.changelog.forEach((item, idx) => {
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -2434,17 +2083,9 @@
         btn.onclick = () => renderChangelogModal(idx);
         sidebar.appendChild(btn);
       });
-
-      const selected = APP_INFO.changelog[currentChangelogIndex] || APP_INFO.changelog[0];
+      const selected = APP_INFO.changelog[currentChangelogIndex];
       if (selected) {
-        let notesHtml = selected.notes.map(note => `<li class="changelog-detail-item">${note}</li>`).join('');
-        detailPane.innerHTML = `
-          <div class="changelog-detail-header">
-            <div class="changelog-detail-title">${selected.version}</div>
-            <div class="changelog-detail-date">📅 배포일: ${selected.date}</div>
-          </div>
-          <ul class="changelog-detail-list">${notesHtml}</ul>
-        `;
+        detailPane.innerHTML = `<div class="changelog-detail-header"><div class="changelog-detail-title">${selected.version}</div><div class="changelog-detail-date">📅 배포일: ${selected.date}</div></div><ul class="changelog-detail-list">${selected.notes.map(n => `<li class="changelog-detail-item">${n}</li>`).join('')}</ul>`;
       }
     }
 
@@ -2453,67 +2094,34 @@
 
     async function openCameraScanner() {
       camModal.classList.add('active');
-      if (typeof Html5Qrcode === 'undefined') {
-        showToast('카메라 라이브러리를 불러오는 중입니다.', 'error');
-        return;
-      }
+      if (typeof Html5Qrcode === 'undefined') { showToast('카메라 로딩중...', 'error'); return; }
       if (!html5QrCode) html5QrCode = new Html5Qrcode("cameraReader");
-
       try {
         availableCameras = await Html5Qrcode.getCameras();
         cameraSelect.innerHTML = '';
         if (availableCameras && availableCameras.length > 0) {
           availableCameras.forEach((cam, idx) => {
             const opt = document.createElement('option');
-            opt.value = cam.id;
-            opt.textContent = cam.label || `카메라 ${idx + 1}`;
+            opt.value = cam.id; opt.textContent = cam.label || `카메라 ${idx + 1}`;
             cameraSelect.appendChild(opt);
           });
-          const backCamIdx = availableCameras.findIndex(c => c.label.toLowerCase().includes('back') || c.label.toLowerCase().includes('후면'));
+          const backCamIdx = availableCameras.findIndex(c => c.label.toLowerCase().includes('back'));
           currentCameraIndex = backCamIdx !== -1 ? backCamIdx : 0;
           cameraSelect.value = availableCameras[currentCameraIndex].id;
           startCamera(availableCameras[currentCameraIndex].id);
-        } else {
-          showToast('사용 가능한 카메라 장치를 찾지 못했습니다.', 'error');
-        }
-      } catch (err) {
-        console.error(err);
-        showToast('카메라 권한이 차단되었습니다. 주소창에서 카메라를 허용해 주세요.', 'error');
-      }
+        } else { showToast('카메라를 찾지 못했습니다.', 'error'); }
+      } catch (err) { showToast('카메라 권한을 확인해주세요.', 'error'); }
     }
 
     async function startCamera(cameraId) {
       if (html5QrCode && html5QrCode.isScanning) await html5QrCode.stop();
-
-      const scanConfig = {
-        fps: 15,
-        qrbox: { width: 250, height: 250 },
-        formatsToSupport: [
-          Html5QrcodeSupportedFormats.DATA_MATRIX,
-          Html5QrcodeSupportedFormats.QR_CODE,
-          Html5QrcodeSupportedFormats.CODE_128,
-          Html5QrcodeSupportedFormats.CODE_39,
-          Html5QrcodeSupportedFormats.EAN_13,
-          Html5QrcodeSupportedFormats.UPC_A
-        ]
-      };
-
-      html5QrCode.start(
-        cameraId,
-        scanConfig,
-        (decodedText) => {
-          stopCamera();
-          camModal.classList.remove('active');
-          processBarcodeInput(decodedText);
-        },
-        () => {}
-      ).catch(err => console.warn(err));
+      html5QrCode.start(cameraId, { fps: 15, qrbox: { width: 250, height: 250 } }, (text) => {
+        stopCamera(); camModal.classList.remove('active'); processBarcodeInput(text);
+      }, () => {}).catch(err => console.warn(err));
     }
 
     async function stopCamera() {
-      if (html5QrCode && html5QrCode.isScanning) {
-        try { await html5QrCode.stop(); } catch (e) {}
-      }
+      if (html5QrCode && html5QrCode.isScanning) { try { await html5QrCode.stop(); } catch(e){} }
     }
 
     const deviceModal = document.getElementById('deviceModal');
@@ -2522,37 +2130,6 @@
     const dataModal = document.getElementById('dataModal');
     const aboutModal = document.getElementById('aboutModal');
     const changelogModal = document.getElementById('changelogModal');
-
-    function openAddModal() {
-      refreshSelectDropdowns();
-      document.getElementById('modalTitle').textContent = '신규 단말기 등록';
-      document.getElementById('formDeviceId').value = '';
-      document.getElementById('deviceForm').reset();
-      document.getElementById('formLastViewed').value = '';
-      deviceModal.classList.add('active');
-    }
-
-    function openEditModal(d) {
-      refreshSelectDropdowns();
-      document.getElementById('modalTitle').textContent = '단말기 정보 수정';
-      document.getElementById('formDeviceId').value = d.id;
-      document.getElementById('formMgmtNo').value = d.managementNo || '';
-      document.getElementById('formCompany').value = d.company || appConfig.companies[0];
-      document.getElementById('formName').value = d.name || '';
-      document.getElementById('formCategory').value = d.category || appConfig.categories[0];
-      document.getElementById('formSecLevel').value = d.securityLevel || appConfig.securityLevels[0];
-      document.getElementById('formAp').value = d.ap || '';
-      document.getElementById('formRam').value = d.ram || '';
-      document.getElementById('formStorage').value = d.storage || '';
-      document.getElementById('formCarrier').value = d.carrier || appConfig.carriers[0];
-      document.getElementById('formColor').value = d.color || '';
-      document.getElementById('formSn').value = d.sn || '';
-      document.getElementById('formLastViewed').value = d.lastViewed || '';
-      document.getElementById('formImei1').value = d.imei1 || '';
-      document.getElementById('formImei2').value = d.imei2 || '';
-      document.getElementById('formNotes').value = d.notes || '';
-      deviceModal.classList.add('active');
-    }
 
     function initializeAppCore() {
       const cached = localStorage.getItem('mobile_devices_cloud_cache');
@@ -2573,37 +2150,46 @@
       document.querySelectorAll('a[href]').forEach(link => {
         link.addEventListener('click', function(e) {
           const targetUrl = this.getAttribute('href');
-          if (!targetUrl || targetUrl.startsWith('#') || targetUrl.startsWith('javascript:') || this.getAttribute('target') === '_blank') return;
+          if (!targetUrl || targetUrl.startsWith('#') || targetUrl.startsWith('javascript:')) return;
           e.preventDefault();
           document.body.classList.add('page-leaving');
           setTimeout(() => { window.location.href = targetUrl; }, 220);
         });
       });
 
-      window.addEventListener('pageshow', (event) => {
-        if (event.persisted) document.body.classList.remove('page-leaving');
-      });
+      window.addEventListener('pageshow', (event) => { if (event.persisted) document.body.classList.remove('page-leaving'); });
 
+      // [핵심 4] 테마 전환 시 안드로이드 시스템 상태바 & 네비게이션 바 메타 태그 동시 갱신
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
         document.getElementById('themePillIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+
+        const targetColor = next === 'dark' ? '#030712' : '#f1f5f9';
+        const meta = document.getElementById('themeMeta');
+        if (meta) meta.setAttribute('content', targetColor);
       };
 
       document.getElementById('btnOpenCamModal').onclick = openCameraScanner;
       document.getElementById('btnQuickCam').onclick = openCameraScanner;
-      document.getElementById('btnOpenAddModal').onclick = openAddModal;
+      document.getElementById('btnOpenAddModal').onclick = () => {
+        refreshSelectDropdowns();
+        document.getElementById('modalTitle').textContent = '신규 단말기 등록';
+        document.getElementById('formDeviceId').value = '';
+        document.getElementById('deviceForm').reset();
+        document.getElementById('formLastViewed').value = '';
+        deviceModal.classList.add('active');
+      };
+
       document.getElementById('btnOpenChangelogModal').onclick = () => { renderChangelogModal(0); changelogModal.classList.add('active'); };
       document.getElementById('btnOpenAboutModal').onclick = () => { renderAboutModal(); aboutModal.classList.add('active'); };
 
       const openDataModalHandler = () => dataModal.classList.add('active');
-      const btnDataToolbar = document.getElementById('btnOpenDataModal');
-      const btnDataDock = document.getElementById('btnOpenDataModalDock');
-      if (btnDataToolbar) btnDataToolbar.onclick = openDataModalHandler;
-      if (btnDataDock) btnDataDock.onclick = openDataModalHandler;
-
+      document.getElementById('btnOpenDataModal').onclick = openDataModalHandler;
+      document.getElementById('btnOpenDataModalDock').onclick = openDataModalHandler;
       document.getElementById('btnOpenConfigModal').onclick = () => { renderConfigTags(); configModal.classList.add('active'); };
+
       document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
       document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
       document.getElementById('btnCloseChangelogModal').onclick = () => changelogModal.classList.remove('active');
@@ -2613,95 +2199,45 @@
 
       document.getElementById('btnDownloadJson').onclick = function() {
         const exportData = { devices, config: appConfig, exportedAt: new Date().toISOString() };
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
         const dlAnchor = document.createElement('a');
-        dlAnchor.setAttribute("href", dataStr);
-        dlAnchor.setAttribute("download", `devices_backup_${Date.now()}.json`);
-        document.body.appendChild(dlAnchor);
-        dlAnchor.click();
-        dlAnchor.remove();
-        showToast('JSON 백업 파일이 다운로드되었습니다.', 'success');
+        dlAnchor.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+        dlAnchor.download = `devices_backup_${Date.now()}.json`;
+        document.body.appendChild(dlAnchor); dlAnchor.click(); dlAnchor.remove();
+        showToast('백업 파일 다운로드 완료', 'success');
       };
 
       document.getElementById('btnUploadJson').onclick = function() {
         const fileInput = document.getElementById('jsonFileInput');
         const file = fileInput.files[0];
-        if (!file) {
-          showToast('복원할 .json 파일을 먼저 선택해 주세요.', 'error');
-          return;
-        }
+        if (!file) { showToast('파일을 선택해주세요.', 'error'); return; }
         const reader = new FileReader();
         reader.onload = async function(evt) {
           try {
             const imported = JSON.parse(evt.target.result);
-            if (!imported || (!Array.isArray(imported.devices) && !Array.isArray(imported))) {
-              showToast('유효하지 않은 백업 파일 형식입니다.', 'error');
-              return;
-            }
-            if (confirm("정말 이 백업 파일로 현재 데이터를 복원하시겠습니까? 기존 데이터는 대체됩니다.")) {
-              if (Array.isArray(imported)) {
-                devices = imported;
-              } else {
-                devices = imported.devices || [];
-                if (imported.config) {
-                  if (Array.isArray(imported.config.companies)) appConfig.companies = imported.config.companies;
-                  if (Array.isArray(imported.config.categories)) appConfig.categories = imported.config.categories;
-                  if (Array.isArray(imported.config.securityLevels)) appConfig.securityLevels = imported.config.securityLevels;
-                  if (Array.isArray(imported.config.carriers)) appConfig.carriers = imported.config.carriers;
-                  if (imported.config.colors) appConfig.colors = { ...appConfig.colors, ...imported.config.colors };
-                }
-              }
+            if (confirm("백업 파일로 복원하시겠습니까? 기존 데이터가 대체됩니다.")) {
+              devices = Array.isArray(imported) ? imported : (imported.devices || []);
+              if (imported.config) appConfig = { ...appConfig, ...imported.config };
               await saveToCloud();
-              refreshSelectDropdowns();
-              renderConfigTags();
-              updateTabCounts();
-              renderTable();
-              resetHeroView();
-              fileInput.value = '';
-              dataModal.classList.remove('active');
-              showToast('데이터 복원이 성공적으로 완료되었습니다!', 'success');
+              refreshSelectDropdowns(); renderConfigTags(); updateTabCounts(); renderTable(); resetHeroView();
+              fileInput.value = ''; dataModal.classList.remove('active');
+              showToast('데이터 복원 완료!', 'success');
             }
-          } catch (err) {
-            console.error(err);
-            showToast('JSON 파일을 읽는 중 오류가 발생했습니다.', 'error');
-          }
+          } catch(e) { showToast('파일 읽기 오류', 'error'); }
         };
         reader.readAsText(file);
       };
 
       document.getElementById('btnCloseCamModal').onclick = () => { stopCamera(); camModal.classList.remove('active'); };
       document.getElementById('btnCancelCamModal').onclick = () => { stopCamera(); camModal.classList.remove('active'); };
-
-      document.getElementById('btnSwitchCam').onclick = () => {
-        if (availableCameras.length > 1) {
-          currentCameraIndex = (currentCameraIndex + 1) % availableCameras.length;
-          cameraSelect.value = availableCameras[currentCameraIndex].id;
-          startCamera(availableCameras[currentCameraIndex].id);
-        } else {
-          showToast('전환할 다른 카메라가 없습니다.', 'info');
-        }
-      };
-
-      cameraSelect.onchange = (e) => {
-        const selectedId = e.target.value;
-        currentCameraIndex = availableCameras.findIndex(c => c.id === selectedId);
-        startCamera(selectedId);
-      };
-
       document.getElementById('btnCloseDeviceModal').onclick = () => deviceModal.classList.remove('active');
       document.getElementById('btnCancelDeviceModal').onclick = () => deviceModal.classList.remove('active');
 
       document.getElementById('btnSubmitDeviceForm').onclick = async function() {
         const form = document.getElementById('deviceForm');
-        if (!form.checkValidity()) {
-          form.reportValidity();
-          return;
-        }
+        if (!form.checkValidity()) { form.reportValidity(); return; }
 
         const id = document.getElementById('formDeviceId').value;
         const newCategory = document.getElementById('formCategory').value;
-        const editedLastViewed = document.getElementById('formLastViewed').value.trim();
-
         const deviceData = {
           id: id || ('dev-' + Date.now()),
           managementNo: document.getElementById('formMgmtNo').value.trim(),
@@ -2718,65 +2254,66 @@
           imei1: document.getElementById('formImei1').value.trim(),
           imei2: document.getElementById('formImei2').value.trim(),
           notes: document.getElementById('formNotes').value.trim(),
-          lastViewed: editedLastViewed
+          lastViewed: document.getElementById('formLastViewed').value.trim()
         };
 
         if (id) {
           const idx = devices.findIndex(x => x.id === id);
           if (idx !== -1) devices[idx] = deviceData;
-        } else {
-          devices.unshift(deviceData);
-        }
+        } else { devices.unshift(deviceData); }
 
         await saveToCloud();
-
-        if (newCategory === '판매완료') {
-          switchInventoryTab('sold');
-          showToast(`'판매완료'로 변경되어 판매 내역으로 이동했습니다.`, 'info');
-        } else {
-          if (currentInventoryTab === 'sold') switchInventoryTab('active');
-          else renderTable();
-          showToast('저장되었습니다.', 'success');
-        }
-
+        if (newCategory === '판매완료') switchInventoryTab('sold');
+        else { if (currentInventoryTab === 'sold') switchInventoryTab('active'); else renderTable(); }
         selectDevice(deviceData.id, true);
         deviceModal.classList.remove('active');
+        showToast('저장되었습니다.', 'success');
       };
 
       document.getElementById('btnEditCurrent').onclick = function() {
-        if (!currentSelectedId) {
-          showToast('수정할 기기를 먼저 목록에서 선택하거나 스캔하세요.', 'info');
-          return;
-        }
+        if (!currentSelectedId) { showToast('기기를 선택하거나 스캔하세요.', 'info'); return; }
         const d = devices.find(x => x.id === currentSelectedId);
-        if (d) openEditModal(d);
+        if (d) {
+          refreshSelectDropdowns();
+          document.getElementById('modalTitle').textContent = '단말기 정보 수정';
+          document.getElementById('formDeviceId').value = d.id;
+          document.getElementById('formMgmtNo').value = d.managementNo || '';
+          document.getElementById('formCompany').value = d.company || '';
+          document.getElementById('formName').value = d.name || '';
+          document.getElementById('formCategory').value = d.category || '';
+          document.getElementById('formSecLevel').value = d.securityLevel || '';
+          document.getElementById('formAp').value = d.ap || '';
+          document.getElementById('formRam').value = d.ram || '';
+          document.getElementById('formStorage').value = d.storage || '';
+          document.getElementById('formCarrier').value = d.carrier || '';
+          document.getElementById('formColor').value = d.color || '';
+          document.getElementById('formSn').value = d.sn || '';
+          document.getElementById('formLastViewed').value = d.lastViewed || '';
+          document.getElementById('formImei1').value = d.imei1 || '';
+          document.getElementById('formImei2').value = d.imei2 || '';
+          document.getElementById('formNotes').value = d.notes || '';
+          deviceModal.classList.add('active');
+        }
       };
 
       document.getElementById('btnDeleteCurrent').onclick = function() {
-        if (!currentSelectedId) {
-          showToast('삭제할 기기를 먼저 목록에서 선택하거나 스캔하세요.', 'info');
-          return;
-        }
+        if (!currentSelectedId) { showToast('기기를 선택하세요.', 'info'); return; }
         const d = devices.find(x => x.id === currentSelectedId);
         if (!d) return;
         deviceToDeleteId = d.id;
-        document.getElementById('deleteConfirmText').innerHTML = `<strong>[${d.managementNo}] ${d.name}</strong><br>기기를 영구히 삭제하시겠습니까?`;
+        document.getElementById('deleteConfirmText').innerHTML = `<strong>[${d.managementNo}] ${d.name}</strong><br>기기를 삭제하시겠습니까?`;
         deleteModal.classList.add('active');
       };
 
       document.getElementById('btnCloseDeleteModal').onclick = () => deleteModal.classList.remove('active');
       document.getElementById('btnCancelDeleteModal').onclick = () => deleteModal.classList.remove('active');
-
       document.getElementById('btnConfirmDelete').onclick = async function() {
         if (deviceToDeleteId) {
           devices = devices.filter(d => d.id !== deviceToDeleteId);
-          await saveToCloud();
-          renderTable();
-          resetHeroView();
-          showToast('기기가 삭제되었습니다.', 'info');
+          await saveToCloud(); renderTable(); resetHeroView();
+          showToast('삭제되었습니다.', 'info');
         }
-        deleteModal.classList.remove('active');
-        deviceToDeleteId = null;
+        deleteModal.classList.remove('active'); deviceToDeleteId = null;
       };
 
       document.getElementById('btnCloseConfigModal').onclick = () => configModal.classList.remove('active');
@@ -2790,27 +2327,19 @@
       document.getElementById('tabSold').onclick = () => switchInventoryTab('sold');
       document.getElementById('btnCenterAlertClose').onclick = hideCenterAlert;
 
-      const barcodeInput = document.getElementById('barcodeScannerInput');
-      barcodeInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          const val = this.value.trim();
-          if (val) processBarcodeInput(val);
-        }
+      document.getElementById('barcodeScannerInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); const val = this.value.trim(); if (val) processBarcodeInput(val); }
       });
 
       document.getElementById('tableSearchInput').addEventListener('input', renderTable);
       document.getElementById('filterCategory').addEventListener('change', renderTable);
 
       initFirebase();
-      setTimeout(() => barcodeInput.focus(), 300);
+      setTimeout(() => document.getElementById('barcodeScannerInput').focus(), 300);
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializeAppCore);
-    } else {
-      initializeAppCore();
-    }
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initializeAppCore); }
+    else { initializeAppCore(); }
   </script>
 </body>
 </html>
