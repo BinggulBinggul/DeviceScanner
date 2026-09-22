@@ -6,7 +6,6 @@
   <title>Green Onion Project - Workspace Hub</title>
 
   <link rel="manifest" href="./manifest.json">
-  <!-- 안드로이드 시스템 상태바 및 하단 제스처 바 색상 동기화 메타 태그 -->
   <meta name="theme-color" content="#030712" id="themeMeta">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -75,7 +74,6 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* [핵심 1] 최상단 html/body 배경색 강제 밀착 (하단 틈새 색상 불일치 완전 차단) */
     html {
       background-color: #030712;
       min-height: 100%;
@@ -106,7 +104,6 @@
       pointer-events: none;
     }
 
-    /* [핵심 2] 화면 전체를 100dvh로 빈틈없이 감싸는 고정 배경 레이어 */
     .app-bg-fixed {
       position: fixed;
       top: 0;
@@ -130,14 +127,14 @@
     .orb-2 { width: 450px; height: 450px; bottom: -50px; right: -50px; background: var(--orb-2); }
     .orb-3 { width: 350px; height: 350px; top: 35%; left: 45%; background: var(--orb-3); }
 
-    /* [핵심 3] 상단 펀치홀 0px 밀착 및 하단 플로팅 독 겹침 방지 여백 */
+    /* 커진 독을 고려한 하단 여백 130px 확보 */
     .hub-container {
       position: relative;
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
       width: 100%;
-      padding: 10px 20px calc(110px + env(safe-area-inset-bottom, 0px)) 20px;
+      padding: 10px 20px calc(130px + env(safe-area-inset-bottom, 0px)) 20px;
       display: flex;
       flex-direction: column;
       flex: 1;
@@ -291,16 +288,18 @@
     .card-action-text { font-size: 13px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 5px; }
     .card-action-text.disabled-text { color: var(--text-muted); }
 
-    /* 대시보드 하단 플로팅 독 */
+    /* =========================================================
+       [핵심] 약 2배 크기로 확대된 대시보드 하단 플로팅 독
+       ========================================================= */
     .floating-dock-wrap {
       position: fixed;
-      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
       z-index: 1000;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       max-width: 96vw;
       pointer-events: none;
     }
@@ -312,44 +311,44 @@
       -webkit-backdrop-filter: blur(28px);
       border: 1.5px solid var(--dock-border);
       border-radius: 9999px;
-      padding: 5px 8px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
-      gap: 3px;
-      box-shadow: 0 16px 40px var(--shadow-color), 0 0 24px rgba(16, 185, 129, 0.15);
+      gap: 4px;
+      box-shadow: 0 18px 45px var(--shadow-color), 0 0 28px rgba(16, 185, 129, 0.18);
     }
 
     .pill-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 6px 11px; border-radius: 9999px; background: transparent; border: none;
+      padding: 8px 14px; border-radius: 9999px; background: transparent; border: none;
       color: var(--text-sub); cursor: pointer; text-decoration: none;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; min-width: 48px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); font-family: inherit; min-width: 64px;
     }
     .pill-item:hover { background: var(--dock-item-hover); color: var(--text-main); transform: translateY(-2px); }
-    .pill-item:active { transform: scale(0.94); }
+    .pill-item:active { transform: scale(0.92); }
 
-    .pill-icon { font-size: 16px; height: 20px; display: flex; align-items: center; justify-content: center; }
-    .pill-icon svg { width: 18px; height: 18px; vertical-align: middle; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3)); }
-    .pill-label { font-size: 9.5px; font-weight: 700; margin-top: 2px; white-space: nowrap; letter-spacing: -0.2px; }
+    .pill-icon { font-size: 24px; height: 28px; display: flex; align-items: center; justify-content: center; }
+    .pill-icon svg { width: 26px; height: 26px; vertical-align: middle; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+    .pill-label { font-size: 11.5px; font-weight: 700; margin-top: 3px; white-space: nowrap; letter-spacing: -0.2px; }
 
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
-      color: #fff !important; padding: 6px 13px;
-      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+      color: #fff !important; padding: 8px 16px;
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.45);
     }
     .pill-item.pill-accent-dash .pill-label { color: #fff; }
 
     .pill-item.pill-accent-devices {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
-      color: #fff !important; padding: 6px 13px;
-      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
+      color: #fff !important; padding: 8px 16px;
+      box-shadow: 0 4px 16px rgba(6, 182, 212, 0.45);
     }
     .pill-item.pill-accent-devices .pill-label { color: #fff; }
 
     .pill-item.pill-accent-memo {
       background: linear-gradient(135deg, #6366f1, #7c3aed);
-      color: #fff !important; padding: 6px 13px;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+      color: #fff !important; padding: 8px 16px;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.45);
     }
     .pill-item.pill-accent-memo .pill-label { color: #fff; }
 
@@ -360,31 +359,32 @@
       -webkit-backdrop-filter: blur(28px);
       border: 1.5px solid var(--dock-border);
       border-radius: 9999px;
-      width: 48px; height: 48px;
+      width: 62px; height: 62px;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       color: var(--text-main);
-      box-shadow: 0 16px 40px var(--shadow-color), 0 0 20px rgba(16, 185, 129, 0.15);
+      box-shadow: 0 18px 45px var(--shadow-color), 0 0 24px rgba(16, 185, 129, 0.18);
       cursor: pointer; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); padding: 0; flex-shrink: 0;
     }
     .floating-theme-island:hover { background: var(--dock-item-hover); transform: translateY(-2px) scale(1.06); border-color: var(--accent); }
     .floating-theme-island:active { transform: scale(0.92); }
-    .floating-theme-island .pill-icon { font-size: 16px; height: 18px; }
-    .floating-theme-island .pill-label { font-size: 9px; font-weight: 700; color: var(--text-sub); }
+    .floating-theme-island .pill-icon { font-size: 24px; height: 26px; }
+    .floating-theme-island .pill-label { font-size: 11px; font-weight: 700; color: var(--text-sub); }
 
+    /* 모달 */
     .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      display: none; align-items: center; justify-content: center; z-index: 2000; padding: 16px;
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.68);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      display: none; align-items: center; justify-content: center; z-index: 2500; padding: 16px;
     }
-    .modal-overlay.active { display: flex; }
+    .modal-overlay.active { display: flex !important; }
     .modal-box {
       background: var(--glass-bg); border: 1px solid var(--glass-border);
       border-radius: 20px; width: 100%; max-width: 500px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5); overflow: hidden; animation: pageEnterAnim 0.2s ease-out;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55); overflow: hidden; animation: pageEnterAnim 0.2s ease-out;
     }
     .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; }
     .modal-title { font-size: 16.5px; font-weight: 700; }
-    .modal-close { background: transparent; border: none; color: var(--text-sub); font-size: 22px; cursor: pointer; }
+    .modal-close { background: transparent; border: none; color: var(--text-sub); font-size: 24px; cursor: pointer; }
     .modal-body { padding: 18px 20px; }
     .modal-footer { padding: 14px 20px; border-top: 1px solid var(--glass-border); display: flex; justify-content: flex-end; }
     .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -397,21 +397,27 @@
     }
 
     @media (max-width: 768px) {
-      .hub-container { padding: 8px 12px calc(110px + env(safe-area-inset-bottom, 0px)) 12px; }
+      .hub-container { padding: 8px 12px calc(130px + env(safe-area-inset-bottom, 0px)) 12px; }
       .hero-title { font-size: 22px; }
       .hero-banner { padding: 22px 18px; }
       .apps-grid { grid-template-columns: 1fr; }
-      .floating-dock-wrap { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); gap: 6px; }
-      .pill-item { padding: 5px 8px; min-width: 42px; }
-      .pill-icon { font-size: 15px; height: 18px; }
-      .pill-label { font-size: 9px; }
-      .floating-theme-island { width: 42px; height: 42px; }
+      
+      .floating-dock-wrap { bottom: calc(14px + env(safe-area-inset-bottom, 0px)); gap: 8px; }
+      .floating-pill-bar { padding: 7px 10px; gap: 3px; }
+      .pill-item { padding: 7px 10px; min-width: 52px; }
+      .pill-icon { font-size: 21px; height: 24px; }
+      .pill-label { font-size: 10.5px; }
+      .pill-item.pill-accent-dash,
+      .pill-item.pill-accent-devices,
+      .pill-item.pill-accent-memo { padding: 7px 12px; }
+      .floating-theme-island { width: 56px; height: 56px; }
+      .floating-theme-island .pill-icon { font-size: 21px; height: 23px; }
+      .floating-theme-island .pill-label { font-size: 10px; }
       .specs-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <!-- [핵심] 화면 100%를 오차 없이 덮는 고정 배경 레이어 -->
   <div class="app-bg-fixed"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
@@ -493,7 +499,7 @@
         </div>
         <h3 class="card-title">개인 메모장</h3>
         <p class="card-desc">
-          텍스트 및 숫자 기반 빠른 기록, 태블릿 대응 가이드, 카테고리 분류, 상단 핀 고정 및 클라우드 동기화 지원.
+          텍스트 및 숫자 기반 빠른 기록, 2배 커진 플로팅 독, 카테고리 분류, 상단 핀 고정 및 클라우드 동기화 지원.
         </p>
         <div class="card-footer">
           <span class="card-action-text">메모장 열기 &rarr;</span>
@@ -523,7 +529,7 @@
     </footer>
   </div>
 
-  <!-- 대시보드 하단 플로팅 독 -->
+  <!-- 대시보드 하단 플로팅 독 (2배 크기) -->
   <div class="floating-dock-wrap">
     <nav class="floating-pill-bar">
       <a href="./index.html" class="pill-item pill-accent-dash" title="현재 대시보드">
@@ -582,13 +588,12 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="pill-item pill-accent-dash" id="btnDoneAboutModal" style="padding: 6px 16px;">확인</button>
+        <button type="button" class="pill-item pill-accent-dash" id="btnDoneAboutModal" style="padding: 8px 20px;">확인</button>
       </div>
     </div>
   </div>
 
   <script>
-    // [핵심 4] 테마 전환 시 안드로이드 시스템 상태바 & 네비게이션 바 메타 태그 동시 갱신
     document.getElementById('btnThemeToggle').onclick = function() {
       const cur = document.documentElement.getAttribute('data-theme');
       const next = cur === 'dark' ? 'light' : 'dark';
@@ -601,9 +606,16 @@
     };
 
     const aboutModal = document.getElementById('aboutModal');
-    document.getElementById('btnOpenAboutModal').onclick = () => aboutModal.classList.add('active');
-    document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
-    document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
+    const openAbout = () => { aboutModal.classList.add('active'); aboutModal.style.display = 'flex'; };
+    const closeAbout = () => { aboutModal.classList.remove('active'); aboutModal.style.display = 'none'; };
+
+    document.getElementById('btnOpenAboutModal').onclick = openAbout;
+    document.getElementById('btnCloseAboutModal').onclick = closeAbout;
+    document.getElementById('btnDoneAboutModal').onclick = closeAbout;
+
+    aboutModal.addEventListener('click', (e) => {
+      if (e.target === aboutModal) closeAbout();
+    });
 
     document.querySelectorAll('a[href]').forEach(link => {
       link.addEventListener('click', function(e) {
