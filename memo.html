@@ -6,7 +6,8 @@
   <title>Personal Memo - Green Onion Project</title>
 
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#030712">
+  <!-- 안드로이드 시스템 상태바 및 하단 제스처 바 색상 동기화 메타 태그 -->
+  <meta name="theme-color" content="#030712" id="themeMeta">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -22,6 +23,7 @@
     }
 
     [data-theme="dark"] {
+      --bg-base: #030712;
       --bg-gradient: radial-gradient(circle at 20% 15%, #064e3b 0%, #06261f 35%, #030712 100%);
       --orb-1: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(5, 150, 105, 0.2) 0%, transparent 70%);
@@ -52,7 +54,8 @@
     }
 
     [data-theme="light"] {
-      --bg-gradient: radial-gradient(circle at 20% 20%, #d1fae5 0%, #f0fdf4 40%, #f8fafc 100%);
+      --bg-base: #f8fafc;
+      --bg-gradient: radial-gradient(circle at 20% 15%, #d1fae5 0%, #f0fdf4 40%, #f8fafc 100%);
       --orb-1: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
       --orb-2: radial-gradient(circle, rgba(52, 211, 153, 0.15) 0%, transparent 70%);
       --orb-3: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, transparent 70%);
@@ -83,29 +86,47 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    @keyframes pageEnterAnim {
-      0% { opacity: 0; transform: scale(0.985) translateY(12px); filter: blur(6px); }
-      100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+    /* [핵심 1] 최상단 html/body 배경색 강제 밀착 (하단 틈새 색상 불일치 완전 차단) */
+    html {
+      background-color: #030712;
+      min-height: 100%;
+      min-height: 100dvh;
+    }
+    html[data-theme="light"] {
+      background-color: #f8fafc;
     }
 
     body {
       font-family: var(--font-family);
-      background: var(--bg-gradient);
+      background-color: transparent;
       color: var(--text-main);
       min-height: 100vh;
+      min-height: 100dvh;
       overflow-x: hidden;
       position: relative;
       user-select: none;
       display: flex;
       flex-direction: column;
       animation: pageEnterAnim 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1), transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), filter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1), transform 0.24s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     body.page-leaving {
       opacity: 0 !important;
       transform: scale(0.985) translateY(-8px) !important;
-      filter: blur(6px) !important;
+      pointer-events: none;
+    }
+
+    /* [핵심 2] 화면 전체를 100dvh로 빈틈없이 감싸는 고정 배경 레이어 */
+    .app-bg-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: var(--bg-gradient);
+      z-index: -10;
       pointer-events: none;
     }
 
@@ -114,20 +135,20 @@
       border-radius: 50%;
       filter: blur(90px);
       pointer-events: none;
-      z-index: 0;
+      z-index: -5;
     }
     .orb-1 { width: 500px; height: 500px; top: -100px; left: -100px; background: var(--orb-1); }
     .orb-2 { width: 450px; height: 450px; bottom: -50px; right: -50px; background: var(--orb-2); }
     .orb-3 { width: 350px; height: 350px; top: 35%; left: 45%; background: var(--orb-3); }
 
-    /* 안전구역 완전 제거: 상단 10px 밀착, 하단 플로팅 독 공간 확보 */
+    /* [핵심 3] 상단 펀치홀 0px 밀착 및 하단 플로팅 독 겹침 방지 여백 */
     .app-container {
       position: relative;
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
       width: 100%;
-      padding: 10px 16px calc(96px + env(safe-area-inset-bottom, 0px)) 16px;
+      padding: 10px 16px calc(110px + env(safe-area-inset-bottom, 0px)) 16px;
       display: flex;
       flex-direction: column;
       flex: 1;
@@ -135,7 +156,6 @@
       min-width: 0;
     }
 
-    /* 미니멀 헤더 */
     header.glass-header {
       background: var(--glass-bg);
       backdrop-filter: blur(24px);
@@ -152,18 +172,18 @@
     }
     .brand-area { display: flex; align-items: center; gap: 10px; }
     .brand-logo {
-      width: 34px;
-      height: 34px;
+      width: 38px;
+      height: 38px;
       border-radius: 10px;
       background: var(--accent-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
-      font-size: 18px;
+      font-size: 20px;
       box-shadow: 0 0 16px var(--accent-glow);
     }
-    .brand-title { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .brand-title { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     
     .cloud-status {
       font-size: 11px;
@@ -178,10 +198,10 @@
       gap: 4px;
     }
 
-    /* 하단 플로팅 독 & 독립 테마 버튼 */
+    /* 하단 플로팅 독 */
     .floating-dock-wrap {
       position: fixed;
-      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      bottom: calc(16px + env(safe-area-inset-bottom, 0px));
       left: 50%;
       transform: translateX(-50%);
       z-index: 1000;
@@ -250,7 +270,7 @@
       letter-spacing: -0.2px;
     }
 
-    /* 1. 대시보드 강조 캡슐 (초록) */
+    /* 1. 대시보드 (초록) */
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
@@ -258,13 +278,8 @@
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
     }
     .pill-item.pill-accent-dash .pill-label { color: #fff; }
-    .pill-item.pill-accent-dash:hover {
-      background: linear-gradient(135deg, #059669, #047857);
-      transform: translateY(-2px) scale(1.04);
-      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
-    }
 
-    /* 2. 새 메모 강조 캡슐 (보라) */
+    /* 2. 새 메모 (보라) */
     .pill-item.pill-primary {
       background: linear-gradient(135deg, #6366f1, #7c3aed);
       color: #fff !important;
@@ -272,13 +287,8 @@
       box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
     }
     .pill-item.pill-primary .pill-label { color: #fff; }
-    .pill-item.pill-primary:hover {
-      background: linear-gradient(135deg, #4f46e5, #6d28d9);
-      transform: translateY(-2px) scale(1.04);
-      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
-    }
 
-    /* 6. 독립 분리된 원형 테마 버튼 */
+    /* 독립 분리된 원형 테마 버튼 */
     .floating-theme-island {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -359,7 +369,7 @@
       cursor: pointer;
     }
 
-    /* 메모 카드 그리드 (태블릿 & 모바일 100% 대응) */
+    /* 메모 카드 그리드 */
     .memo-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
@@ -734,32 +744,21 @@
     .toast.error { border-left: 4px solid var(--danger); }
     .toast.info { border-left: 4px solid var(--accent); }
 
-    /* =========================================================
-       태블릿 (1024px 이하) 및 모바일 완벽 대응 미디어 쿼리
-       ========================================================= */
+    /* 태블릿(1024px) 및 모바일 완벽 대응 */
     @media (max-width: 1024px) {
       .app-container {
-        padding: 8px 10px calc(96px + env(safe-area-inset-bottom, 0px)) 10px;
-        gap: 10px;
+        padding: 8px 10px calc(110px + env(safe-area-inset-bottom, 0px)) 10px;
       }
-      header.glass-header { padding: 10px 14px; gap: 8px; }
-      .memo-grid {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
+      header.glass-header { padding: 10px 14px; }
+      .memo-grid { grid-template-columns: 1fr; gap: 10px; }
       .search-filter-wrap { flex-direction: column; align-items: stretch; }
-      .floating-dock-wrap {
-        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-        gap: 5px;
-        max-width: 98vw;
-      }
-      .floating-pill-bar { padding: 3px 5px; gap: 2px; }
+      .floating-dock-wrap { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); gap: 6px; max-width: 98vw; }
+      .floating-pill-bar { padding: 4px 6px; gap: 2px; }
       .pill-item { padding: 5px 6px; min-width: 40px; }
       .pill-icon { font-size: 15px; height: 18px; }
-      .pill-icon svg { width: 15px; height: 15px; }
+      .pill-icon svg { width: 16px; height: 16px; }
       .pill-label { font-size: 9px; }
-      .pill-item.pill-accent-dash,
-      .pill-item.pill-primary { padding: 5px 9px; }
+      .pill-item.pill-accent-dash, .pill-item.pill-primary { padding: 5px 9px; }
       .floating-theme-island { width: 40px; height: 40px; }
       .floating-theme-island .pill-icon { font-size: 14px; height: 16px; }
       .floating-theme-island .pill-label { font-size: 8px; }
@@ -779,6 +778,8 @@
   </style>
 </head>
 <body>
+  <!-- [핵심] 화면 100%를 오차 없이 덮는 고정 배경 레이어 -->
+  <div class="app-bg-fixed"></div>
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
@@ -803,19 +804,17 @@
           <option value="ALL">전체 카테고리</option>
         </select>
       </div>
-      <div style="font-size: 12.5px; color: var(--text-sub);" id="memoCountBadge">
-        총 0개
-      </div>
+      <div style="font-size: 12.5px; color: var(--text-sub);" id="memoCountBadge">총 0개</div>
     </div>
 
     <div class="memo-grid" id="memoGrid"></div>
   </div>
 
-  <!-- 하단 플로팅 독 (순서: 대시보드 -> 새 메모 -> 로그 -> 정보 -> 백업 -> 독립 테마) -->
+  <!-- 하단 플로팅 독 -->
   <div class="floating-dock-wrap">
     <nav class="floating-pill-bar">
       <!-- 1. 대시보드 (초록 강조) -->
-      <a href="./index.html" class="pill-item pill-accent-dash" title="Green Onion Project 메인 대시보드로 이동">
+      <a href="./index.html" class="pill-item pill-accent-dash" title="메인 대시보드로 이동">
         <div class="pill-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 11C10 7 7 4 4 3C5 7 8 9 10 12" fill="#a7f3d0"/>
@@ -836,32 +835,32 @@
       </button>
 
       <!-- 3. 로그 -->
-      <button type="button" class="pill-item" id="btnOpenChangelogModal" title="버전별 업데이트 로그">
+      <button type="button" class="pill-item" id="btnOpenChangelogModal" title="업데이트 로그">
         <div class="pill-icon">📋</div>
         <span class="pill-label">로그</span>
       </button>
 
       <!-- 4. 정보 -->
-      <button type="button" class="pill-item" id="btnOpenAboutModal" title="애플리케이션 및 개발자 정보">
+      <button type="button" class="pill-item" id="btnOpenAboutModal" title="앱 정보">
         <div class="pill-icon">ℹ️</div>
         <span class="pill-label">정보</span>
       </button>
 
       <!-- 5. 백업 -->
-      <button type="button" class="pill-item" id="btnExportJson" title="JSON 백업 파일 다운로드">
+      <button type="button" class="pill-item" id="btnExportJson" title="JSON 백업">
         <div class="pill-icon">💾</div>
         <span class="pill-label">백업</span>
       </button>
     </nav>
 
     <!-- 6. 독립 분리된 원형 테마 버튼 -->
-    <button type="button" class="floating-theme-island" id="btnThemeToggle" title="화이트/다크 모드 전환">
+    <button type="button" class="floating-theme-island" id="btnThemeToggle" title="테마 전환">
       <div class="pill-icon" id="themePillIcon">☀️</div>
       <span class="pill-label" id="themePillLabel">테마</span>
     </button>
   </div>
 
-  <!-- Modal 1: Add / Edit Memo -->
+  <!-- 모달들 -->
   <div class="modal-overlay" id="memoModal">
     <div class="modal-box">
       <div class="modal-header">
@@ -870,19 +869,12 @@
       </div>
       <div class="modal-body">
         <input type="hidden" id="formMemoId">
-        <div class="form-group">
-          <label>제목</label>
-          <input type="text" id="formMemoTitle" placeholder="메모 제목 (선택 사항)">
-        </div>
+        <div class="form-group"><label>제목</label><input type="text" id="formMemoTitle" placeholder="메모 제목 (선택 사항)"></div>
         <div style="display: flex; gap: 10px;">
-          <div class="form-group" style="flex: 1;">
-            <label>카테고리</label>
-            <input type="text" id="formMemoCategory" placeholder="예: 일반, 아이디어, 할 일" value="일반">
-          </div>
+          <div class="form-group" style="flex: 1;"><label>카테고리</label><input type="text" id="formMemoCategory" value="일반"></div>
           <div class="form-group" style="justify-content: flex-end;">
             <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; padding-bottom: 8px;">
-              <input type="checkbox" id="formMemoPinned" style="width: 16px; height: 16px; accent-color: var(--accent);">
-              <span>상단 고정 📌</span>
+              <input type="checkbox" id="formMemoPinned" style="width: 16px; height: 16px; accent-color: var(--accent);"> <span>상단 고정 📌</span>
             </label>
           </div>
         </div>
@@ -902,11 +894,10 @@
     </div>
   </div>
 
-  <!-- Modal 2: 사이드바 패치노트 모달 -->
   <div class="modal-overlay" id="changelogModal">
     <div class="modal-box" style="max-width: 640px;">
       <div class="modal-header">
-        <div class="modal-title">📋 업데이트 로그 (Changelog)</div>
+        <div class="modal-title">📋 업데이트 로그</div>
         <button type="button" class="modal-close" id="btnCloseChangelogModal">&times;</button>
       </div>
       <div class="modal-body">
@@ -915,17 +906,14 @@
           <div class="changelog-detail-pane" id="changelogDetailPane"></div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-icon btn-primary" id="btnDoneChangelogModal">닫기</button>
-      </div>
+      <div class="modal-footer"><button type="button" class="btn-icon btn-primary" id="btnDoneChangelogModal">닫기</button></div>
     </div>
   </div>
 
-  <!-- Modal 3: App & Developer Info -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
-        <div class="modal-title">ℹ️ 애플리케이션 및 개발자 정보</div>
+        <div class="modal-title">ℹ️ 애플리케이션 정보</div>
         <button type="button" class="modal-close" id="btnCloseAboutModal">&times;</button>
       </div>
       <div class="modal-body">
@@ -934,43 +922,20 @@
           <h2 style="font-size: 18px; font-weight: 800;" id="aboutAppTitle">Personal Memo Hub</h2>
           <div class="about-version-badge" id="aboutAppVersion">v1.1</div>
         </div>
-
         <div class="specs-grid">
-          <div class="spec-item">
-            <div class="spec-lbl">프로젝트</div>
-            <div class="spec-val">Green Onion Project</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">개발자</div>
-            <div class="spec-val" id="aboutDevName">Kim Dogyun</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">배포 환경</div>
-            <div class="spec-val" id="aboutDeployEnv">Vercel Web + GitHub</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">사용중인 클라우드</div>
-            <div class="spec-val" id="aboutCloudDb">Firebase Firestore</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">사용 AI</div>
-            <div class="spec-val" id="aboutAi">Gemini</div>
-          </div>
-          <div class="spec-item">
-            <div class="spec-lbl">마지막 빌드 날짜</div>
-            <div class="spec-val" id="aboutAppDate">2026-09-22</div>
-          </div>
+          <div class="spec-item"><div class="spec-lbl">프로젝트</div><div class="spec-val">Green Onion Project</div></div>
+          <div class="spec-item"><div class="spec-lbl">개발자</div><div class="spec-val" id="aboutDevName">Kim Dogyun</div></div>
+          <div class="spec-item"><div class="spec-lbl">배포 환경</div><div class="spec-val">Vercel Web + GitHub</div></div>
+          <div class="spec-item"><div class="spec-lbl">클라우드</div><div class="spec-val">Firebase Firestore</div></div>
+          <div class="spec-item"><div class="spec-lbl">사용 AI</div><div class="spec-val">Gemini</div></div>
+          <div class="spec-item"><div class="spec-lbl">빌드 날짜</div><div class="spec-val">2026-09-22</div></div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-icon btn-primary" id="btnDoneAboutModal">확인</button>
-      </div>
+      <div class="modal-footer"><button type="button" class="btn-icon btn-primary" id="btnDoneAboutModal">확인</button></div>
     </div>
   </div>
 
-  <div class="toast" id="toastBox">
-    <span id="toastMsg">알림</span>
-  </div>
+  <div class="toast" id="toastBox"><span id="toastMsg">알림</span></div>
 
   <script>
     const APP_INFO = {
@@ -986,9 +951,9 @@
           version: "v1.1",
           date: "2026.09.22",
           notes: [
-            "플로팅 디자인 적용 및 메뉴 최적화",
-            "펀치홀 카메라 상단 0px 전체화면 지원",
-            "태블릿 및 모바일 반응형 레이아웃 대응"
+            "하단 배경 틈새 색상 일체화 및 시스템 바 색상 동기화",
+            "플로팅 독 디자인 적용 및 태블릿 반응형 레이아웃 대응",
+            "펀치홀 카메라 상단 0px 전체화면 밀착 지원"
           ]
         },
         {
@@ -997,9 +962,7 @@
           notes: [
             "Green Onion Project 대시보드 연동",
             "하단 리퀴드 글래스 플로팅 독 & 독립 테마 아일랜드 UI 적용",
-            "텍스트 및 숫자 기반 빠른 기록 & 클라우드 실시간 동기화 지원",
-            "카테고리 분류, 상단 핀(Pin) 고정 및 클립보드 복사 지원",
-            "JSON 파일 데이터 백업 기능 및 사이드바 패치노트 시스템 탑재"
+            "텍스트 및 숫자 기반 빠른 기록 & 클라우드 실시간 동기화 지원"
           ]
         }
       ]
@@ -1008,7 +971,6 @@
     let memos = [];
     let categories = ["일반", "아이디어", "할 일", "중요", "기록"];
     let currentChangelogIndex = 0;
-
     let firestoreDb = null;
     let memoDocRef = null;
 
@@ -1023,7 +985,6 @@
             messagingSenderId: "903936009990",
             appId: "1:903936009990:web:a154227c0349101c30a087"
           };
-
           const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
           firestoreDb = app.firestore();
           memoDocRef = firestoreDb.collection("personal_memos").doc("main_data");
@@ -1033,43 +994,17 @@
               const data = docSnap.data();
               if (Array.isArray(data.memos)) memos = data.memos;
               if (Array.isArray(data.categories)) categories = data.categories;
-              setCloudStatus(true);
-              renderCategories();
-              renderMemos();
-            } else {
-              saveToCloud();
-            }
-          }, (err) => {
-            console.warn("Firestore 대기:", err);
-            setCloudStatus(false);
-          });
+              setCloudStatus(true); renderCategories(); renderMemos();
+            } else { saveToCloud(); }
+          }, (err) => { setCloudStatus(false); });
         }
-      } catch (err) {
-        console.warn("Firebase 초기화 에러:", err);
-        setCloudStatus(false);
-      }
+      } catch (err) { setCloudStatus(false); }
     }
 
     async function saveToCloud() {
-      const payload = {
-        memos: memos,
-        categories: categories,
-        updatedAt: new Date().toISOString()
-      };
-
-      try {
-        localStorage.setItem('personal_memos_cloud_cache', JSON.stringify(payload));
-      } catch (e) {}
-
-      if (memoDocRef) {
-        try {
-          await memoDocRef.set(payload);
-          setCloudStatus(true);
-        } catch (err) {
-          console.warn("클라우드 저장 실패:", err);
-          setCloudStatus(false);
-        }
-      }
+      const payload = { memos, categories, updatedAt: new Date().toISOString() };
+      try { localStorage.setItem('personal_memos_cloud_cache', JSON.stringify(payload)); } catch (e) {}
+      if (memoDocRef) { try { await memoDocRef.set(payload); setCloudStatus(true); } catch(e){ setCloudStatus(false); } }
       renderCategories();
     }
 
@@ -1091,9 +1026,7 @@
       const box = document.getElementById('toastBox');
       const text = document.getElementById('toastMsg');
       if (!box) return;
-      box.className = `toast ${type}`;
-      text.textContent = msg;
-      box.style.display = 'flex';
+      box.className = `toast ${type}`; text.textContent = msg; box.style.display = 'flex';
       clearTimeout(window._toastTimer);
       window._toastTimer = setTimeout(() => { box.style.display = 'none'; }, 2300);
     }
@@ -1105,9 +1038,7 @@
       select.innerHTML = '<option value="ALL">전체 카테고리</option>';
       distinctCats.forEach(c => {
         const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
-        select.appendChild(opt);
+        opt.value = c; opt.textContent = c; select.appendChild(opt);
       });
       select.value = distinctCats.includes(curVal) ? curVal : 'ALL';
     }
@@ -1115,7 +1046,6 @@
     function getFilteredMemos() {
       const query = document.getElementById('memoSearchInput').value.trim().toLowerCase();
       const filterCat = document.getElementById('filterCategory').value;
-
       return memos.filter(m => {
         if (filterCat !== 'ALL' && m.category !== filterCat) return false;
         if (!query) return true;
@@ -1133,18 +1063,11 @@
     function renderMemos() {
       const grid = document.getElementById('memoGrid');
       grid.innerHTML = '';
-
       const filtered = getFilteredMemos();
       document.getElementById('memoCountBadge').textContent = `총 ${filtered.length}개`;
 
       if (filtered.length === 0) {
-        grid.innerHTML = `
-          <div class="empty-state">
-            <div style="font-size: 32px; margin-bottom: 10px;">📝</div>
-            <div style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">등록된 메모가 없습니다</div>
-            <div style="font-size: 12.5px; color: var(--text-muted);">하단 독의 [+ 새 메모] 버튼을 눌러 첫 번째 메모를 기록해 보세요.</div>
-          </div>
-        `;
+        grid.innerHTML = `<div class="empty-state"><div style="font-size: 32px; margin-bottom: 10px;">📝</div><div style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">등록된 메모가 없습니다</div><div style="font-size: 12.5px; color: var(--text-muted);">하단 독의 [+ 새 메모] 버튼을 눌러 기록해 보세요.</div></div>`;
         return;
       }
 
@@ -1154,58 +1077,29 @@
         const dateDisplay = (m.updatedAt || m.createdAt || '').slice(0, 16);
 
         card.innerHTML = `
-          <div class="memo-card-header">
-            <span class="memo-badge">${m.category || '일반'}</span>
-            <span class="memo-pin-icon" title="${m.pinned ? '고정 해제' : '상단 고정'}">${m.pinned ? '📌' : '📍'}</span>
-          </div>
+          <div class="memo-card-header"><span class="memo-badge">${m.category || '일반'}</span><span class="memo-pin-icon" title="${m.pinned ? '고정 해제' : '상단 고정'}">${m.pinned ? '📌' : '📍'}</span></div>
           <div class="memo-title">${m.title || '(제목 없음)'}</div>
           <div class="memo-content-preview">${m.content || '(내용 없음)'}</div>
           <div class="memo-footer">
             <span>${dateDisplay}</span>
             <div class="memo-actions">
-              <button type="button" class="btn-memo-act btn-copy" title="내용 복사">복사</button>
-              <button type="button" class="btn-memo-act btn-edit" title="수정">수정</button>
-              <button type="button" class="btn-memo-act del btn-delete" title="삭제">삭제</button>
+              <button type="button" class="btn-memo-act btn-copy">복사</button>
+              <button type="button" class="btn-memo-act btn-edit">수정</button>
+              <button type="button" class="btn-memo-act del btn-delete">삭제</button>
             </div>
           </div>
         `;
 
-        card.onclick = (e) => {
-          if (e.target.closest('.memo-actions') || e.target.closest('.memo-pin-icon')) return;
-          openEditModal(m);
-        };
-
-        card.querySelector('.memo-pin-icon').onclick = (e) => {
-          e.stopPropagation();
-          m.pinned = !m.pinned;
-          saveToCloud();
-          renderMemos();
-          showToast(m.pinned ? '상단에 고정되었습니다.' : '고정이 해제되었습니다.', 'info');
-        };
-
+        card.onclick = (e) => { if (!e.target.closest('.memo-actions') && !e.target.closest('.memo-pin-icon')) openEditModal(m); };
+        card.querySelector('.memo-pin-icon').onclick = (e) => { e.stopPropagation(); m.pinned = !m.pinned; saveToCloud(); renderMemos(); showToast(m.pinned ? '고정됨' : '고정 해제됨', 'info'); };
         card.querySelector('.btn-copy').onclick = (e) => {
           e.stopPropagation();
-          const copyText = `${m.title ? m.title + '\n\n' : ''}${m.content || ''}`;
-          navigator.clipboard.writeText(copyText).then(() => {
-            showToast('클립보드에 복사되었습니다.', 'success');
-          }).catch(() => {
-            showToast('복사 권한이 필요합니다.', 'error');
-          });
+          navigator.clipboard.writeText(`${m.title ? m.title + '\n\n' : ''}${m.content || ''}`).then(() => showToast('복사 완료', 'success'));
         };
-
-        card.querySelector('.btn-edit').onclick = (e) => {
-          e.stopPropagation();
-          openEditModal(m);
-        };
-
+        card.querySelector('.btn-edit').onclick = (e) => { e.stopPropagation(); openEditModal(m); };
         card.querySelector('.btn-delete').onclick = (e) => {
           e.stopPropagation();
-          if (confirm(`'${m.title || '선택한 메모'}'를 삭제하시겠습니까?`)) {
-            memos = memos.filter(x => x.id !== m.id);
-            saveToCloud();
-            renderMemos();
-            showToast('메모가 삭제되었습니다.', 'info');
-          }
+          if (confirm('삭제하시겠습니까?')) { memos = memos.filter(x => x.id !== m.id); saveToCloud(); renderMemos(); showToast('삭제되었습니다.', 'info'); }
         };
 
         grid.appendChild(card);
@@ -1226,7 +1120,6 @@
       document.getElementById('formCharCount').textContent = '0자';
       document.getElementById('formMemoDateInfo').textContent = '';
       memoModal.classList.add('active');
-      setTimeout(() => document.getElementById('formMemoContent').focus(), 150);
     }
 
     function openEditModal(m) {
@@ -1237,7 +1130,7 @@
       document.getElementById('formMemoPinned').checked = !!m.pinned;
       document.getElementById('formMemoContent').value = m.content || '';
       document.getElementById('formCharCount').textContent = `${(m.content || '').length}자`;
-      document.getElementById('formMemoDateInfo').textContent = `작성일: ${m.createdAt || '-'}`;
+      document.getElementById('formMemoDateInfo').textContent = `작성: ${m.createdAt || '-'}`;
       memoModal.classList.add('active');
     }
 
@@ -1256,7 +1149,6 @@
       const sidebar = document.getElementById('changelogSidebar');
       const detailPane = document.getElementById('changelogDetailPane');
       sidebar.innerHTML = '';
-
       APP_INFO.changelog.forEach((item, idx) => {
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -1265,17 +1157,9 @@
         btn.onclick = () => renderChangelogModal(idx);
         sidebar.appendChild(btn);
       });
-
-      const selected = APP_INFO.changelog[currentChangelogIndex] || APP_INFO.changelog[0];
+      const selected = APP_INFO.changelog[currentChangelogIndex];
       if (selected) {
-        let notesHtml = selected.notes.map(note => `<li class="changelog-detail-item">${note}</li>`).join('');
-        detailPane.innerHTML = `
-          <div class="changelog-detail-header">
-            <div class="changelog-detail-title">${selected.version}</div>
-            <div class="changelog-detail-date">📅 배포일: ${selected.date}</div>
-          </div>
-          <ul class="changelog-detail-list">${notesHtml}</ul>
-        `;
+        detailPane.innerHTML = `<div class="changelog-detail-header"><div class="changelog-detail-title">${selected.version}</div><div class="changelog-detail-date">📅 배포일: ${selected.date}</div></div><ul class="changelog-detail-list">${selected.notes.map(n => `<li class="changelog-detail-item">${n}</li>`).join('')}</ul>`;
       }
     }
 
@@ -1289,28 +1173,29 @@
         } catch (e) {}
       }
 
-      renderCategories();
-      renderMemos();
+      renderCategories(); renderMemos();
 
       document.querySelectorAll('a[href]').forEach(link => {
         link.addEventListener('click', function(e) {
           const targetUrl = this.getAttribute('href');
-          if (!targetUrl || targetUrl.startsWith('#') || targetUrl.startsWith('javascript:') || this.getAttribute('target') === '_blank') return;
-          e.preventDefault();
-          document.body.classList.add('page-leaving');
+          if (!targetUrl || targetUrl.startsWith('#') || targetUrl.startsWith('javascript:')) return;
+          e.preventDefault(); document.body.classList.add('page-leaving');
           setTimeout(() => { window.location.href = targetUrl; }, 220);
         });
       });
 
-      window.addEventListener('pageshow', (event) => {
-        if (event.persisted) document.body.classList.remove('page-leaving');
-      });
+      window.addEventListener('pageshow', (event) => { if (event.persisted) document.body.classList.remove('page-leaving'); });
 
+      // [핵심 4] 테마 전환 시 안드로이드 시스템 상태바 & 네비게이션 바 메타 태그 동시 갱신
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
         document.getElementById('themePillIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+
+        const targetColor = next === 'dark' ? '#030712' : '#f8fafc';
+        const meta = document.getElementById('themeMeta');
+        if (meta) meta.setAttribute('content', targetColor);
       };
 
       document.getElementById('btnOpenAddModal').onclick = openAddModal;
@@ -1324,14 +1209,11 @@
 
       document.getElementById('btnExportJson').onclick = function() {
         const exportData = { memos, categories, exportedAt: new Date().toISOString() };
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
         const dlAnchor = document.createElement('a');
-        dlAnchor.setAttribute("href", dataStr);
-        dlAnchor.setAttribute("download", `memos_backup_${Date.now()}.json`);
-        document.body.appendChild(dlAnchor);
-        dlAnchor.click();
-        dlAnchor.remove();
-        showToast('메모 JSON 백업 파일이 다운로드되었습니다.', 'success');
+        dlAnchor.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+        dlAnchor.download = `memos_backup_${Date.now()}.json`;
+        document.body.appendChild(dlAnchor); dlAnchor.click(); dlAnchor.remove();
+        showToast('메모 백업 파일 다운로드 완료', 'success');
       };
 
       document.getElementById('btnCloseMemoModal').onclick = () => memoModal.classList.remove('active');
@@ -1348,33 +1230,20 @@
         const pinned = document.getElementById('formMemoPinned').checked;
         const content = document.getElementById('formMemoContent').value;
 
-        if (!title && !content) {
-          showToast('제목 또는 내용을 입력하세요.', 'error');
-          return;
-        }
-
+        if (!title && !content) { showToast('제목이나 내용을 입력하세요.', 'error'); return; }
         const nowStr = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
         if (id) {
           const idx = memos.findIndex(x => x.id === id);
-          if (idx !== -1) {
-            memos[idx] = { ...memos[idx], title, category, pinned, content, updatedAt: nowStr };
-          }
+          if (idx !== -1) memos[idx] = { ...memos[idx], title, category, pinned, content, updatedAt: nowStr };
         } else {
-          const newMemo = {
-            id: 'memo-' + Date.now(),
-            title, category, pinned, content,
-            createdAt: nowStr, updatedAt: nowStr
-          };
-          memos.unshift(newMemo);
+          memos.unshift({ id: 'memo-' + Date.now(), title, category, pinned, content, createdAt: nowStr, updatedAt: nowStr });
         }
 
         if (!categories.includes(category)) categories.push(category);
-
-        await saveToCloud();
-        renderMemos();
+        await saveToCloud(); renderMemos();
         memoModal.classList.remove('active');
-        showToast('메모가 저장되었습니다.', 'success');
+        showToast('저장되었습니다.', 'success');
       };
 
       document.getElementById('memoSearchInput').addEventListener('input', renderMemos);
@@ -1383,11 +1252,8 @@
       initFirebase();
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializeMemoApp);
-    } else {
-      initializeMemoApp();
-    }
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initializeMemoApp); }
+    else { initializeMemoApp(); }
   </script>
 </body>
 </html>
