@@ -149,7 +149,7 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      padding: 10px 16px calc(110px + env(safe-area-inset-bottom, 0px)) 16px;
+      padding: 10px 16px calc(118px + env(safe-area-inset-bottom, 0px)) 16px;
       gap: 12px;
       min-width: 0;
     }
@@ -219,7 +219,9 @@
       transform: translateY(-1px);
     }
 
-    /* 하단 플로팅 독 */
+    /* =========================================================
+       [핵심] 약 1.5배 크기로 확대된 단말기 관리 플로팅 독
+       ========================================================= */
     .floating-dock-wrap {
       position: fixed;
       bottom: calc(16px + env(safe-area-inset-bottom, 0px));
@@ -240,10 +242,10 @@
       -webkit-backdrop-filter: blur(28px);
       border: 1.5px solid var(--dock-border);
       border-radius: 9999px;
-      padding: 5px 8px;
+      padding: 6px 10px;
       display: flex;
       align-items: center;
-      gap: 2px;
+      gap: 3px;
       box-shadow: 0 16px 40px var(--shadow-color), 0 0 24px rgba(99, 102, 241, 0.15);
     }
 
@@ -252,7 +254,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 6px 9px;
+      padding: 7px 11px;
       border-radius: 9999px;
       background: transparent;
       border: none;
@@ -261,30 +263,30 @@
       text-decoration: none;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       font-family: inherit;
-      min-width: 44px;
+      min-width: 52px;
     }
     .pill-item:hover {
       background: var(--dock-item-hover);
       color: var(--text-main);
       transform: translateY(-2px);
     }
-    .pill-item:active { transform: scale(0.94); }
+    .pill-item:active { transform: scale(0.92); }
 
     .pill-icon {
-      font-size: 16px;
-      height: 20px;
+      font-size: 20px;
+      height: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .pill-icon svg {
-      width: 18px;
-      height: 18px;
+      width: 22px;
+      height: 22px;
       vertical-align: middle;
       filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
     }
     .pill-label {
-      font-size: 9.5px;
+      font-size: 10.5px;
       font-weight: 700;
       margin-top: 2px;
       white-space: nowrap;
@@ -294,7 +296,7 @@
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
-      padding: 6px 12px;
+      padding: 7px 14px;
       box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
     }
     .pill-item.pill-accent-dash .pill-label { color: #fff; }
@@ -302,7 +304,7 @@
     .pill-item.pill-accent-cam {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
       color: #fff !important;
-      padding: 6px 12px;
+      padding: 7px 14px;
       box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
     }
     .pill-item.pill-accent-cam .pill-label { color: #fff; }
@@ -310,7 +312,7 @@
     .pill-item.pill-primary {
       background: linear-gradient(135deg, var(--accent), #7c3aed);
       color: #fff !important;
-      padding: 6px 12px;
+      padding: 7px 14px;
       box-shadow: 0 4px 14px var(--accent-glow);
     }
     .pill-item.pill-primary .pill-label { color: #fff; }
@@ -322,8 +324,8 @@
       -webkit-backdrop-filter: blur(28px);
       border: 1.5px solid var(--dock-border);
       border-radius: 9999px;
-      width: 48px;
-      height: 48px;
+      width: 54px;
+      height: 54px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -341,8 +343,8 @@
       border-color: var(--accent);
     }
     .floating-theme-island:active { transform: scale(0.92); }
-    .floating-theme-island .pill-icon { font-size: 16px; height: 18px; }
-    .floating-theme-island .pill-label { font-size: 9px; font-weight: 700; color: var(--text-sub); }
+    .floating-theme-island .pill-icon { font-size: 20px; height: 22px; }
+    .floating-theme-island .pill-label { font-size: 10px; font-weight: 700; color: var(--text-sub); }
 
     .scanner-panel {
       background: var(--glass-bg);
@@ -1041,12 +1043,13 @@
     .toast.error { border-left: 4px solid var(--danger); }
     .toast.info { border-left: 4px solid var(--accent); }
 
+    /* 태블릿(1024px) 및 모바일 최적화 (1.5x 비율 터치 최적화) */
     @media (max-width: 1024px) {
       .app-container {
         height: auto;
         min-height: 100vh;
         overflow-y: visible;
-        padding: 8px 10px calc(110px + env(safe-area-inset-bottom, 0px)) 10px;
+        padding: 8px 10px calc(118px + env(safe-area-inset-bottom, 0px)) 10px;
         gap: 12px;
       }
       header.glass-header { padding: 10px 14px; gap: 8px; }
@@ -1104,22 +1107,47 @@
       }
       .changelog-tab-btn { flex-shrink: 0; }
 
+      /* 모바일 독: 1.5배 비율로 가로 7개 버튼 완벽 수용 */
       .floating-dock-wrap {
-        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-        gap: 5px;
+        bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+        gap: 6px;
         max-width: 99vw;
       }
-      .floating-pill-bar { padding: 3px 5px; gap: 1px; }
-      .pill-item { padding: 4px 5px; min-width: 36px; }
-      .pill-icon { font-size: 14px; height: 16px; }
-      .pill-icon svg { width: 15px; height: 15px; }
-      .pill-label { font-size: 8.5px; }
+      .floating-pill-bar {
+        padding: 5px 7px;
+        gap: 2px;
+      }
+      .pill-item {
+        padding: 6px 7px;
+        min-width: 42px;
+      }
+      .pill-icon {
+        font-size: 18px;
+        height: 20px;
+      }
+      .pill-icon svg {
+        width: 19px;
+        height: 19px;
+      }
+      .pill-label {
+        font-size: 9.5px;
+      }
       .pill-item.pill-accent-dash,
       .pill-item.pill-accent-cam,
-      .pill-item.pill-primary { padding: 4px 7px; }
-      .floating-theme-island { width: 40px; height: 40px; }
-      .floating-theme-island .pill-icon { font-size: 14px; height: 15px; }
-      .floating-theme-island .pill-label { font-size: 8px; }
+      .pill-item.pill-primary {
+        padding: 6px 10px;
+      }
+      .floating-theme-island {
+        width: 48px;
+        height: 48px;
+      }
+      .floating-theme-island .pill-icon {
+        font-size: 18px;
+        height: 20px;
+      }
+      .floating-theme-island .pill-label {
+        font-size: 9px;
+      }
     }
   </style>
 </head>
@@ -1247,7 +1275,7 @@
     </div>
   </div>
 
-  <!-- 하단 플로팅 독 (순서: 대시보드 -> 카메라 -> 기기등록 -> 로그 -> 앱 정보 -> 백업 -> 설정 -> 독립 테마) -->
+  <!-- 1.5배 확대 하단 플로팅 독 -->
   <div class="floating-dock-wrap">
     <nav class="floating-pill-bar">
       <!-- 1. 대시보드 (초록) -->
@@ -1283,7 +1311,7 @@
         <span class="pill-label">로그</span>
       </button>
 
-      <!-- 5. 앱 정보 (정확한 ID와 명칭 부여) -->
+      <!-- 5. 앱 정보 (정상 복구 완료) -->
       <button type="button" class="pill-item" id="btnOpenAboutModal" title="애플리케이션 및 개발자 정보">
         <div class="pill-icon">ℹ️</div>
         <span class="pill-label">앱 정보</span>
@@ -1302,7 +1330,7 @@
       </button>
     </nav>
 
-    <!-- 8. 독립 분리된 원형 테마 버튼 -->
+    <!-- 8. 독립 분리된 원형 테마 버튼 (1.5배 확대: 54px) -->
     <button type="button" class="floating-theme-island" id="btnThemeToggle" title="화이트/다크 모드 전환">
       <div class="pill-icon" id="themePillIcon">☀️</div>
       <span class="pill-label" id="themePillLabel">테마</span>
@@ -1335,7 +1363,7 @@
     </div>
   </div>
 
-  <!-- [핵심 복구] Modal 2: App & Developer Info -->
+  <!-- [정상 복구] Modal 2: App & Developer Info -->
   <div class="modal-overlay" id="aboutModal">
     <div class="modal-box" style="max-width: 500px;">
       <div class="modal-header">
@@ -1517,10 +1545,10 @@
           version: "v1.1",
           date: "2026.09.22",
           notes: [
+            "하단 플로팅 독 크기 1.5배 확대 (터치 최적화 황금비율)",
             "앱 정보 모달 안전 복구 및 오버레이 클릭 닫기 지원",
             "하단 배경 틈새 색상 일체화 및 시스템 바 색상 동기화",
-            "플로팅 디자인 적용 및 태블릿 가로 스크롤/짤림 완벽 해결",
-            "펀치홀 카메라 상단 0px 전체화면 밀착 지원"
+            "태블릿 가로 스크롤/짤림 완벽 해결 및 펀치홀 상단 0px 밀착 지원"
           ]
         },
         {
@@ -2089,7 +2117,6 @@
       if (dateEl) dateEl.textContent = APP_INFO.releaseDate;
     }
 
-    /* [핵심 안전 복구] 앱 정보 모달 열기/닫기 */
     function openAboutModal() {
       try { renderAboutModal(); } catch (err) { console.warn(err); }
       const modal = document.getElementById('aboutModal');
@@ -2225,7 +2252,7 @@
         changelogModal.style.display = 'flex';
       };
 
-      /* [핵심 복구 이벤트 연결] 앱 정보 버튼들 모두 연결 */
+      /* [앱 정보 버튼 이벤트 연결] */
       document.querySelectorAll('#btnOpenAboutModal').forEach(btn => {
         btn.onclick = openAboutModal;
       });
