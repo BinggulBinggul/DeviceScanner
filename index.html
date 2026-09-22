@@ -2,10 +2,14 @@
 <html lang="ko" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Green Onion Project - Workspace Hub</title>
-  <link rel="manifest" href="./manifest.json">
 
+  <!-- PWA & 펀치홀/상태바 일체화 설정 -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#030712">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
     @view-transition {
@@ -63,7 +67,6 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* 부드러운 화면 진입 및 전환 애니메이션 */
     @keyframes pageEnterAnim {
       0% {
         opacity: 0;
@@ -91,7 +94,6 @@
       transition: opacity 0.24s cubic-bezier(0.4, 0, 0.2, 1), transform 0.24s cubic-bezier(0.4, 0, 0.2, 1), filter 0.24s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* 페이지 이탈 시 부드러운 페이드아웃 */
     body.page-leaving {
       opacity: 0 !important;
       transform: scale(0.985) translateY(-8px) !important;
@@ -110,13 +112,14 @@
     .orb-2 { width: 450px; height: 450px; bottom: -50px; right: -50px; background: var(--orb-2); }
     .orb-3 { width: 350px; height: 350px; top: 35%; left: 45%; background: var(--orb-3); }
 
+    /* 펀치홀 상단 및 하단 세이프존 자동 연산 */
     .hub-container {
       position: relative;
       z-index: 1;
       max-width: 1100px;
       margin: 0 auto;
       width: 100%;
-      padding: 24px 20px 40px;
+      padding: calc(20px + env(safe-area-inset-top, 0px)) 20px calc(40px + env(safe-area-inset-bottom, 0px));
       display: flex;
       flex-direction: column;
       flex: 1;
@@ -458,7 +461,7 @@
       <a href="./devices.html" class="app-card">
         <div class="card-top">
           <div class="card-icon-wrap">📱</div>
-          <span class="card-badge badge-live">v1.0</span>
+          <span class="card-badge badge-live">v1.1</span>
         </div>
         <h3 class="card-title">단말기 자산 관리 시스템</h3>
         <p class="card-desc">
@@ -470,24 +473,23 @@
         </div>
       </a>
 
-      <!-- 2. 개인 메모장 (연결 완료) -->
-<a href="./memo.html" class="app-card">
-  <div class="card-top">
-    <div class="card-icon-wrap">📝</div>
-    <span class="card-badge badge-live">v1.0</span>
-  </div>
-  <h3 class="card-title">개인 메모장</h3>
-  <p class="card-desc">
-    텍스트 및 숫자 기반 빠른 기록, 카테고리 분류, 상단 핀 고정, 클라우드 실시간 동기화 지원 메모장.
-  </p>
-  <div class="card-footer">
-    <span class="card-action-text">메모장 열기 &rarr;</span>
-    <span style="font-size: 11px; color: var(--text-muted);">실시간 동기화</span>
-  </div>
-</a>
+      <!-- 2. 개인 메모장 -->
+      <a href="./memo.html" class="app-card">
+        <div class="card-top">
+          <div class="card-icon-wrap">📝</div>
+          <span class="card-badge badge-live">v1.0</span>
+        </div>
+        <h3 class="card-title">개인 메모장</h3>
+        <p class="card-desc">
+          텍스트 및 숫자 기반 빠른 기록, 카테고리 분류, 상단 핀 고정, 클라우드 실시간 동기화 지원 메모장.
+        </p>
+        <div class="card-footer">
+          <span class="card-action-text">메모장 열기 &rarr;</span>
+          <span style="font-size: 11px; color: var(--text-muted);">실시간 동기화</span>
+        </div>
+      </a>
 
-
-      <!-- 3. 세 번째 기능 (준비 중) -->
+      <!-- 3. 준비 중 -->
       <div class="app-card disabled">
         <div class="card-top">
           <div class="card-icon-wrap">✨</div>
@@ -510,7 +512,6 @@
   </div>
 
   <script>
-    // 테마 토글
     document.getElementById('btnThemeToggle').onclick = function() {
       const cur = document.documentElement.getAttribute('data-theme');
       const next = cur === 'dark' ? 'light' : 'dark';
@@ -518,7 +519,6 @@
       this.textContent = next === 'dark' ? '☀️ 테마' : '🌙 테마';
     };
 
-    // [핵심] 부드러운 페이지 이동(트랜지션) 핸들러
     document.querySelectorAll('a[href]').forEach(link => {
       link.addEventListener('click', function(e) {
         const targetUrl = this.getAttribute('href');
@@ -532,7 +532,6 @@
       });
     });
 
-    // 뒤로가기 시 페이드아웃 상태 복구 (BFCache 방어)
     window.addEventListener('pageshow', (event) => {
       if (event.persisted) {
         document.body.classList.remove('page-leaving');
