@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.vercel.greenonion.twa",
+        "sha256_cert_fingerprints": ["DB:23:B9:CE:94:A1:56:01:D8:53:56:30:F0:93:02:75:57:6A:FE:A8:2E:BF:84:65:6E:23:66:69:43:2B:CA:2E"]
+      }
+    }]
