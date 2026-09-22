@@ -1,11 +1,11 @@
 {
   "name": "Green Onion Project",
   "short_name": "GreenOnion",
-  "description": "클라우드 기반 개인 일상 어시스트 프로젝트",
+  "description": "클라우드 기반 개인 일상 어시스트 프로젝트 with Gemini",
   "start_url": "./index.html",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#030712",
-  "theme_color": "#10b981",
+  "theme_color": "#030712",
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1f331.png",
