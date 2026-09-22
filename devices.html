@@ -208,9 +208,7 @@
       transform: translateY(-1px);
     }
 
-    /* =========================================================
-       [핵심] 하단 리퀴드 글래스 플로팅 독 & 독립 테마 버튼
-       ========================================================= */
+    /* 하단 플로팅 독 & 독립 테마 버튼 래퍼 */
     .floating-dock-wrap {
       position: fixed;
       bottom: 20px;
@@ -285,7 +283,7 @@
       letter-spacing: -0.2px;
     }
 
-    /* 1. 대시보드 강조 캡슐 스타일 */
+    /* 1. 대시보드 강조 캡슐 */
     .pill-item.pill-accent-dash {
       background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
@@ -301,7 +299,7 @@
       box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
     }
 
-    /* 2. 카메라 강조 캡슐 스타일 */
+    /* 2. 카메라 강조 캡슐 */
     .pill-item.pill-accent-cam {
       background: linear-gradient(135deg, #0284c7, #06b6d4);
       color: #fff !important;
@@ -317,7 +315,7 @@
       box-shadow: 0 6px 18px rgba(6, 182, 212, 0.5);
     }
 
-    /* [신규] 메뉴 바에서 분리되어 단독으로 떠 있는 테마 버튼 */
+    /* 7. 독립 분리된 원형 테마 버튼 */
     .floating-theme-island {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -337,7 +335,6 @@
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       padding: 0;
       flex-shrink: 0;
-      border: 1.5px solid var(--dock-border);
     }
     .floating-theme-island:hover {
       background: var(--dock-item-hover);
@@ -706,6 +703,7 @@
     tbody tr.drag-target-top { border-top: 2.5px solid var(--accent) !important; }
     tbody tr.drag-target-bottom { border-bottom: 2.5px solid var(--accent) !important; }
 
+    /* 모달 스타일 */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -1217,7 +1215,6 @@
         flex-shrink: 0;
       }
 
-      /* 모바일 전용 콤팩트 비율 */
       .floating-dock-wrap {
         bottom: 14px;
         gap: 6px;
@@ -1412,13 +1409,10 @@
     </div>
   </div>
 
-  <!-- =========================================================
-       [핵심] 하단 플로팅 독 바 (순서 개편 및 테마 독립 분리)
-       ========================================================= -->
+  <!-- 하단 플로팅 독 (순서 개편 및 테마 독립 분리) -->
   <div class="floating-dock-wrap">
-    <!-- 메인 6구 메뉴 바 알약 -->
     <nav class="floating-pill-bar">
-      <!-- 1. 대시보드 (강조 추가: 대파 에메랄드 캡슐) -->
+      <!-- 1. 대시보드 (강조: 대파 에메랄드 캡슐) -->
       <a href="./index.html" class="pill-item pill-accent-dash" title="Green Onion Project 메인 대시보드로 이동">
         <div class="pill-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1433,13 +1427,13 @@
         <span class="pill-label">대시보드</span>
       </a>
 
-      <!-- 2. 카메라 (강조 추가: 스카이블루 캡슐) -->
+      <!-- 2. 카메라 (강조: 스카이블루 캡슐) -->
       <button type="button" class="pill-item pill-accent-cam" id="btnOpenCamModal" title="카메라로 바코드 스캔">
         <div class="pill-icon">📷</div>
         <span class="pill-label">카메라</span>
       </button>
 
-      <!-- 3. 기기 등록 (강조 제거: 일반 메뉴 스타일) -->
+      <!-- 3. 기기 등록 (강조 제거) -->
       <button type="button" class="pill-item" id="btnOpenAddModal" title="새로운 단말기 등록">
         <div class="pill-icon">＋</div>
         <span class="pill-label">기기 등록</span>
@@ -1464,7 +1458,7 @@
       </button>
     </nav>
 
-    <!-- 7. [독립 분리] 혼자 따로 떠 있는 원형 테마 버튼 -->
+    <!-- 7. 독립 분리된 원형 테마 버튼 -->
     <button type="button" class="floating-theme-island" id="btnThemeToggle" title="화이트/다크 모드 전환">
       <div class="pill-icon" id="themePillIcon">☀️</div>
       <span class="pill-label" id="themePillLabel">테마</span>
@@ -1520,7 +1514,7 @@
         <div class="about-card-hero">
           <div class="about-app-logo">M</div>
           <h2 style="font-size: 18px; font-weight: 800;" id="aboutAppTitle">Mobile Device Asset Manager</h2>
-          <div class="about-version-badge" id="aboutAppVersion">v1.0</div>
+          <div class="about-version-badge" id="aboutAppVersion">v1.1</div>
         </div>
 
         <div class="specs-grid" style="margin-bottom: 8px;">
@@ -1546,7 +1540,7 @@
           </div>
           <div class="spec-item">
             <div class="spec-lbl">마지막 빌드 날짜</div>
-            <div class="spec-val" id="aboutAppDate">2026-09-20</div>
+            <div class="spec-val" id="aboutAppDate">2026-09-22</div>
           </div>
         </div>
       </div>
@@ -1776,15 +1770,24 @@
        JavaScript Application Core
        ========================================================= -->
   <script>
+    // [사용자 직접 수정 영역] 앱 정보 & 사이드바 연동 패치노트 (v1.1 신규 반영)
     const APP_INFO = {
       title: "Mobile Device Asset Manager",
-      version: "v1.0",
+      version: "v1.1",
       developer: "Kim Dogyun",
       deployEnv: "Vercel Web + GitHub",
       cloud: "Firebase Firestore",
       ai: "Gemini",
-      releaseDate: "2026-09-20",
+      releaseDate: "2026-09-22",
       changelog: [
+        {
+          version: "v1.1",
+          date: "2026.09.22",
+          notes: [
+            "플로팅 디자인 적용",
+            "메뉴 위치 최적화"
+          ]
+        },
         {
           version: "v1.0 정식출시",
           date: "2026.09.20",
@@ -2766,7 +2769,7 @@
         }
       });
 
-      // 테마 전환 (단독 분리된 플로팅 아일랜드 버튼 바인딩)
+      // 테마 전환 (독립 분리된 아일랜드 버튼 바인딩)
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
