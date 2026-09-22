@@ -209,31 +209,22 @@
     }
 
     /* =========================================================
-       [핵심] 스크롤 연동 가변 플로팅 알약 독 바 (Smart Reactive Dock)
+       [핵심] 하단 리퀴드 글래스 플로팅 독 & 독립 테마 버튼
        ========================================================= */
-    .floating-pill-wrap {
+    .floating-dock-wrap {
       position: fixed;
       bottom: 20px;
       left: 50%;
-      transform: translate(-50%, 0);
+      transform: translateX(-50%);
       z-index: 1000;
       display: flex;
       align-items: center;
-      justify-content: center;
-      max-width: 95vw;
+      gap: 8px;
+      max-width: 96vw;
       pointer-events: none;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease, filter 0.28s ease;
-      will-change: transform, opacity;
     }
 
-    /* 스크롤 다운 시 화면 밑으로 매끄럽게 숨겨지는 가변 상태 */
-    .floating-pill-wrap.pill-hidden {
-      transform: translate(-50%, calc(100% + 28px)) scale(0.92);
-      opacity: 0;
-      pointer-events: none;
-      filter: blur(4px);
-    }
-
+    /* 메인 6구 메뉴 바 알약 */
     .floating-pill-bar {
       pointer-events: auto;
       background: var(--dock-bg);
@@ -241,12 +232,11 @@
       -webkit-backdrop-filter: blur(28px);
       border: 1.5px solid var(--dock-border);
       border-radius: 9999px;
-      padding: 5px 10px;
+      padding: 5px 8px;
       display: flex;
       align-items: center;
-      gap: 4px;
-      box-shadow: 0 16px 40px var(--shadow-color), 0 0 24px rgba(99, 102, 241, 0.15);
-      transition: all var(--transition-speed);
+      gap: 3px;
+      box-shadow: 0 16px 40px var(--shadow-color), 0 0 24px rgba(99, 102, 241, 0.12);
     }
 
     .pill-item {
@@ -254,7 +244,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 6px 11px;
+      padding: 6px 10px;
       border-radius: 9999px;
       background: transparent;
       border: none;
@@ -263,7 +253,7 @@
       text-decoration: none;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       font-family: inherit;
-      min-width: 50px;
+      min-width: 48px;
     }
     .pill-item:hover {
       background: var(--dock-item-hover);
@@ -275,7 +265,7 @@
     }
 
     .pill-icon {
-      font-size: 17px;
+      font-size: 16px;
       height: 20px;
       display: flex;
       align-items: center;
@@ -295,27 +285,76 @@
       letter-spacing: -0.2px;
     }
 
-    .pill-item.pill-primary {
-      background: linear-gradient(135deg, var(--accent), #7c3aed);
+    /* 1. 대시보드 강조 캡슐 스타일 */
+    .pill-item.pill-accent-dash {
+      background: linear-gradient(135deg, #10b981, #059669);
       color: #fff !important;
-      padding: 6px 14px;
-      box-shadow: 0 4px 14px var(--accent-glow);
+      padding: 6px 13px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
     }
-    .pill-item.pill-primary .pill-label {
+    .pill-item.pill-accent-dash .pill-label {
       color: #fff;
     }
-    .pill-item.pill-primary:hover {
-      background: linear-gradient(135deg, #4f46e5, #6d28d9);
+    .pill-item.pill-accent-dash:hover {
+      background: linear-gradient(135deg, #059669, #047857);
       transform: translateY(-2px) scale(1.04);
-      box-shadow: 0 6px 18px var(--accent-glow);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.5);
     }
 
-    .pill-item.pill-dash {
-      color: #34d399;
+    /* 2. 카메라 강조 캡슐 스타일 */
+    .pill-item.pill-accent-cam {
+      background: linear-gradient(135deg, #0284c7, #06b6d4);
+      color: #fff !important;
+      padding: 6px 13px;
+      box-shadow: 0 4px 14px rgba(6, 182, 212, 0.4);
     }
-    .pill-item.pill-dash:hover {
-      background: rgba(16, 185, 129, 0.15);
-      color: #10b981;
+    .pill-item.pill-accent-cam .pill-label {
+      color: #fff;
+    }
+    .pill-item.pill-accent-cam:hover {
+      background: linear-gradient(135deg, #0369a1, #0891b2);
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 6px 18px rgba(6, 182, 212, 0.5);
+    }
+
+    /* [신규] 메뉴 바에서 분리되어 단독으로 떠 있는 테마 버튼 */
+    .floating-theme-island {
+      pointer-events: auto;
+      background: var(--dock-bg);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid var(--dock-border);
+      border-radius: 9999px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      box-shadow: 0 16px 40px var(--shadow-color), 0 0 20px rgba(99, 102, 241, 0.12);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0;
+      flex-shrink: 0;
+      border: 1.5px solid var(--dock-border);
+    }
+    .floating-theme-island:hover {
+      background: var(--dock-item-hover);
+      transform: translateY(-2px) scale(1.06);
+      border-color: var(--accent);
+    }
+    .floating-theme-island:active {
+      transform: scale(0.92);
+    }
+    .floating-theme-island .pill-icon {
+      font-size: 16px;
+      height: 18px;
+    }
+    .floating-theme-island .pill-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--text-sub);
     }
 
     .scanner-panel {
@@ -1178,8 +1217,10 @@
         flex-shrink: 0;
       }
 
-      .floating-pill-wrap {
+      /* 모바일 전용 콤팩트 비율 */
+      .floating-dock-wrap {
         bottom: 14px;
+        gap: 6px;
         max-width: 98vw;
       }
       .floating-pill-bar {
@@ -1187,8 +1228,8 @@
         gap: 2px;
       }
       .pill-item {
-        padding: 5px 7px;
-        min-width: 44px;
+        padding: 5px 6px;
+        min-width: 40px;
       }
       .pill-icon {
         font-size: 15px;
@@ -1199,10 +1240,22 @@
         height: 16px;
       }
       .pill-label {
-        font-size: 9.5px;
+        font-size: 9px;
       }
-      .pill-item.pill-primary {
-        padding: 5px 10px;
+      .pill-item.pill-accent-dash,
+      .pill-item.pill-accent-cam {
+        padding: 5px 9px;
+      }
+      .floating-theme-island {
+        width: 42px;
+        height: 42px;
+      }
+      .floating-theme-island .pill-icon {
+        font-size: 15px;
+        height: 16px;
+      }
+      .floating-theme-island .pill-label {
+        font-size: 8.5px;
       }
     }
   </style>
@@ -1359,10 +1412,14 @@
     </div>
   </div>
 
-  <!-- 화면 하단 플로팅 글래스 알약 독 (스크롤 가변 연동) -->
-  <div class="floating-pill-wrap" id="floatingPillWrap">
+  <!-- =========================================================
+       [핵심] 하단 플로팅 독 바 (순서 개편 및 테마 독립 분리)
+       ========================================================= -->
+  <div class="floating-dock-wrap">
+    <!-- 메인 6구 메뉴 바 알약 -->
     <nav class="floating-pill-bar">
-      <a href="./index.html" class="pill-item pill-dash" title="Green Onion Project 메인 대시보드로 이동">
+      <!-- 1. 대시보드 (강조 추가: 대파 에메랄드 캡슐) -->
+      <a href="./index.html" class="pill-item pill-accent-dash" title="Green Onion Project 메인 대시보드로 이동">
         <div class="pill-icon">
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 11C10 7 7 4 4 3C5 7 8 9 10 12" fill="#a7f3d0"/>
@@ -1376,36 +1433,42 @@
         <span class="pill-label">대시보드</span>
       </a>
 
-      <button type="button" class="pill-item" id="btnOpenCamModal" title="카메라로 바코드 스캔">
+      <!-- 2. 카메라 (강조 추가: 스카이블루 캡슐) -->
+      <button type="button" class="pill-item pill-accent-cam" id="btnOpenCamModal" title="카메라로 바코드 스캔">
         <div class="pill-icon">📷</div>
         <span class="pill-label">카메라</span>
       </button>
 
-      <button type="button" class="pill-item pill-primary" id="btnOpenAddModal" title="새로운 단말기 등록">
+      <!-- 3. 기기 등록 (강조 제거: 일반 메뉴 스타일) -->
+      <button type="button" class="pill-item" id="btnOpenAddModal" title="새로운 단말기 등록">
         <div class="pill-icon">＋</div>
         <span class="pill-label">기기 등록</span>
       </button>
 
-      <button type="button" class="pill-item" id="btnOpenConfigModal" title="항목 및 색상 설정">
-        <div class="pill-icon">⚙️</div>
-        <span class="pill-label">설정</span>
-      </button>
-
+      <!-- 4. 로그 -->
       <button type="button" class="pill-item" id="btnOpenChangelogModal" title="버전별 업데이트 로그">
         <div class="pill-icon">📋</div>
         <span class="pill-label">로그</span>
       </button>
 
+      <!-- 5. 정보 -->
       <button type="button" class="pill-item" id="btnOpenAboutModal" title="애플리케이션 및 개발자 정보">
         <div class="pill-icon">ℹ️</div>
         <span class="pill-label">정보</span>
       </button>
 
-      <button type="button" class="pill-item" id="btnThemeToggle" title="화이트/다크 모드 전환">
-        <div class="pill-icon" id="themePillIcon">☀️</div>
-        <span class="pill-label" id="themePillLabel">테마</span>
+      <!-- 6. 설정 -->
+      <button type="button" class="pill-item" id="btnOpenConfigModal" title="항목 및 색상 설정">
+        <div class="pill-icon">⚙️</div>
+        <span class="pill-label">설정</span>
       </button>
     </nav>
+
+    <!-- 7. [독립 분리] 혼자 따로 떠 있는 원형 테마 버튼 -->
+    <button type="button" class="floating-theme-island" id="btnThemeToggle" title="화이트/다크 모드 전환">
+      <div class="pill-icon" id="themePillIcon">☀️</div>
+      <span class="pill-label" id="themePillLabel">테마</span>
+    </button>
   </div>
 
   <!-- Modal 1: Data Management -->
@@ -1727,10 +1790,10 @@
           date: "2026.09.20",
           notes: [
             "Green Onion Project 메인 대시보드와 통합",
-            "스크롤 연동 가변 리퀴드 글래스 플로팅 알약 독(Reactive Pill Dock) 적용",
-            "대시보드와 기기 관리 간 부드러운 글래스 트랜지션 애니메이션 적용",
-            "독립된 사이드바 형태의 업데이트 로그(Changelog) 팝업 신설",
-            "마지막 조회 일시 사용자 직접 수정 기능 및 경과 일수(D-Day) 자동 계산 배지 지원"
+            "하단 리퀴드 글래스 플로팅 독 순서 개편 및 테마 버튼 독립 분리",
+            "대시보드(초록) 및 카메라(하늘색) 캡슐 강조 UI 적용",
+            "독립된 사이드바 형태의 업데이트 로그(Changelog) 팝업 지원",
+            "마지막 조회 일시 직접 수정 및 경과 일수(D-Day) 자동 계산 배지 지원"
           ]
         },
         {
@@ -2684,69 +2747,6 @@
       renderTable();
       resetHeroView();
 
-      // [핵심] 가변 플로팅 알약 독 스크롤 반응형 제어 로직
-      const pillWrap = document.getElementById('floatingPillWrap');
-      if (pillWrap) {
-        let lastScrollY = window.scrollY;
-        let isTicking = false;
-
-        function updatePillVisibility(currentY) {
-          const diff = currentY - lastScrollY;
-          const docHeight = document.documentElement.scrollHeight;
-          const winHeight = window.innerHeight;
-
-          // 1. 최상단 근처이거나 최하단 근처일 때는 시인성을 위해 항상 표시
-          if (currentY <= 15 || currentY + winHeight >= docHeight - 20) {
-            pillWrap.classList.remove('pill-hidden');
-          } 
-          // 2. 아래로 스크롤: 화면 내용을 가리지 않도록 쏙 숨김
-          else if (diff > 8) {
-            pillWrap.classList.add('pill-hidden');
-          } 
-          // 3. 위로 살짝 스크롤: 메뉴를 조작하려 할 때 즉시 나타남
-          else if (diff < -6) {
-            pillWrap.classList.remove('pill-hidden');
-          }
-          lastScrollY = currentY;
-        }
-
-        window.addEventListener('scroll', () => {
-          if (!isTicking) {
-            window.requestAnimationFrame(() => {
-              updatePillVisibility(window.scrollY);
-              isTicking = false;
-            });
-            isTicking = true;
-          }
-        }, { passive: true });
-
-        // 내부 테이블 컨테이너 스크롤 시에도 동일하게 가변 반응
-        const tableContainer = document.querySelector('.table-container');
-        if (tableContainer) {
-          let lastTableScrollTop = 0;
-          tableContainer.addEventListener('scroll', () => {
-            const currentTableY = tableContainer.scrollTop;
-            const diff = currentTableY - lastTableScrollTop;
-
-            if (currentTableY <= 10) {
-              pillWrap.classList.remove('pill-hidden');
-            } else if (diff > 10) {
-              pillWrap.classList.add('pill-hidden');
-            } else if (diff < -8) {
-              pillWrap.classList.remove('pill-hidden');
-            }
-            lastTableScrollTop = currentTableY;
-          }, { passive: true });
-        }
-
-        // PC 환경: 마우스 커서가 화면 하단 근처로 오면 즉시 표시
-        window.addEventListener('mousemove', (e) => {
-          if (window.innerHeight - e.clientY < 60) {
-            pillWrap.classList.remove('pill-hidden');
-          }
-        }, { passive: true });
-      }
-
       document.querySelectorAll('a[href]').forEach(link => {
         link.addEventListener('click', function(e) {
           const targetUrl = this.getAttribute('href');
@@ -2766,6 +2766,7 @@
         }
       });
 
+      // 테마 전환 (단독 분리된 플로팅 아일랜드 버튼 바인딩)
       document.getElementById('btnThemeToggle').onclick = function() {
         const cur = document.documentElement.getAttribute('data-theme');
         const next = cur === 'dark' ? 'light' : 'dark';
@@ -2773,22 +2774,23 @@
         document.getElementById('themePillIcon').textContent = next === 'dark' ? '☀️' : '🌙';
       };
 
+      // 6구 알약 독 버튼 이벤트 바인딩
       document.getElementById('btnOpenCamModal').onclick = openCameraScanner;
       document.getElementById('btnQuickCam').onclick = openCameraScanner;
-      document.getElementById('btnOpenConfigModal').onclick = () => { renderConfigTags(); configModal.classList.add('active'); };
       document.getElementById('btnOpenAddModal').onclick = openAddModal;
-
-      document.getElementById('btnOpenAboutModal').onclick = () => {
-        renderAboutModal();
-        aboutModal.classList.add('active');
-      };
-      document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
-      document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
-
       document.getElementById('btnOpenChangelogModal').onclick = () => {
         renderChangelogModal(0);
         changelogModal.classList.add('active');
       };
+      document.getElementById('btnOpenAboutModal').onclick = () => {
+        renderAboutModal();
+        aboutModal.classList.add('active');
+      };
+      document.getElementById('btnOpenConfigModal').onclick = () => { renderConfigTags(); configModal.classList.add('active'); };
+
+      document.getElementById('btnCloseAboutModal').onclick = () => aboutModal.classList.remove('active');
+      document.getElementById('btnDoneAboutModal').onclick = () => aboutModal.classList.remove('active');
+
       document.getElementById('btnCloseChangelogModal').onclick = () => changelogModal.classList.remove('active');
       document.getElementById('btnDoneChangelogModal').onclick = () => changelogModal.classList.remove('active');
 
@@ -3005,4 +3007,3 @@
   </script>
 </body>
 </html>
-
